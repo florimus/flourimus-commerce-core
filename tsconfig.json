@@ -1,0 +1,21 @@
+{
+  "compilerOptions": {
+    "target": "es6",
+    "module": "commonjs",
+    "rootDir": "./",
+    "outDir": "./build",
+    "esModuleInterop": true,
+    "forceConsistentCasingInFileNames": true,
+    "strict": true,
+    "baseUrl": "./",
+    "paths": {
+      "@errors/*": ["src/core/errors/*"],
+      "@context/*": ["src/context/*"],
+      "@services/*": ["src/service/*"],
+      "@types": ["src/core/types.d.ts"],
+      "@config": ["config.ts"]
+    }
+  },
+  "include": ["**/*"],
+  "exclude": ["node_modules", "**/*.env", "./build", "./database"]
+}
