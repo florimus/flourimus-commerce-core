@@ -12,7 +12,7 @@ This project serves as a boilerplate for building robust and scalable web applic
 - **TypeScript**: Write clean and maintainable code with TypeScript, ensuring type safety and improved developer experience.
 - **GraphQL**: Implement a GraphQL API for querying and manipulating data efficiently.
 - **MongoDB Integration**: Seamlessly connect your application to MongoDB for storing and retrieving data.
-- **Authenticated Routes**: Secure specific routes with authentication middleware to restrict access.
+- **Authenticated Routes With Shield**: Secure specific routes with Shield authentication to restrict access.
 - **ESLint Configurations**: Enforce coding standards and catch errors early with ESLint configurations.
 - **Database Scripts**: Include scripts for managing database migrations and release planning.
 
@@ -23,6 +23,7 @@ This project serves as a boilerplate for building robust and scalable web applic
 - TypeScript
 - GraphQL
 - MongoDB
+- Shield
 - ESLint
 
 ## Getting Started
