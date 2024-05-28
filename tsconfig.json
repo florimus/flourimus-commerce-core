@@ -12,6 +12,8 @@
       "@errors/*": ["src/core/errors/*"],
       "@context/*": ["src/context/*"],
       "@services/*": ["src/service/*"],
+      "@resolvers/*": ["src/resolvers/*"],
+      "@permissions/*": ["src/permissions/*"],
       "@types": ["src/core/types.d.ts"],
       "@config": ["config.ts"]
     }

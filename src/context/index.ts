@@ -1,5 +1,5 @@
-import authenticationFilter from "./authContext"
+import userContext from "./authContext"
 
 export default {
-  userContext: authenticationFilter 
+  userContext 
 }

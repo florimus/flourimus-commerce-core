@@ -3,7 +3,7 @@
  * Define all types here
  */
 export interface ContextObjectType {
-  isAuthenticated: boolean
+  name: string
   permissons: string[]
 }
 
