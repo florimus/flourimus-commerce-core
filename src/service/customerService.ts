@@ -1,5 +1,10 @@
-export const getUserInfo = async () => {
-  return ({
-    name: "anu"
-  })
-}
+import { ContextObjectType, UserQueryArgsType } from "@types";
+
+export const getUserInfo = async (
+  args: UserQueryArgsType,
+  context: ContextObjectType
+) => {
+  return {
+    name: "anu",
+  };
+};

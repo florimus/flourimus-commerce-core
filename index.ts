@@ -16,7 +16,7 @@ async function startServer(): Promise<void> {
 
   server.applyMiddleware({ app: app });
 
-  console.info("Conning to MongoDB...");
+  console.info("Connecting to MongoDB...");
   mongoose.connect(process.env.MONGO_URI!).then(() => {
     app.listen(PORT, () => console.info(`Server started on ${getCurrentTime()}`));
   });
