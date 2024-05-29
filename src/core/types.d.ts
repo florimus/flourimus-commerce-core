@@ -8,5 +8,6 @@ export interface ContextObjectType {
 }
 
 export type UserQueryArgsType = {
-
+  _id: string
+  email: string
 }
