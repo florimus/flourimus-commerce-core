@@ -2,20 +2,40 @@
 /**
  * Define all types here
  */
-export interface ContextObjectType {
-  name: string
-  permissons: string[]
+export interface ContextObjectType extends UserType {
+  permissions: string[];
 }
 
 export type UserQueryArgsType = {
-  _id: string
-  email: string
-}
+  _id: string;
+  email: string;
+};
 
 export interface SystemConfigsType {
-  code: string,
-  defaultConfigurations: any,
-  channelConfigurations: any,
-  isActive: true
+  code: string;
+  defaultConfigurations: any;
+  channelConfigurations: any;
+  isActive: true;
 }
 
+export interface PhoneType {
+  dialCode: string;
+  number: string;
+}
+
+export interface UserType {
+  _id: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  phone: PhoneType;
+  role: string;
+  loginType: string;
+  lastOnline: string;
+  createdAt?: string;
+  updatedAt?: string;
+  isActive?: Boolean;
+  createdBy?: string;
+  updatedBy?: string;
+  metaStatus?: string;
+}

@@ -12,7 +12,7 @@ const script_02 = async (mongoose, env = "local") => {
 
   const collection = mongoose.connection.collection("systems");
 
-  if (env === "local") {
+  if (env) {
     await collection.insertMany([
       {
         code: "SEQUENCES",
@@ -36,11 +36,13 @@ const script_02 = async (mongoose, env = "local") => {
         createdAt: "2024-01-10T10:00:00.000Z",
         updatedAt: "2024-05-20T10:00:00.000Z",
         isActive: true,
-        createdBy: "script@R1.0.0-01",
-        updatedBy: "script@R1.0.0-01",
+        createdBy: "script@R1.0.0-02",
+        updatedBy: "script@R1.0.0-02",
       },
     ]);
     console.log("Data inserted successfully.");
+  }
+  if (env === "local") {
   }
   if (env === "uat") {
   }

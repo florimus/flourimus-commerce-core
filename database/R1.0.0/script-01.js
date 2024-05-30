@@ -9,10 +9,10 @@ const script_01 = async (mongoose, env = "local") => {
     console.log(`skipping script: ${scriptId}`);
     return;
   }
-  
+
   const collection = mongoose.connection.collection("users");
 
-  if (env === "local") {
+  if (env) {
     await collection.insertMany([
       {
         _id: "USR001",
@@ -116,6 +116,8 @@ const script_01 = async (mongoose, env = "local") => {
       },
     ]);
     console.log("Data inserted successfully.");
+  }
+  if (env === "local") {
   }
   if (env === "uat") {
   }

@@ -1,3 +1,4 @@
+import { UserType } from "@types";
 import User from "src/schemas/UserSchema";
 
 export const getUserByIdOrEmail = async (
@@ -6,7 +7,10 @@ export const getUserByIdOrEmail = async (
   isActive?: boolean
 ) => {
   if (isActive) {
-    return await User.findOne({ $or: [{ _id }, { email }], isActive });
+    return (await User.findOne({
+      $or: [{ _id }, { email }],
+      isActive,
+    })) as UserType;
   }
-  return await User.findOne({ $or: [{ _id }, { email }] });
+  return (await User.findOne({ $or: [{ _id }, { email }] })) as UserType;
 };
