@@ -1,11 +1,10 @@
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
-import { ContextObjectType, UserQueryArgsType } from "@types";
+import { UserQueryArgsType } from "@types";
 import { getUserByIdOrEmail } from "src/repository/userRepository";
 
 export const getUserInfo = async (
   args: UserQueryArgsType,
-  context?: ContextObjectType
 ) => {
   const { _id, email } = args || {}
 

@@ -12,6 +12,7 @@
       "@errors/*": ["src/core/errors/*"],
       "@context/*": ["src/context/*"],
       "@services/*": ["src/service/*"],
+      "@repositories/*": ["src/repository/*"],
       "@resolvers/*": ["src/resolvers/*"],
       "@permissions/*": ["src/permissions/*"],
       "@types": ["src/core/types.d.ts"],

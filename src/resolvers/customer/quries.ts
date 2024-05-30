@@ -1,4 +1,4 @@
-import { ContextObjectType, UserQueryArgsType } from "@types";
+import { UserQueryArgsType } from "@types";
 import { getUserInfo } from "@services/customerService";
 
 export const resolverQuries = {
@@ -6,7 +6,6 @@ export const resolverQuries = {
     user: async (
       _: unknown,
       args: UserQueryArgsType,
-      context: ContextObjectType
-    ) => await getUserInfo(args, context),
+    ) => await getUserInfo(args),
   },
 };
