@@ -1,13 +1,8 @@
-import { UserType } from "@types";
+import { TokenPayloadType, TokenType, UserType } from "@types";
 import jwt, { SignOptions } from "jsonwebtoken";
 import constants from "@core/constants/contants";
 
 const secret = process.env.TOKEN_SECRET!;
-type TokenType =
-  | "register-access"
-  | "register-refresh"
-  | "anonymous-access"
-  | "anonymous-refresh";
 
 const anonymous_access_token_options = {
   expiresIn: "1h",
@@ -46,7 +41,7 @@ const gettokenOptions: (type: TokenType) => {
 };
 
 const populateToken = (
-  payload: Partial<UserType> & { type: string },
+  payload: TokenPayloadType,
   tokenType: TokenType
 ) => {
   const tokenOptions = gettokenOptions(tokenType);
@@ -63,7 +58,7 @@ export const createUserToken = (user: UserType, userTokenType: string) => {
       lastName: user.lastName,
       lastOnline: user.lastOnline,
       role: user.role,
-      type: `${userTokenType}-${constants.tokenConstants.ACCESS_TOKEN}`,
+      type: `${userTokenType}-${constants.tokenConstants.ACCESS_TOKEN}` as TokenType,
     },
     `${userTokenType}-${constants.tokenConstants.ACCESS_TOKEN}` as TokenType
   );
@@ -73,7 +68,7 @@ export const createUserToken = (user: UserType, userTokenType: string) => {
       _id: user._id,
       email: user.email,
       loginType: user.loginType,
-      type: `${userTokenType}-${constants.tokenConstants.REFRESH_TOKEN}`,
+      type: `${userTokenType}-${constants.tokenConstants.REFRESH_TOKEN}` as TokenType,
     },
     `${userTokenType}-${constants.tokenConstants.REFRESH_TOKEN}` as TokenType
   );
@@ -83,3 +78,13 @@ export const createUserToken = (user: UserType, userTokenType: string) => {
     refresh: refreshToken,
   };
 };
+
+export const decodeToken = (token: string) => {
+  try {
+    const decoded = jwt.verify(token, secret);
+    return decoded as TokenPayloadType
+  } catch (error) {
+    console.info(error);
+  }
+  return {} as TokenPayloadType
+}

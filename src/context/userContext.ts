@@ -2,6 +2,7 @@ import { Request } from "express";
 import { ContextObjectType, SystemConfigsType, UserType } from "@types";
 import { getUserByIdOrEmail } from "@repositories/userRepository";
 import { getSystemConfigurations } from "@repositories/organizationRepository";
+import { verifyAuthenticationToken } from "@services/authenticationService";
 
 const configurations = async (role: string) => {
   const systemConfigurations: SystemConfigsType = await getSystemConfigurations("PERMISSIONS_OF_ROLES");
@@ -19,7 +20,8 @@ export default async function userContext({ req }: { req: Request }): Promise<Co
   const { authorization } = headers || {}
 
   if (authorization) {
-    const userId = authorization?.split(" ")?.[1];
+    const token = authorization?.split(" ")?.[1];
+    const userId = verifyAuthenticationToken(token);
     if (userId) {
       const user: UserType = await getUserByIdOrEmail(userId, "", true);      
       if (user) {

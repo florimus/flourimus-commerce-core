@@ -20,6 +20,14 @@ export type TokenQueryArgsType = {
   }
 };
 
+export type TokenType =
+  | "register-access"
+  | "register-refresh"
+  | "anonymous-access"
+  | "anonymous-refresh";
+
+export type TokenPayloadType = Partial<UserType> & { type: TokenType }
+
 export interface SystemConfigsType {
   code: string;
   defaultConfigurations: any;
