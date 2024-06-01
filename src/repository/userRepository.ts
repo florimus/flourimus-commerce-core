@@ -14,3 +14,7 @@ export const getUserByIdOrEmail = async (
   }
   return (await User.findOne({ $or: [{ _id }, { email }] })) as UserType;
 };
+
+export const createUser = async (user: UserType) => {
+  return await new User(user).save();
+}

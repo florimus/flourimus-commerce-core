@@ -6,8 +6,12 @@ import { isAuthenticated } from "./permissions";
 export const permissions = shield({
   Query: {
     "*": isAuthenticated,
-    ...customerPermissions
+    ...customerPermissions.quries
   },
+  Mutation: {
+    "*": isAuthenticated,
+    ...customerPermissions.mutations
+  }
 },
   {
     fallbackError: new UnAuthorizationError("Permission Denied")

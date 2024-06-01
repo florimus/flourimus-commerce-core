@@ -32,13 +32,13 @@ const constructId = (config: SequenceConfigurationTypes) => {
 const sequenceGenerator = async (entity: EntityType) => {
   const config: SequenceConfigurationTypes = await configurations(entity);
   const id = constructId(config);
-  updateSequenceNumber("product", config.next + 1);
+  updateSequenceNumber(entity, config.next + 1);
   return id;
 }
 
 const sequence = {
-  productId: sequenceGenerator("product"),
-  customerId: sequenceGenerator("customer"),
+  productId: async () => await sequenceGenerator("product"),
+  customerId: async () => await sequenceGenerator("customer"),
 };
 
 export default sequence;

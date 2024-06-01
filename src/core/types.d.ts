@@ -21,8 +21,17 @@ export type TokenQueryArgsType = {
 };
 
 export type RefreshQueryArgsType = {
-  token: string; 
+  token: string;
 };
+
+export type InviteStaffMutationArgsType = {
+  inviteStaffInput: {
+    email: string;
+    role: string;
+    firstName: string;
+    lastName: string;    
+  }
+}
 
 export type TokenType =
   | "register-access"
@@ -49,11 +58,11 @@ export interface UserType {
   firstName: string;
   lastName: string;
   email: string;
-  phone: PhoneType;
+  phone?: PhoneType;
   role: string;
   password?: string;
-  loginType: string;
-  lastOnline: string;
+  loginType?: string;
+  lastOnline?: string;
   createdAt?: string;
   updatedAt?: string;
   isActive?: Boolean;
