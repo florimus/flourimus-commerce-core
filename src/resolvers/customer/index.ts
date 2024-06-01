@@ -1,10 +1,15 @@
-import { permissions } from "./permissions";
+import { resolverMutations } from "./mutations";
+import { mutationPermissions, quriesPermissions } from "./permissions";
 import { resolverQuries } from "./quries";
 
 export default function customerResolvers() {
   return {
-    ...resolverQuries
+    ...resolverQuries,
+    ...resolverMutations
   }
 }
 
-export const customerPermissions = permissions
+export const customerPermissions = {
+  quries: quriesPermissions,
+  mutations: mutationPermissions
+}

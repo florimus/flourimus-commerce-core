@@ -16,6 +16,7 @@
       "@resolvers/*": ["src/resolvers/*"],
       "@permissions/*": ["src/permissions/*"],
       "@core/*": ["src/core/*"],
+      "@schemas/*": ["src/schemas/*"],
       "@types": ["src/core/types.d.ts"],
       "@config": ["config.ts"]
     }

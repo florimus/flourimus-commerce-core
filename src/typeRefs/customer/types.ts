@@ -35,4 +35,11 @@ export const UserDefs = gql`
     grandType: String!
     externalToken: String
   }
+
+  input InviteStaffInput {
+    email: String!
+    role: String!
+    firstName: String!
+    lastName: String
+  }
 `;
