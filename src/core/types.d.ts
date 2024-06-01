@@ -11,6 +11,23 @@ export type UserQueryArgsType = {
   email: string;
 };
 
+export type TokenQueryArgsType = {
+  tokenRequestInput: {
+    email?: string;
+    password?: string;
+    grandType?: "password" | "google" | "anonymous";
+    externalToken?: string;
+  }
+};
+
+export type TokenType =
+  | "register-access"
+  | "register-refresh"
+  | "anonymous-access"
+  | "anonymous-refresh";
+
+export type TokenPayloadType = Partial<UserType> & { type: TokenType }
+
 export interface SystemConfigsType {
   code: string;
   defaultConfigurations: any;
@@ -30,6 +47,7 @@ export interface UserType {
   email: string;
   phone: PhoneType;
   role: string;
+  password?: string;
   loginType: string;
   lastOnline: string;
   createdAt?: string;

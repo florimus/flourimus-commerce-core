@@ -1,5 +1,5 @@
-import { UserQueryArgsType } from "@types";
-import { getUserInfo } from "@services/customerService";
+import { TokenQueryArgsType, UserQueryArgsType } from "@types";
+import { getToken, getUserInfo } from "@services/customerService";
 
 export const resolverQuries = {
   Query: {
@@ -7,5 +7,10 @@ export const resolverQuries = {
       _: unknown,
       args: UserQueryArgsType,
     ) => await getUserInfo(args),
+
+    token: async (
+      _: unknown,
+      args: TokenQueryArgsType
+    ) => await getToken(args),
   },
 };

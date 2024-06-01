@@ -22,4 +22,17 @@ export const UserDefs = gql`
     updatedBy: String
     metaStatus: String
   }
+
+  type Token {
+    access: String!
+    refresh: String!
+  }
+
+  # =============== Inputs =================
+  input TokenRequestInput {
+    email: String
+    password: String
+    grandType: String!
+    externalToken: String
+  }
 `;
