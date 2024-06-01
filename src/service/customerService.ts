@@ -6,7 +6,7 @@ import { createUserToken } from "@core/utils/jwtUtils";
 import { getUserByIdOrEmail } from "@repositories/userRepository";
 import constants from "@core/constants/contants";
 import { comparePasswords } from "@core/utils/bycriptUtils";
-import { v4 as uuidv4 } from 'uuid';
+import { v4 as uuidv4 } from "uuid";
 import roles from "@core/roles";
 
 const anonymousUser: UserType = {
