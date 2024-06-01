@@ -24,6 +24,6 @@ export const systemSchema = new Schema({
 
 systemSchema.add(commonFieldsSchema);
 
-const System = mongoose.model('systems', systemSchema);
+const System = mongoose.model("systems", systemSchema);
 
 export default System;
