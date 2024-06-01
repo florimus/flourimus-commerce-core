@@ -2,7 +2,7 @@ const release = "R1.0.0";
 
 const mongoose = require("mongoose");
 const scripts = require(`./${release}/imports`);
-const localDbUrl = "mongodb+srv://username:password@clustor-domain/database";
+const localDbUrl = "mongodb+srv://officialalwibster:hXDjGW3oVQgeMT1n@cluster0.3cvpiie.mongodb.net/demo?retryWrites=true&w=majority&appName=Cluster0";
 
 const env = process.argv?.[2];
 const url = process.argv?.[3];

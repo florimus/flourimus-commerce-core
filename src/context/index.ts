@@ -1,4 +1,4 @@
-import userContext from "./authContext"
+import userContext from "./userContext"
 
 export default {
   userContext 
