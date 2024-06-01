@@ -11,6 +11,15 @@ export type UserQueryArgsType = {
   email: string;
 };
 
+export type TokenQueryArgsType = {
+  tokenRequestInput: {
+    email?: string;
+    password?: string;
+    grandType?: "password" | "google";
+    externalToken?: string;
+  }
+};
+
 export interface SystemConfigsType {
   code: string;
   defaultConfigurations: any;
@@ -30,6 +39,7 @@ export interface UserType {
   email: string;
   phone: PhoneType;
   role: string;
+  password?: string;
   loginType: string;
   lastOnline: string;
   createdAt?: string;
