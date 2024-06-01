@@ -78,4 +78,4 @@ export const getToken = async (args: TokenQueryArgsType) => {
     access: "",
     refresh: "",
   };
-};
+}
