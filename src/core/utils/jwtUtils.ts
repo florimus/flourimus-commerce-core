@@ -63,7 +63,7 @@ export const createUserToken = (user: UserType, userTokenType: string) => {
       lastName: user.lastName,
       lastOnline: user.lastOnline,
       role: user.role,
-      type: userTokenType,
+      type: `${userTokenType}-${constants.tokenConstants.ACCESS_TOKEN}`,
     },
     `${userTokenType}-${constants.tokenConstants.ACCESS_TOKEN}` as TokenType
   );
@@ -73,7 +73,7 @@ export const createUserToken = (user: UserType, userTokenType: string) => {
       _id: user._id,
       email: user.email,
       loginType: user.loginType,
-      type: userTokenType,
+      type: `${userTokenType}-${constants.tokenConstants.REFRESH_TOKEN}`,
     },
     `${userTokenType}-${constants.tokenConstants.REFRESH_TOKEN}` as TokenType
   );

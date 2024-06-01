@@ -1,10 +1,27 @@
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
 import UnAuthorizationError from "@errors/UnAuthorizationError";
-import { UserQueryArgsType, TokenQueryArgsType } from "@types";
+import { UserQueryArgsType, TokenQueryArgsType, UserType } from "@types";
 import { createUserToken } from "@core/utils/jwtUtils";
 import { getUserByIdOrEmail } from "@repositories/userRepository";
 import constants from "@core/constants/contants";
+import { v4 as uuidv4 } from 'uuid';
+import roles from "@core/roles";
+
+const anonymousUser: UserType = {
+  _id: uuidv4(),
+  email: "",
+  firstName: "",
+  lastName: "",
+  lastOnline: "",
+  loginType: "anonymousUser",
+  role: roles.CUSTOMER,
+  isActive: true,
+  phone: {
+    dialCode: "",
+    number: ""
+  }
+}
 
 export const getUserInfo = async (args: UserQueryArgsType) => {
   const { _id, email } = args || {};
@@ -37,6 +54,10 @@ const authenticatedPasswordUser = async (email?: string, password?: string) => {
   throw new UnAuthorizationError("Invalid Password");
 };
 
+const authenticateAnonymousUser = async () => {
+  return createUserToken(anonymousUser, constants.tokenConstants.ANONYMOUS_TOKEN);
+}
+
 export const getToken = async (args: TokenQueryArgsType) => {
   const { tokenRequestInput } = args || {};
 
@@ -46,6 +67,8 @@ export const getToken = async (args: TokenQueryArgsType) => {
         tokenRequestInput?.email,
         tokenRequestInput?.password
       );
+    case "anonymous":
+      return authenticateAnonymousUser();
     default:
       break;
   }

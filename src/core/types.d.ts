@@ -15,7 +15,7 @@ export type TokenQueryArgsType = {
   tokenRequestInput: {
     email?: string;
     password?: string;
-    grandType?: "password" | "google";
+    grandType?: "password" | "google" | "anonymous";
     externalToken?: string;
   }
 };
