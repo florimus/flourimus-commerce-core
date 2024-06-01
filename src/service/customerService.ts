@@ -5,6 +5,7 @@ import { UserQueryArgsType, TokenQueryArgsType, UserType } from "@types";
 import { createUserToken } from "@core/utils/jwtUtils";
 import { getUserByIdOrEmail } from "@repositories/userRepository";
 import constants from "@core/constants/contants";
+import { comparePasswords } from "@core/utils/bycriptUtils";
 import { v4 as uuidv4 } from 'uuid';
 import roles from "@core/roles";
 
@@ -36,7 +37,7 @@ export const getUserInfo = async (args: UserQueryArgsType) => {
 };
 
 const isvalidPassword = async (password: string, dbPassword?: string) => {
-  return password === dbPassword;
+  return comparePasswords(password, dbPassword!);
 };
 
 const authenticatedPasswordUser = async (email?: string, password?: string) => {

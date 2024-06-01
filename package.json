@@ -18,6 +18,7 @@
     "@types/express": "^4.17.21",
     "@types/mongoose": "^5.11.97",
     "apollo-server": "^3.13.0",
+    "bcrypt": "^5.1.1",
     "express": "^4.19.2",
     "graphql": "^16.8.1",
     "graphql-middleware": "^6.1.35",
@@ -29,6 +30,7 @@
   },
   "devDependencies": {
     "@eslint/js": "^9.3.0",
+    "@types/bcrypt": "^5.0.2",
     "@types/jsonwebtoken": "^9.0.6",
     "@types/moment": "^2.13.0",
     "@types/node": "^20.12.12",
