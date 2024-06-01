@@ -1,5 +1,5 @@
-import { TokenQueryArgsType, UserQueryArgsType } from "@types";
-import { getToken, getUserInfo } from "@services/customerService";
+import { RefreshQueryArgsType, TokenQueryArgsType, UserQueryArgsType } from "@types";
+import { getToken, getUserInfo, getRefreshToken } from "@services/customerService";
 
 export const resolverQuries = {
   Query: {
@@ -12,5 +12,10 @@ export const resolverQuries = {
       _: unknown,
       args: TokenQueryArgsType
     ) => await getToken(args),
+
+    refresh: async (
+      _: unknown,
+      args: RefreshQueryArgsType
+    ) => await getRefreshToken(args),
   },
 };

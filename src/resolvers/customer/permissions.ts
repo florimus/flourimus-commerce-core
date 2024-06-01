@@ -3,5 +3,6 @@ import { hasRole, isAuthenticated } from "@permissions/permissions";
 
 export const permissions = {
   user: and(isAuthenticated, hasRole("usr:r")),
-  token: allow
+  token: allow,
+  refresh: allow
 }

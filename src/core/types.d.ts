@@ -20,6 +20,10 @@ export type TokenQueryArgsType = {
   }
 };
 
+export type RefreshQueryArgsType = {
+  token: string; 
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"
