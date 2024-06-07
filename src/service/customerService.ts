@@ -4,6 +4,7 @@ import {
   RefreshQueryArgsType,
   InviteStaffMutationArgsType,
   ContextObjectType,
+  VerifyInvitationQueryArgsType,
 } from "@types";
 
 import customerServiceImpl from "@services/impl/customerServiceImpl";
@@ -42,4 +43,13 @@ export const getRefreshToken = async (args: RefreshQueryArgsType) => {
  */
 export const inviteStaffUser = async (args: InviteStaffMutationArgsType, context: ContextObjectType) => {
   return await customerServiceImpl.inviteStaffUser(args, context);
+};
+
+/**
+ * Controller used to get verify staff invitation token
+ * @param args 
+ * @returns 
+ */
+export const getVerifiedStaffInfo = async (args: VerifyInvitationQueryArgsType) => {
+  return await customerServiceImpl.getVerifiedStaffInfo(args);
 };

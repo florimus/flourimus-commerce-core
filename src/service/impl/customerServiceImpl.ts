@@ -8,8 +8,13 @@ import {
   RefreshQueryArgsType,
   InviteStaffMutationArgsType,
   ContextObjectType,
+  VerifyInvitationQueryArgsType,
 } from "@types";
-import { createDeltaToken, createUserToken } from "@core/utils/jwtUtils";
+import {
+  createDeltaToken,
+  createUserToken,
+  decodeDeltaToken,
+} from "@core/utils/jwtUtils";
 import { createUser, getUserByIdOrEmail } from "@repositories/userRepository";
 import constants from "@core/constants/contants";
 import { comparePasswords } from "@core/utils/bycriptUtils";
@@ -181,9 +186,24 @@ const inviteStaffUser = async (
   return savedUser ? user : {};
 };
 
+/**
+ * Controller used to get verify staff invitation token
+ * @param args
+ * @returns
+ */
+const getVerifiedStaffInfo = async (args: VerifyInvitationQueryArgsType) => {
+  const tokenData = decodeDeltaToken(args?.token);
+  const user = await getUserByIdOrEmail("", tokenData?.email);
+  if (user?.token === args?.token) {
+    return user;
+  }
+  throw new NotFoundError("User not invited");
+};
+
 export default {
   getUserInfo,
   getToken,
   getRefreshToken,
   inviteStaffUser,
+  getVerifiedStaffInfo,
 };

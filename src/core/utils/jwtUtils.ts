@@ -1,6 +1,7 @@
 import { TokenPayloadType, TokenType, UserType } from "@types";
 import jwt, { SignOptions } from "jsonwebtoken";
 import constants from "@core/constants/contants";
+import UnAuthorizationError from "@errors/UnAuthorizationError";
 
 const secret = process.env.TOKEN_SECRET!;
 
@@ -96,4 +97,16 @@ export const createDeltaToken = (email: string, id: string) => {
     algorithm: "HS256",
     expiresIn: "24h"
   } as SignOptions);
+}
+
+export const decodeDeltaToken = (token: string) => {
+  try {
+    const decoded = jwt.verify(token, secret);
+    return decoded as {
+      email: string,
+      id: string
+    }
+  } catch (error) {
+    throw new UnAuthorizationError("Invalid token")
+  }
 }
