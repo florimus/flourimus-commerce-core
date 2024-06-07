@@ -88,3 +88,12 @@ export const decodeToken = (token: string) => {
   }
   return {} as TokenPayloadType
 }
+
+export const createDeltaToken = (email: string, id: string) => {
+  return jwt.sign({
+    email, id
+  }, secret, {
+    algorithm: "HS256",
+    expiresIn: "24h"
+  } as SignOptions);
+}
