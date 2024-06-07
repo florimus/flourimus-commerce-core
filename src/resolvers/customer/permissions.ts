@@ -5,8 +5,10 @@ export const quriesPermissions = {
   user: and(isAuthenticated, hasRole("usr:r")),
   token: allow,
   refresh: allow,
+  verifyInvitation: allow,
 }
 
 export const mutationPermissions = {
-  inviteStaff: and(isAuthenticated, hasRole("usr:c"))
+  inviteStaff: and(isAuthenticated, hasRole("usr:c")),
+  onboardStaff: allow,
 }

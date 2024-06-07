@@ -9,15 +9,20 @@ import {
   InviteStaffMutationArgsType,
   ContextObjectType,
   VerifyInvitationQueryArgsType,
+  OnboardStaffMutationArgsType,
 } from "@types";
 import {
   createDeltaToken,
   createUserToken,
   decodeDeltaToken,
 } from "@core/utils/jwtUtils";
-import { createUser, getUserByIdOrEmail } from "@repositories/userRepository";
+import {
+  createUser,
+  getUserByIdOrEmail,
+  updateUser,
+} from "@repositories/userRepository";
 import constants from "@core/constants/contants";
-import { comparePasswords } from "@core/utils/bycriptUtils";
+import { comparePasswords, hashPassword } from "@core/utils/bycriptUtils";
 import { v4 as uuidv4 } from "uuid";
 import roles from "@core/roles";
 import { verifyRefreshToken } from "@services/authenticationService";
@@ -200,10 +205,52 @@ const getVerifiedStaffInfo = async (args: VerifyInvitationQueryArgsType) => {
   throw new NotFoundError("User not invited");
 };
 
+/**
+ * Controller used to get onboard invited ustaff
+ * @param args
+ * @returns
+ */
+export const onboardInvitedStaff = async (
+  args: OnboardStaffMutationArgsType
+) => {
+  const { onboardStaffInput } = args || {};
+  if (
+    !onboardStaffInput?._id ||
+    !onboardStaffInput?.loginType ||
+    !onboardStaffInput?.firstName ||
+    !onboardStaffInput?.password
+  ) {
+    throw new BadRequestError("Invalid request");
+  }
+  const user = await getUserByIdOrEmail(onboardStaffInput?._id, "");
+  if (!user || user?.token !== onboardStaffInput?.token) {
+    throw new NotFoundError("No user invite founds");
+  }
+
+  const hashedPassword = await hashPassword(onboardStaffInput.password);
+
+  const userRequest: Partial<UserType> = {
+    firstName: onboardStaffInput.firstName,
+    lastName: onboardStaffInput.lastName,
+    password: hashedPassword,
+    token: "",
+    isActive: true,
+    loginType: onboardStaffInput.loginType,
+    updatedAt: getCurrentTime(),
+    updatedBy: user?.email,
+  };
+  const savedUser = await updateUser(onboardStaffInput._id, userRequest);
+  sendEmail(user?.email, emailCodes.ONBOARD_DASHBOARD_STAFF, {
+    firstName: user?.firstName,
+  });
+  return savedUser;
+};
+
 export default {
   getUserInfo,
   getToken,
   getRefreshToken,
   inviteStaffUser,
   getVerifiedStaffInfo,
+  onboardInvitedStaff,
 };

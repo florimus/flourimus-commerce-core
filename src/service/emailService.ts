@@ -4,7 +4,8 @@ import { getSystemConfigurations } from "@repositories/organizationRepository";
 import sgMail from "@sendgrid/mail";
 
 export const emailCodes = {
-  INVITE_DASHBOARD_STAFF: "dashboard_user_invite"
+  INVITE_DASHBOARD_STAFF: "dashboard_user_invite",
+  ONBOARD_DASHBOARD_STAFF: "dashboard_user_onboard"
 }
 
 const getEmailConfigurations = async (code: string) => {
@@ -22,7 +23,10 @@ export const sendEmail = async (to: string, code: string, templateData: unknown)
 
   const msg = {
     to,
-    from: emailConfigs.from,
+    from: {
+      email: emailConfigs.from,
+      name: emailConfigs.name,
+    },
     templateId: emailConfigs.templateId,
     dynamic_template_data: templateData
   };

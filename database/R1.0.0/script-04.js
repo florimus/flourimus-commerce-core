@@ -19,7 +19,13 @@ const script_04 = async (mongoose, env = "local") => {
         defaultConfigurations: {
           dashboard_user_invite: {
             from: "official.alwibster@gmail.com",
+            name: "Alwibster Dashboard",
             templateId: "d-3d6d044bfbd8422481bb1bd0ee0736fa",
+          },
+          dashboard_user_onboard: {
+            from: "official.alwibster@gmail.com",
+            name: "Alwibster Dashboard",
+            templateId: "d-b1b1b3beb763417892997e9de0748e80",
           },
         },
         channelConfigurations: null,

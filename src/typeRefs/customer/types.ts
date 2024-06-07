@@ -42,4 +42,13 @@ export const UserDefs = gql`
     firstName: String!
     lastName: String
   }
+
+  input OnboardStaffInput {
+    _id: String!
+    firstName: String!
+    lastName: String
+    password: String
+    loginType: String!
+    token: String!
+  }
 `;

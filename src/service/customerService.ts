@@ -5,6 +5,7 @@ import {
   InviteStaffMutationArgsType,
   ContextObjectType,
   VerifyInvitationQueryArgsType,
+  OnboardStaffMutationArgsType,
 } from "@types";
 
 import customerServiceImpl from "@services/impl/customerServiceImpl";
@@ -52,4 +53,13 @@ export const inviteStaffUser = async (args: InviteStaffMutationArgsType, context
  */
 export const getVerifiedStaffInfo = async (args: VerifyInvitationQueryArgsType) => {
   return await customerServiceImpl.getVerifiedStaffInfo(args);
+};
+
+/**
+ * Controller used to get onboard invited ustaff
+ * @param args 
+ * @returns 
+ */
+export const onboardInvitedStaff = async (args: OnboardStaffMutationArgsType) => {  
+  return await customerServiceImpl.onboardInvitedStaff(args);
 };

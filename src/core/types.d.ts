@@ -33,7 +33,18 @@ export type InviteStaffMutationArgsType = {
     email: string;
     role: string;
     firstName: string;
-    lastName: string;    
+    lastName: string;
+  }
+}
+
+export type OnboardStaffMutationArgsType = {
+  onboardStaffInput: {
+    _id: string;
+    firstName: string;
+    lastName: string;
+    password: string
+    loginType: string;
+    token: string;
   }
 }
 
@@ -78,5 +89,6 @@ export interface UserType {
 
 export interface BasicDBEmailConfig {
   from: string;
+  name: string;
   templateId: string;
 }
