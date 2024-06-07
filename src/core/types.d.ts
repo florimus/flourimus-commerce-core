@@ -48,6 +48,10 @@ export type OnboardStaffMutationArgsType = {
   }
 }
 
+export type ForgotPasswordMutationArgsType = {
+  email: string;
+}
+
 export type TokenType =
   | "register-access"
   | "register-refresh"

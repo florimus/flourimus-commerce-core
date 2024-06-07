@@ -10,6 +10,7 @@ import {
   ContextObjectType,
   VerifyInvitationQueryArgsType,
   OnboardStaffMutationArgsType,
+  ForgotPasswordMutationArgsType,
 } from "@types";
 import {
   createDeltaToken,
@@ -186,7 +187,7 @@ const inviteStaffUser = async (
     firstName: user?.firstName,
     name: context.firstName,
     role: context.role,
-    link: `${process.env.STORE_FRONT_URL}/invite/${user?._id}/token/${loginToken}`,
+    link: `${process.env.STORE_FRONT_URL}/invite/${loginToken}`,
   });
   return savedUser ? user : {};
 };
@@ -223,7 +224,7 @@ export const onboardInvitedStaff = async (
     throw new BadRequestError("Invalid request");
   }
   const user = await getUserByIdOrEmail(onboardStaffInput?._id, "");
-  if (!user || user?.token !== onboardStaffInput?.token) {
+  if (!user || user.isActive || user?.token !== onboardStaffInput?.token) {
     throw new NotFoundError("No user invite founds");
   }
 
@@ -246,6 +247,33 @@ export const onboardInvitedStaff = async (
   return savedUser;
 };
 
+/**
+ * Controller used to get forget password link
+ * @param args 
+ * @returns 
+ */
+export const forgotPassword = async (args: ForgotPasswordMutationArgsType) => {
+  const user = await getUserByIdOrEmail("", args.email, true);
+  if (!user || !user._id) {
+    throw new NotFoundError("No user invite founds");
+  }
+  const passwordRestToken: string = createDeltaToken(
+    args.email,
+    user._id
+  );
+  await updateUser(user._id, {
+    token: passwordRestToken
+  });
+  sendEmail(user?.email, emailCodes.USER_FORGOT_PASSWORD, {
+    firstName: user?.firstName,
+    link: `${process.env.STORE_FRONT_URL}/reset/${passwordRestToken}`
+  });
+  return {
+    email: user.email,
+    send: true
+  };
+};
+
 export default {
   getUserInfo,
   getToken,
@@ -253,4 +281,5 @@ export default {
   inviteStaffUser,
   getVerifiedStaffInfo,
   onboardInvitedStaff,
+  forgotPassword,
 };
