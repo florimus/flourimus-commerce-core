@@ -175,7 +175,7 @@ const inviteStaffUser = async (
     role: context.role,
     link: `${process.env.STORE_FRONT_URL}/invite/${user?._id}/token/${loginToken}`
   });
-  return user;
+  return savedUser ? user : {};
 };
 
 export default {
