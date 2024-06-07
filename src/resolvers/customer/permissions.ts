@@ -11,5 +11,6 @@ export const quriesPermissions = {
 export const mutationPermissions = {
   inviteStaff: and(isAuthenticated, hasRole("usr:c")),
   onboardStaff: allow,
-  forgotPassword: allow
+  forgotPassword: allow,
+  resetPassword: allow
 }

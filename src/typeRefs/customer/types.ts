@@ -33,6 +33,12 @@ export const UserDefs = gql`
     send: Boolean
   }
 
+  type ResetPassword {
+    firstName: String
+    lastName: String
+    success: Boolean
+  }
+
   # =============== Inputs =================
   input TokenRequestInput {
     email: String
@@ -55,5 +61,10 @@ export const UserDefs = gql`
     password: String
     loginType: String!
     token: String!
+  }
+
+  input ResetPasswordInput {
+    token: String!
+    password: String!
   }
 `;

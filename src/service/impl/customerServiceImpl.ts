@@ -11,6 +11,7 @@ import {
   VerifyInvitationQueryArgsType,
   OnboardStaffMutationArgsType,
   ForgotPasswordMutationArgsType,
+  ResetPasswordMutationArgsType,
 } from "@types";
 import {
   createDeltaToken,
@@ -200,7 +201,7 @@ const inviteStaffUser = async (
 const getVerifiedStaffInfo = async (args: VerifyInvitationQueryArgsType) => {
   const tokenData = decodeDeltaToken(args?.token);
   const user = await getUserByIdOrEmail("", tokenData?.email);
-  if (user?.token === args?.token) {
+  if (!user?.isActive && user?.token === args?.token) {
     return user;
   }
   throw new NotFoundError("User not invited");
@@ -254,7 +255,7 @@ export const onboardInvitedStaff = async (
  */
 export const forgotPassword = async (args: ForgotPasswordMutationArgsType) => {
   const user = await getUserByIdOrEmail("", args.email, true);
-  if (!user || !user._id) {
+  if (!user || !user._id || user.loginType !== "password") {
     throw new NotFoundError("No user invite founds");
   }
   const passwordRestToken: string = createDeltaToken(
@@ -274,6 +275,41 @@ export const forgotPassword = async (args: ForgotPasswordMutationArgsType) => {
   };
 };
 
+/**
+ * Controller used to get reset password
+ * @param args 
+ * @returns 
+ */
+export const resetPassword = async (args: ResetPasswordMutationArgsType) => {
+  if (!args?.resetPasswordInput?.token || !args?.resetPasswordInput?.password) {
+    throw new BadRequestError("Invalid request");
+  }
+
+  const tokenData = decodeDeltaToken(args?.resetPasswordInput?.token);
+  const user = await getUserByIdOrEmail("", tokenData?.email);
+
+  if (user?.isActive && user?.token === args?.resetPasswordInput.token) {
+    const hashedPassword = await hashPassword(args?.resetPasswordInput?.password);
+
+    await updateUser(user._id, {
+      password: hashedPassword,
+      token: "",
+      updatedAt: getCurrentTime(),
+      updatedBy: user?.email
+    })
+    sendEmail(user?.email, emailCodes.USER_RESET_PASSWORD, {
+      firstName: user?.firstName,
+      link: `${process.env.STORE_FRONT_URL}`
+    });
+    return {
+      firstName: user.firstName,
+      lastName: user.lastName,
+      success: true
+    };
+  }
+  throw new NotFoundError("Password request not found")
+};
+
 export default {
   getUserInfo,
   getToken,
@@ -282,4 +318,5 @@ export default {
   getVerifiedStaffInfo,
   onboardInvitedStaff,
   forgotPassword,
+  resetPassword,
 };

@@ -3,11 +3,13 @@ import {
   ForgotPasswordMutationArgsType,
   InviteStaffMutationArgsType,
   OnboardStaffMutationArgsType,
+  ResetPasswordMutationArgsType,
 } from "@core/types";
 import {
   forgotPassword,
   inviteStaffUser,
   onboardInvitedStaff,
+  resetPassword,
 } from "@services/customerService";
 
 export const resolverMutations = {
@@ -23,5 +25,8 @@ export const resolverMutations = {
 
     forgotPassword: async (_: unknown, args: ForgotPasswordMutationArgsType) =>
       await forgotPassword(args),
+
+    resetPassword: async (_: unknown, args: ResetPasswordMutationArgsType) =>
+      await resetPassword(args),
   },
 };
