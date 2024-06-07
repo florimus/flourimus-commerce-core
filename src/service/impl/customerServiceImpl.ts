@@ -152,7 +152,10 @@ const inviteStaffUser = async (
   }
 
   const userId = await sequence.customerId();
-  const loginToken: string = createDeltaToken(args?.inviteStaffInput?.email, userId)
+  const loginToken: string = createDeltaToken(
+    args?.inviteStaffInput?.email,
+    userId
+  );
 
   const user: UserType = {
     _id: userId,
@@ -173,7 +176,7 @@ const inviteStaffUser = async (
     firstName: user?.firstName,
     name: context.firstName,
     role: context.role,
-    link: `${process.env.STORE_FRONT_URL}/invite/${user?._id}/token/${loginToken}`
+    link: `${process.env.STORE_FRONT_URL}/invite/${user?._id}/token/${loginToken}`,
   });
   return savedUser ? user : {};
 };
