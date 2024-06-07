@@ -27,6 +27,16 @@ const script_04 = async (mongoose, env = "local") => {
             name: "Alwibster Dashboard",
             templateId: "d-b1b1b3beb763417892997e9de0748e80",
           },
+          user_forgot_password: {
+            from: "official.alwibster@gmail.com",
+            name: "Alwibster Dashboard",
+            templateId: "d-d528cb05c4174fcfa9f831b381401211",
+          },
+          user_reset_password: {
+            from: "official.alwibster@gmail.com",
+            name: "Alwibster Dashboard",
+            templateId: "d-f7cd8f292c9e4f568cd068ad5d3e8ad7",
+          },
         },
         channelConfigurations: null,
         createdAt: "2024-01-10T10:00:00.000Z",

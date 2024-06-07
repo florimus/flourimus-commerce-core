@@ -7,6 +7,7 @@ export const emailCodes = {
   INVITE_DASHBOARD_STAFF: "dashboard_user_invite",
   ONBOARD_DASHBOARD_STAFF: "dashboard_user_onboard",
   USER_FORGOT_PASSWORD: "user_forgot_password",
+  USER_RESET_PASSWORD: "user_reset_password",
 }
 
 const getEmailConfigurations = async (code: string) => {

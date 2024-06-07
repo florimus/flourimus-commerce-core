@@ -7,6 +7,7 @@ import {
   VerifyInvitationQueryArgsType,
   OnboardStaffMutationArgsType,
   ForgotPasswordMutationArgsType,
+  ResetPasswordMutationArgsType,
 } from "@types";
 
 import customerServiceImpl from "@services/impl/customerServiceImpl";
@@ -72,4 +73,13 @@ export const onboardInvitedStaff = async (args: OnboardStaffMutationArgsType) =>
  */
 export const forgotPassword = async (args: ForgotPasswordMutationArgsType) => {  
   return await customerServiceImpl.forgotPassword(args);
+};
+
+/**
+ * Controller used to get reset password
+ * @param args 
+ * @returns 
+ */
+export const resetPassword = async (args: ResetPasswordMutationArgsType) => {
+  return await customerServiceImpl.resetPassword(args);
 };

@@ -52,6 +52,13 @@ export type ForgotPasswordMutationArgsType = {
   email: string;
 }
 
+export type ResetPasswordMutationArgsType = {
+  resetPasswordInput: {
+    token: string;
+    password: string;
+  }
+}
+
 export type TokenType =
   | "register-access"
   | "register-refresh"

@@ -5,5 +5,6 @@ export const UserMutations = gql`
     inviteStaff(inviteStaffInput: InviteStaffInput): User
     onboardStaff(onboardStaffInput: OnboardStaffInput): User
     forgotPassword(email: String): ForgotPassword
+    resetPassword(resetPasswordInput: ResetPasswordInput): ResetPassword
   }
 `;
