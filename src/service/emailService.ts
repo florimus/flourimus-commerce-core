@@ -5,7 +5,8 @@ import sgMail from "@sendgrid/mail";
 
 export const emailCodes = {
   INVITE_DASHBOARD_STAFF: "dashboard_user_invite",
-  ONBOARD_DASHBOARD_STAFF: "dashboard_user_onboard"
+  ONBOARD_DASHBOARD_STAFF: "dashboard_user_onboard",
+  USER_FORGOT_PASSWORD: "user_forgot_password",
 }
 
 const getEmailConfigurations = async (code: string) => {

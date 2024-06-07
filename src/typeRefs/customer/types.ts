@@ -28,6 +28,11 @@ export const UserDefs = gql`
     refresh: String!
   }
 
+  type ForgotPassword {
+    email: String
+    send: Boolean
+  }
+
   # =============== Inputs =================
   input TokenRequestInput {
     email: String

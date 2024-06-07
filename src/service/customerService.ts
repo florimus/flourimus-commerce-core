@@ -6,6 +6,7 @@ import {
   ContextObjectType,
   VerifyInvitationQueryArgsType,
   OnboardStaffMutationArgsType,
+  ForgotPasswordMutationArgsType,
 } from "@types";
 
 import customerServiceImpl from "@services/impl/customerServiceImpl";
@@ -62,4 +63,13 @@ export const getVerifiedStaffInfo = async (args: VerifyInvitationQueryArgsType) 
  */
 export const onboardInvitedStaff = async (args: OnboardStaffMutationArgsType) => {  
   return await customerServiceImpl.onboardInvitedStaff(args);
+};
+
+/**
+ * Controller used to get forget password link
+ * @param args 
+ * @returns 
+ */
+export const forgotPassword = async (args: ForgotPasswordMutationArgsType) => {  
+  return await customerServiceImpl.forgotPassword(args);
 };
