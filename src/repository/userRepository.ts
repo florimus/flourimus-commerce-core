@@ -18,3 +18,8 @@ export const getUserByIdOrEmail = async (
 export const createUser = async (user: UserType) => {
   return await new User(user).save();
 }
+
+export const updateUser = async (_id: string, data: Partial<UserType>) => {  
+  await User.updateOne({ _id }, data);
+  return await User.findOne({ _id }) as UserType
+}
