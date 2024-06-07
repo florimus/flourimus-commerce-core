@@ -69,4 +69,10 @@ export interface UserType {
   createdBy?: string;
   updatedBy?: string;
   metaStatus?: string;
+  token?: string;
+}
+
+export interface BasicDBEmailConfig {
+  from: string;
+  templateId: string;
 }

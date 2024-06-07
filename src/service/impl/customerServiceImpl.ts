@@ -9,7 +9,7 @@ import {
   InviteStaffMutationArgsType,
   ContextObjectType,
 } from "@types";
-import { createUserToken } from "@core/utils/jwtUtils";
+import { createDeltaToken, createUserToken } from "@core/utils/jwtUtils";
 import { createUser, getUserByIdOrEmail } from "@repositories/userRepository";
 import constants from "@core/constants/contants";
 import { comparePasswords } from "@core/utils/bycriptUtils";
@@ -19,6 +19,8 @@ import { verifyRefreshToken } from "@services/authenticationService";
 import AlreadyExistsError from "@errors/AlreadyExitsError";
 import sequence from "@core/sequence";
 import { getCurrentTime } from "@core/utils/timeUtils";
+import { emailCodes, sendEmail } from "@services/emailService";
+import { validateEmail } from "@core/utils/stringUtils";
 
 const anonymousUser: UserType = {
   _id: uuidv4(),
@@ -145,13 +147,24 @@ const inviteStaffUser = async (
     throw new AlreadyExistsError("user already exists");
   }
 
+  if (!validateEmail(args?.inviteStaffInput?.email)) {
+    throw new BadRequestError("invalid email id");
+  }
+
+  const userId = await sequence.customerId();
+  const loginToken: string = createDeltaToken(
+    args?.inviteStaffInput?.email,
+    userId
+  );
+
   const user: UserType = {
-    _id: await sequence.customerId(),
+    _id: userId,
     email: args?.inviteStaffInput.email,
     firstName: args?.inviteStaffInput.firstName,
     lastName: args?.inviteStaffInput.lastName,
     role: args?.inviteStaffInput.role,
     isActive: false,
+    token: loginToken,
     createdBy: context.email,
     updatedBy: context.email,
     createdAt: getCurrentTime(),
@@ -159,7 +172,13 @@ const inviteStaffUser = async (
   };
 
   const savedUser = await createUser(user);
-  return savedUser;
+  sendEmail(user?.email, emailCodes.INVITE_DASHBOARD_STAFF, {
+    firstName: user?.firstName,
+    name: context.firstName,
+    role: context.role,
+    link: `${process.env.STORE_FRONT_URL}/invite/${user?._id}/token/${loginToken}`,
+  });
+  return savedUser ? user : {};
 };
 
 export default {

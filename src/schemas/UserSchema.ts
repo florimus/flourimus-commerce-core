@@ -53,6 +53,9 @@ export const userSchema = new Schema({
   },
   lastOnline: {
     type: String
+  },
+  token: {
+    type: String
   }
 });
 
