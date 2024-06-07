@@ -1,5 +1,5 @@
-import { RefreshQueryArgsType, TokenQueryArgsType, UserQueryArgsType } from "@types";
-import { getToken, getUserInfo, getRefreshToken } from "@services/customerService";
+import { RefreshQueryArgsType, TokenQueryArgsType, UserQueryArgsType, VerifyInvitationQueryArgsType } from "@types";
+import { getToken, getUserInfo, getRefreshToken, getVerifiedStaffInfo } from "@services/customerService";
 
 export const resolverQuries = {
   Query: {
@@ -7,6 +7,11 @@ export const resolverQuries = {
       _: unknown,
       args: UserQueryArgsType,
     ) => await getUserInfo(args),
+
+    verifyInvitation: async (
+      _: unknown,
+      args: VerifyInvitationQueryArgsType,
+    ) => await getVerifiedStaffInfo(args),
 
     token: async (
       _: unknown,

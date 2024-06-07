@@ -11,6 +11,10 @@ export type UserQueryArgsType = {
   email: string;
 };
 
+export type VerifyInvitationQueryArgsType = {
+  token: string;
+};
+
 export type TokenQueryArgsType = {
   tokenRequestInput: {
     email?: string;
