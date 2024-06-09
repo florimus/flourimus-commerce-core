@@ -1,8 +1,14 @@
-import { RefreshQueryArgsType, TokenQueryArgsType, UserQueryArgsType, VerifyInvitationQueryArgsType } from "@types";
-import { getToken, getUserInfo, getRefreshToken, getVerifiedStaffInfo } from "@services/customerService";
+import { ContextObjectType, RefreshQueryArgsType, TokenQueryArgsType, UserQueryArgsType, VerifyInvitationQueryArgsType } from "@types";
+import { getToken, getUserInfo, getRefreshToken, getVerifiedStaffInfo, getCurrentUserInfo } from "@services/customerService";
 
 export const resolverQuries = {
   Query: {
+    me: async (
+      _: unknown,
+      __: unknown,
+      context: ContextObjectType,
+    ) => await getCurrentUserInfo(context),
+
     user: async (
       _: unknown,
       args: UserQueryArgsType,

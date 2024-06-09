@@ -21,6 +21,7 @@ export const UserDefs = gql`
     createdBy: String
     updatedBy: String
     metaStatus: String
+    permissions: [String]
   }
 
   type Token {

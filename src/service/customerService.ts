@@ -13,6 +13,15 @@ import {
 import customerServiceImpl from "@services/impl/customerServiceImpl";
 
 /**
+ * Controller used to get current user
+ * @param args 
+ * @returns 
+ */
+export const getCurrentUserInfo = async (context: ContextObjectType) => {
+  return await customerServiceImpl.getCurrentUserInfo(context);
+};
+
+/**
  * Controller used to get user
  * @param args 
  * @returns 
@@ -62,7 +71,7 @@ export const getVerifiedStaffInfo = async (args: VerifyInvitationQueryArgsType) 
  * @param args 
  * @returns 
  */
-export const onboardInvitedStaff = async (args: OnboardStaffMutationArgsType) => {  
+export const onboardInvitedStaff = async (args: OnboardStaffMutationArgsType) => {
   return await customerServiceImpl.onboardInvitedStaff(args);
 };
 
@@ -71,7 +80,7 @@ export const onboardInvitedStaff = async (args: OnboardStaffMutationArgsType) =>
  * @param args 
  * @returns 
  */
-export const forgotPassword = async (args: ForgotPasswordMutationArgsType) => {  
+export const forgotPassword = async (args: ForgotPasswordMutationArgsType) => {
   return await customerServiceImpl.forgotPassword(args);
 };
 

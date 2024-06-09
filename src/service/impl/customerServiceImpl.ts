@@ -76,6 +76,15 @@ const authenticateAnonymousUser = async () => {
 };
 
 /**
+ * Controller used to get current user
+ * @param args
+ * @returns
+ */
+const getCurrentUserInfo = async (context: ContextObjectType) => {
+  return context;
+};
+
+/**
  * Controller used to get user
  * @param args
  * @returns
@@ -311,6 +320,7 @@ export const resetPassword = async (args: ResetPasswordMutationArgsType) => {
 };
 
 export default {
+  getCurrentUserInfo,
   getUserInfo,
   getToken,
   getRefreshToken,
