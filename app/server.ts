@@ -20,6 +20,8 @@ const schemaWithMiddleware = applyMiddleware(
 export const server = new ApolloServer({
   schema: schemaWithMiddleware,
   context: context.userContext,
+  introspection: true,
+  playground: true,
   formatError: (error: Error) => {
     if (error instanceof UnAuthorizationError) {
       return {

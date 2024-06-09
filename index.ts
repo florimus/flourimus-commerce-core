@@ -3,7 +3,7 @@
 require("dotenv").config();
 import { server } from "./app/server";
 import mongoose from "mongoose"
-import express, { Request, Response } from "express";
+import express from "express";
 import { getCurrentTime } from "./src/core/utils/timeUtils";
 import checkHelth from "app/helth";
 
