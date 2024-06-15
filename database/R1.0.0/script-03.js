@@ -80,7 +80,7 @@ const script_03 = async (mongoose, env = "local") => {
         updatedBy: "script@R1.0.0-03",
       },
     ]);
-    console.log("Data inserted successfully.");
+    console.log("User permissions inserted successfully.");
   }
   if (env === "local") {
   }

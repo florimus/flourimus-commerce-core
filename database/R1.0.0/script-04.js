@@ -46,7 +46,7 @@ const script_04 = async (mongoose, env = "local") => {
         updatedBy: "script@R1.0.0-04",
       },
     ]);
-    console.log("Data inserted successfully.");
+    console.log("Email configurations inserted successfully.");
   }
   if (env === "local") {
   }

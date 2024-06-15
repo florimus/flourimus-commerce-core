@@ -1,13 +1,14 @@
+import { getCurrentTime } from "@core/utils/timeUtils";
 import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const commonFieldsSchema = new Schema({
-  createdAt: { type: Date, default: Date.now },
-  updatedAt: { type: Date, default: Date.now },
+  createdAt: { type: String, default: getCurrentTime() },
+  updatedAt: { type: String, default: getCurrentTime() },
   isActive: { type: Boolean, default: false },
-  createdBy: { typeof: String },
-  updatedBy: { typeof: String },
-  metaStatus: { type: String }
+  createdBy: { type: String },
+  updatedBy: { type: String, default: getCurrentTime() },
+  metaStatus: { type: String, default: getCurrentTime() }
 }, { _id: false });
 
 export default commonFieldsSchema;
