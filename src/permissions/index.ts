@@ -1,11 +1,13 @@
 import { shield } from "graphql-shield";
 import { customerPermissions } from "@resolvers/customer";
 import { isAuthenticated } from "./permissions";
+import { productPermissions } from "@resolvers/product";
 
 export const permissions = shield({
   Query: {
     "*": isAuthenticated,
-    ...customerPermissions.quries
+    ...customerPermissions.quries,
+    ...productPermissions.quries,
   },
   Mutation: {
     "*": isAuthenticated,
