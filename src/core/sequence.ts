@@ -1,7 +1,7 @@
 import { getSystemConfigurations, updateSequenceNumberConfiguration } from "@repositories/organizationRepository";
 import { SystemConfigsType } from "@types";
 
-type EntityType = "product" | "customer"
+type EntityType = "product" | "customer" | "sku"
 type SequenceConfigurationTypes = {
   prefix: string;
   sufix: string;
@@ -39,6 +39,7 @@ const sequenceGenerator = async (entity: EntityType) => {
 const sequence = {
   productId: async () => await sequenceGenerator("product"),
   customerId: async () => await sequenceGenerator("customer"),
+  skuId: async () => await sequenceGenerator("sku"),
 };
 
 export default sequence;

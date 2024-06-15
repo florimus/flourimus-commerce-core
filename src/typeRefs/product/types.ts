@@ -7,11 +7,27 @@ export const ProductDefs = gql`
     medias: [String]
     parentId: String
     category: String
+    brand: String
     haveVariants: Boolean
     isVariant: Boolean
     isSellable: Boolean
-    variantInfo: String
+    variantInfo: [String]
+    createdAt: String
+    updatedAt: String
+    isActive: Boolean
+    createdBy: String
+    updatedBy: String
+    metaStatus: String
   }
 
   # =============== Inputs =================
+  input ProductCreateInput {
+    name: String!
+    medias: [String]
+    parentId: String
+    category: String
+    brand: String
+    isVariant: Boolean
+    isSellable: Boolean
+  }
 `;

@@ -59,6 +59,22 @@ export type ResetPasswordMutationArgsType = {
   }
 }
 
+export type ProductArgsType = {
+  _id: string;
+};
+
+export type CreateProductArgsType = {
+  productCreateInput: {
+    name: string;
+    parentId: string;
+    category: string;
+    brand: string;
+    isVariant: boolean;
+    medias: [string];
+    isSellable: boolean;
+  }
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"
@@ -96,6 +112,25 @@ export interface UserType {
   updatedBy?: string;
   metaStatus?: string;
   token?: string;
+}
+
+export interface ProductType {
+  _id: string;
+  name: string;
+  medias: [string];
+  parentId: string;
+  category: string;
+  brand: string;
+  haveVariants: boolean;
+  isVariant: boolean;
+  isSellable: boolean;
+  variantInfo?: [string]
+  createdAt?: string;
+  updatedAt?: string;
+  isActive?: Boolean;
+  createdBy?: string;
+  updatedBy?: string;
+  metaStatus?: string;
 }
 
 export interface BasicDBEmailConfig {

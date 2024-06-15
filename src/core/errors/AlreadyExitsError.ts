@@ -1,5 +1,7 @@
 export default class AlreadyExistsError extends Error {
   status: number = 409;
+  code: string = "CONFLICT";
+  stacktrace: string[] = [];
 
   constructor(message: string) {
     super(message);

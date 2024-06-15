@@ -38,7 +38,8 @@ export const productSchema = new Schema({
     default: true,
   },
   variantInfo: {
-    type: String
+    type: [String],
+    default: []
   }
 });
 
