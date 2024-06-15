@@ -83,7 +83,7 @@ const script_01 = async (mongoose, env = "local") => {
           dialCode: "+91",
           number: "6543210987",
         },
-        password: "password012",
+        password: "$2b$10$D9w/7kW13ORBM3y68226ueSluOJmN9ZxNZEXnZb88kuM7nFv3cZlm",
         role: "storeAdmin",
         loginType: "password",
         lastOnline: "2024-05-26T07:45:00.000Z",
@@ -115,7 +115,7 @@ const script_01 = async (mongoose, env = "local") => {
         metaStatus: "active",
       },
     ]);
-    console.log("Data inserted successfully.");
+    console.log("Dummy user's inserted successfully.");
   }
   if (env === "local") {
   }

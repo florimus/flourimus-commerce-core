@@ -20,7 +20,7 @@ const script_02 = async (mongoose, env = "local") => {
           product: {
             prefix: "PRD",
             sufix: "",
-            next: 1,
+            next: 11,
             length: 6,
             mask: "0",
           },
@@ -28,6 +28,13 @@ const script_02 = async (mongoose, env = "local") => {
             prefix: "CUS",
             sufix: "",
             next: 1,
+            length: 6,
+            mask: "0",
+          },
+          sku: {
+            prefix: "SKU",
+            sufix: "",
+            next: 24,
             length: 6,
             mask: "0",
           },
@@ -40,7 +47,7 @@ const script_02 = async (mongoose, env = "local") => {
         updatedBy: "script@R1.0.0-02",
       },
     ]);
-    console.log("Data inserted successfully.");
+    console.log("Sequence configurations inserted successfully.");
   }
   if (env === "local") {
   }
