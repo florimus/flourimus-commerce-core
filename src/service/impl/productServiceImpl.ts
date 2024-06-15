@@ -68,7 +68,23 @@ export const createProduct = async (args: CreateProductArgsType, context: Contex
   if (productCreateInput.isVariant) {
     return await createVariantProduct(productCreateInput.parentId, productCreateInput, context?.email);
   }
-  return {};
+  const productId = await sequence.productId();
+  const product = await productRepository.createProduct({
+    _id: productId,
+    category: productCreateInput.category,
+    brand: productCreateInput.brand,
+    haveVariants: false,
+    isSellable: productCreateInput?.isSellable,
+    name: productCreateInput.name,
+    medias: productCreateInput?.medias,
+    isVariant: false,
+    isActive: true,
+    createdAt: getCurrentTime(),
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+    createdBy: context.email,
+  });
+  return product;
 }
 
 export default {

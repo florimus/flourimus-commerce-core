@@ -118,7 +118,7 @@ export interface ProductType {
   _id: string;
   name: string;
   medias: [string];
-  parentId: string;
+  parentId?: string;
   category: string;
   brand: string;
   haveVariants: boolean;
