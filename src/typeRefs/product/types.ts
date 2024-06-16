@@ -2,7 +2,7 @@ import { gql } from "apollo-server-express";
 
 export const ProductDefs = gql`
   type Product {
-    _id: String
+    _id: ID
     name: String
     medias: [String]
     parentId: String
@@ -38,7 +38,7 @@ export const ProductDefs = gql`
   }
 
   input ProductUpdateInput {
-    name: String!
+    name: String
     medias: [String]
     category: String
     brand: String

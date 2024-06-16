@@ -24,8 +24,13 @@ const getProductVariants = async (parentId: string, isActive?: boolean) => {
   return (await Product.find({ parentId })) as ProductType[];
 };
 
+const updateVariants = async (parentId: string, data: Partial<ProductType>) => {
+  return await Product.updateMany({ parentId }, { $set: data });
+};
+
 export default {
   createProduct,
   updateProduct,
   getProductVariants,
+  updateVariants,
 };
