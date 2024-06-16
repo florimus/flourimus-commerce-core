@@ -1,4 +1,11 @@
-import { ContextObjectType, CreateProductArgsType, ProductArgsType, ProductType, UpdateProductArgsType } from "@core/types";
+import {
+  ContextObjectType,
+  CreateProductArgsType,
+  ProductArgsType,
+  ProductListArgsType,
+  ProductType,
+  UpdateProductArgsType,
+} from "@core/types";
 import productServiceImpl from "./impl/productServiceImpl";
 
 /**
@@ -7,35 +14,44 @@ import productServiceImpl from "./impl/productServiceImpl";
  * @returns
  */
 export const getProductById = async (args: ProductArgsType) => {
-    return await productServiceImpl.getProductById(args._id);
-}
+  return await productServiceImpl.getProductById(args._id);
+};
 
 /**
  * Controller used to get create product
  * @param args
  * @returns
  */
-export const createProduct = async (args: CreateProductArgsType, context: ContextObjectType) => {
-    return await productServiceImpl.createProduct(args, context);
-}
+export const createProduct = async (
+  args: CreateProductArgsType,
+  context: ContextObjectType
+) => {
+  return await productServiceImpl.createProduct(args, context);
+};
 
 /**
  * Controller used to update product
  * @param args
  * @returns
  */
-export const updateProduct = async (args: UpdateProductArgsType, context: ContextObjectType) => {
-    return await productServiceImpl.updateProduct(args, context);
-}
+export const updateProduct = async (
+  args: UpdateProductArgsType,
+  context: ContextObjectType
+) => {
+  return await productServiceImpl.updateProduct(args, context);
+};
 
 /**
  * Controller used to update product status
  * @param args
  * @returns
  */
-export const statusUpdateProduct = async (args: ProductArgsType, context: ContextObjectType) => {
-    return await productServiceImpl.statusUpdateProduct(args._id, context);
-}
+export const statusUpdateProduct = async (
+  args: ProductArgsType,
+  context: ContextObjectType
+) => {
+  return await productServiceImpl.statusUpdateProduct(args._id, context);
+};
 
 /**
  * Controller used to get product variant
@@ -43,5 +59,14 @@ export const statusUpdateProduct = async (args: ProductArgsType, context: Contex
  * @returns
  */
 export const getVariantInfo = async (product: ProductType) => {
-    return await productServiceImpl.getVariantInfo(product);
-}
+  return await productServiceImpl.getVariantInfo(product);
+};
+
+/**
+ * Controller used to get product list
+ * @param args
+ * @returns
+ */
+export const getProductList = async (args: ProductListArgsType) => {
+  return await productServiceImpl.getProductList(args.productListInput);
+};

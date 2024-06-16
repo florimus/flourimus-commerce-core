@@ -28,9 +28,45 @@ const updateVariants = async (parentId: string, data: Partial<ProductType>) => {
   return await Product.updateMany({ parentId }, { $set: data });
 };
 
+const getProductList = async (
+  page: number,
+  size: number,
+  search: string,
+  sortBy: string,
+  sortDirection: string,
+  active: "ACTIVE" | "INACTIVE" | "ALL",
+  type: "product" | "variant" | "all"
+) => {
+  let query: any = {};
+  if (search) {
+    query.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { id: { $regex: search, $options: "i" } },
+    ];
+  }
+  if (active === "ACTIVE") {
+    query.isActive = true;
+  } else if (active === "INACTIVE") {
+    query.isActive = false;
+  }
+  if (type === "product") {
+    query.isVariant = false;
+  } else if (type === "variant") {
+    query.isVariant = true;
+  }
+  const products = await Product.find(query)
+    .limit(size)
+    .sort({ [sortBy]: sortDirection === "ASC" ? 1 : -1 })
+    .skip(size * (page ?? 0))
+    .exec();
+  const count = await Product.countDocuments(query);
+  return { products, count };
+};
+
 export default {
   createProduct,
   updateProduct,
   getProductVariants,
   updateVariants,
+  getProductList,
 };

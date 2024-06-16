@@ -2,6 +2,7 @@ import sequence from "@core/sequence";
 import {
   ContextObjectType,
   CreateProductArgsType,
+  ProductListArgsType,
   ProductType,
   UpdateProductArgsType,
 } from "@core/types";
@@ -188,10 +189,52 @@ export const getVariantInfo = async (product: ProductType) => {
   return [];
 };
 
+/**
+ * Controller used to get product list
+ * @param args
+ * @returns
+ */
+export const getProductList = async (
+  listArgs: ProductListArgsType["productListInput"]
+) => {
+  const {
+    page = 0,
+    size = 5,
+    search,
+    sortBy = "updatedAt",
+    sortDirection = "desc",
+    active = "ALL",
+    type = "all",
+  } = listArgs || {};
+  const { products, count } = await productRepository.getProductList(
+    page,
+    size,
+    search,
+    sortBy,
+    sortDirection,
+    active,
+    type
+  );
+  const totalPages = Math.ceil(count / size);
+  const pageInfo = {
+    isStart: page === 0,
+    isEnd: page >= totalPages - 1,
+    totalPages,
+    totalMatches: count,
+    currentMatchs: products.length
+  }
+  
+  return {
+    products,
+    pageInfo
+  };
+};
+
 export default {
   getProductById,
   createProduct,
   updateProduct,
   statusUpdateProduct,
   getVariantInfo,
+  getProductList,
 };

@@ -26,6 +26,19 @@ export const ProductDefs = gql`
     status: Boolean
   }
 
+  type ProductList {
+    products: [Product]
+    pageInfo: ProductPageInfo
+  }
+
+  type ProductPageInfo {
+    isStart: Boolean
+    isEnd: Boolean
+    totalPages: Int
+    totalMatches: Int
+    currentMatchs: Int
+  }
+
   # =============== Inputs =================
   input ProductCreateInput {
     name: String!
@@ -43,5 +56,15 @@ export const ProductDefs = gql`
     category: String
     brand: String
     isSellable: Boolean
+  }
+
+  input ProductListInput {
+    search: String
+    page: Int
+    size: Int
+    sortBy: String
+    sortDirection: String
+    active: String
+    type: String
   }
 `;
