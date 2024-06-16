@@ -148,6 +148,8 @@ export const statusUpdateProduct = async (
   }
   const productUpdateBody = {
     isActive: !product.isActive,
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
   } as Partial<ProductType>;
   const updatedProduct = await productRepository.updateProduct(
     _id,
