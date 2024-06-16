@@ -1,8 +1,9 @@
 import {
   ContextObjectType,
   CreateProductArgsType,
+  UpdateProductArgsType,
 } from "@core/types";
-import { createProduct } from "@services/productService";
+import { createProduct, updateProduct } from "@services/productService";
 
 export const resolverMutations = {
   Mutation: {
@@ -11,5 +12,11 @@ export const resolverMutations = {
       args: CreateProductArgsType,
       context: ContextObjectType
     ) => await createProduct(args, context),
+
+    productUpdate: async (
+      _: unknown,
+      args: UpdateProductArgsType,
+      context: ContextObjectType
+    ) => await updateProduct(args, context),
   },
 };

@@ -6,5 +6,6 @@ export const quriesPermissions = {
 }
 
 export const mutationPermissions = {
-  productCreate: and(isAuthenticated, hasRole("prd:c"))
+  productCreate: and(isAuthenticated, hasRole("prd:c")),
+  productUpdate: and(isAuthenticated, hasRole("prd:u")),
 }

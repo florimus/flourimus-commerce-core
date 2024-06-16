@@ -1,9 +1,16 @@
 import sequence from "@core/sequence";
-import { ContextObjectType, CreateProductArgsType } from "@core/types";
+import {
+  ContextObjectType,
+  CreateProductArgsType,
+  ProductType,
+  UpdateProductArgsType,
+} from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
-import productRepository, { getProductInfoById, updateProduct } from "@repositories/productRepository"
+import productRepository, {
+  getProductInfoById,
+} from "@repositories/productRepository";
 
 /**
  * Controller used to get product by Id
@@ -19,7 +26,7 @@ export const getProductById = async (id: string) => {
     throw new NotFoundError("Product not found");
   }
   return product;
-}
+};
 
 const createVariantProduct = async (
   productId: string,
@@ -49,24 +56,31 @@ const createVariantProduct = async (
     createdBy,
   });
   if (!parentProduct.haveVariants) {
-    await updateProduct(productId, { haveVariants: true })
+    await productRepository.updateProduct(productId, { haveVariants: true });
   }
   return product;
-}
+};
 
 /**
  * Controller used to get create product
  * @param args
  * @returns
  */
-export const createProduct = async (args: CreateProductArgsType, context: ContextObjectType) => {
+export const createProduct = async (
+  args: CreateProductArgsType,
+  context: ContextObjectType
+) => {
   const { productCreateInput } = args || {};
 
   if (!productCreateInput.name) {
     throw new BadRequestError("Name is mandatory");
   }
   if (productCreateInput.isVariant) {
-    return await createVariantProduct(productCreateInput.parentId, productCreateInput, context?.email);
+    return await createVariantProduct(
+      productCreateInput.parentId,
+      productCreateInput,
+      context?.email
+    );
   }
   const productId = await sequence.productId();
   const product = await productRepository.createProduct({
@@ -85,9 +99,39 @@ export const createProduct = async (args: CreateProductArgsType, context: Contex
     createdBy: context.email,
   });
   return product;
-}
+};
+
+/**
+ * Controller used to update product
+ * @param args
+ * @returns
+ */
+const updateProduct = async (
+  args: UpdateProductArgsType,
+  context: ContextObjectType
+) => {
+  const { _id, productUpdateInput } = args || {};
+  if (!_id) {
+    throw new BadRequestError("ProductId is Mandatory");
+  }
+  const product = await getProductInfoById(_id);
+  if (!product?._id) {
+    throw new NotFoundError("Product not found");
+  }
+  const newProduct = {
+    category: productUpdateInput.category || product.category,
+    brand: productUpdateInput.brand || product.brand,
+    isSellable: productUpdateInput?.isSellable || product.isSellable,
+    name: productUpdateInput.name || product.name,
+    medias: productUpdateInput?.medias || product.medias,
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+  } as Partial<ProductType>;
+  return await productRepository.updateProduct(_id, newProduct);
+};
 
 export default {
   getProductById,
-  createProduct
-}
+  createProduct,
+  updateProduct,
+};
