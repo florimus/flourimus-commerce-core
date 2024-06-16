@@ -1,4 +1,5 @@
 import { ProductType } from "@types";
+import { FilterQuery } from "mongoose";
 import Product from "src/schemas/ProductSchema";
 
 export const getProductInfoById = async (_id: string, isActive?: boolean) => {
@@ -37,7 +38,7 @@ const getProductList = async (
   active: "ACTIVE" | "INACTIVE" | "ALL",
   type: "product" | "variant" | "all"
 ) => {
-  let query: any = {};
+  const query: FilterQuery<ProductType> = {};
   if (search) {
     query.$or = [
       { name: { $regex: search, $options: "i" } },
