@@ -41,8 +41,8 @@ const createVariantProduct = async (
   const skuId = await sequence.skuId();
   const product = await productRepository.createProduct({
     _id: skuId,
-    category: variantInfo.category,
-    brand: variantInfo.brand,
+    category: parentProduct.category,
+    brand: parentProduct.brand,
     haveVariants: false,
     isSellable: variantInfo?.isSellable,
     name: variantInfo.name,
