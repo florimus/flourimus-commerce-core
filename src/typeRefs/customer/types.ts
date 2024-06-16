@@ -7,7 +7,7 @@ export const UserDefs = gql`
   }
 
   type User {
-    _id: String!
+    _id: ID!
     firstName: String!
     lastName: String
     email: String!
@@ -56,7 +56,7 @@ export const UserDefs = gql`
   }
 
   input OnboardStaffInput {
-    _id: String!
+    _id: ID!
     firstName: String!
     lastName: String
     password: String

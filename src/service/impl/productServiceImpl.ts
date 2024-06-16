@@ -41,8 +41,8 @@ const createVariantProduct = async (
   const skuId = await sequence.skuId();
   const product = await productRepository.createProduct({
     _id: skuId,
-    category: variantInfo.category,
-    brand: variantInfo.brand,
+    category: parentProduct.category,
+    brand: parentProduct.brand,
     haveVariants: false,
     isSellable: variantInfo?.isSellable,
     name: variantInfo.name,
@@ -118,16 +118,30 @@ const updateProduct = async (
   if (!product?._id) {
     throw new NotFoundError("Product not found");
   }
-  const newProduct = {
-    category: productUpdateInput.category || product.category,
-    brand: productUpdateInput.brand || product.brand,
-    isSellable: productUpdateInput?.isSellable || product.isSellable,
+  const updatedProduct = {
     name: productUpdateInput.name || product.name,
     medias: productUpdateInput?.medias || product.medias,
+    isSellable: productUpdateInput?.isSellable || product.isSellable,
     updatedAt: getCurrentTime(),
     updatedBy: context.email,
   } as Partial<ProductType>;
-  return await productRepository.updateProduct(_id, newProduct);
+
+  if (!product.isVariant) {
+    updatedProduct.category = productUpdateInput.category || product.category;
+    updatedProduct.brand = productUpdateInput.brand || product.brand;
+
+    if (product.haveVariants) {
+      const updateVariantData = {} as Partial<ProductType>;
+      const isCategoryChanged = updatedProduct.category !== product.category;
+      const isBrandChanged = updatedProduct.brand !== product.brand;
+      if (isBrandChanged || isCategoryChanged) {
+        updateVariantData.category = updatedProduct.category;
+        updateVariantData.brand = updatedProduct.brand;
+      }
+      await productRepository.updateVariants(product._id, updateVariantData);
+    }
+  }
+  return await productRepository.updateProduct(_id, updatedProduct);
 };
 
 /**
@@ -161,9 +175,23 @@ export const statusUpdateProduct = async (
   };
 };
 
+/**
+ * Controller used to get product variant
+ * @param product
+ * @returns
+ */
+export const getVariantInfo = async (product: ProductType) => {
+  const { _id, haveVariants } = product || {};
+  if (haveVariants) {
+    return await productRepository.getProductVariants(_id);
+  }
+  return [];
+};
+
 export default {
   getProductById,
   createProduct,
   updateProduct,
   statusUpdateProduct,
+  getVariantInfo,
 };
