@@ -21,7 +21,7 @@ export type TokenQueryArgsType = {
     password?: string;
     grandType?: "password" | "google" | "anonymous";
     externalToken?: string;
-  }
+  };
 };
 
 export type RefreshQueryArgsType = {
@@ -34,33 +34,45 @@ export type InviteStaffMutationArgsType = {
     role: string;
     firstName: string;
     lastName: string;
-  }
-}
+  };
+};
 
 export type OnboardStaffMutationArgsType = {
   onboardStaffInput: {
     _id: string;
     firstName: string;
     lastName: string;
-    password: string
+    password: string;
     loginType: string;
     token: string;
-  }
-}
+  };
+};
 
 export type ForgotPasswordMutationArgsType = {
   email: string;
-}
+};
 
 export type ResetPasswordMutationArgsType = {
   resetPasswordInput: {
     token: string;
     password: string;
-  }
-}
+  };
+};
 
 export type ProductArgsType = {
   _id: string;
+};
+
+export type ProductListArgsType = {
+  productListInput: {
+    search: string;
+    page: number;
+    size: number;
+    sortBy: string;
+    sortDirection: "ASC" | "DESC";
+    active: "ACTIVE" | "INACTIVE" | "ALL";
+    type: "product" | "variant" | "all";
+  };
 };
 
 export type CreateProductArgsType = {
@@ -72,18 +84,18 @@ export type CreateProductArgsType = {
     isVariant: boolean;
     medias: [string];
     isSellable: boolean;
-  }
+  };
 };
 
 export type UpdateProductArgsType = {
-  _id: string
+  _id: string;
   productUpdateInput: {
-    name?: string,
-    medias?: string,
-    category?: string,
-    brand?: string,
-    isSellable?: boolean,
-  }
+    name?: string;
+    medias?: string;
+    category?: string;
+    brand?: string;
+    isSellable?: boolean;
+  };
 };
 
 export type TokenType =
@@ -92,7 +104,7 @@ export type TokenType =
   | "anonymous-access"
   | "anonymous-refresh";
 
-export type TokenPayloadType = Partial<UserType> & { type: TokenType }
+export type TokenPayloadType = Partial<UserType> & { type: TokenType };
 
 export interface SystemConfigsType {
   code: string;
@@ -135,7 +147,7 @@ export interface ProductType {
   haveVariants: boolean;
   isVariant: boolean;
   isSellable: boolean;
-  variantInfo?: [string]
+  variantInfo?: [string];
   createdAt?: string;
   updatedAt?: string;
   isActive?: Boolean;
