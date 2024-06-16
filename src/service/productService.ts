@@ -27,3 +27,12 @@ export const createProduct = async (args: CreateProductArgsType, context: Contex
 export const updateProduct = async (args: UpdateProductArgsType, context: ContextObjectType) => {
     return await productServiceImpl.updateProduct(args, context);
 }
+
+/**
+ * Controller used to update product status
+ * @param args
+ * @returns
+ */
+export const statusUpdateProduct = async (args: ProductArgsType, context: ContextObjectType) => {
+    return await productServiceImpl.statusUpdateProduct(args._id, context);
+}
