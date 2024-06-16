@@ -1,4 +1,3 @@
-import pubsub from "@core/pubSub";
 import { ProductArgsType, ProductListArgsType, ProductType } from "@core/types";
 import {
   getProductById,
@@ -12,21 +11,15 @@ export const resolverQuries = {
       await getProductById(args),
 
     productList: async (_: unknown, args: ProductListArgsType) => {
-      const message = {
-        id: "1",
-        content: "Hello, world!",
-      };
-      pubsub.publish("NEW_MESSAGE", { newMessage: message });
+      // const message = {
+      //   id: "1",
+      //   content: "Hello, world!",
+      // };
+      // pubsub.publish("NEW_MESSAGE", { newMessage: message });
       return await getProductList(args);
     },
   },
   Product: {
     variants: async (product: ProductType) => await getVariantInfo(product),
-  },
-  Subscription: {
-    newMessage: {
-      subscribe: (_: any, __: any, ___: any) =>
-        pubsub?.asyncIterator(["NEW_MESSAGE"]),
-    },
   },
 };

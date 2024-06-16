@@ -39,6 +39,15 @@ export const ProductDefs = gql`
     currentMatchs: Int
   }
 
+  type ProductBulkUploadInfo {
+    isAvailable: Boolean
+    startTime: String
+    Estimate: String
+    totalDocuments: Int
+    completedDocuments: Int
+    createdBy: String
+  }
+
   # =============== Inputs =================
   input ProductCreateInput {
     name: String!
