@@ -18,6 +18,7 @@ export const ProductDefs = gql`
     createdBy: String
     updatedBy: String
     metaStatus: String
+    variants: [Product]
   }
 
   type ProductStatusChangeResponse {

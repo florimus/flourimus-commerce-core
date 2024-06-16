@@ -161,9 +161,23 @@ export const statusUpdateProduct = async (
   };
 };
 
+/**
+ * Controller used to get product variant
+ * @param product
+ * @returns
+ */
+export const getVariantInfo = async (product: ProductType) => {
+  const { _id, haveVariants } = product || {};
+  if (haveVariants) {
+    return await productRepository.getProductVariants(_id);
+  }
+  return [];
+};
+
 export default {
   getProductById,
   createProduct,
   updateProduct,
   statusUpdateProduct,
+  getVariantInfo,
 };

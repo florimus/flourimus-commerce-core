@@ -1,4 +1,4 @@
-import { ContextObjectType, CreateProductArgsType, ProductArgsType, UpdateProductArgsType } from "@core/types";
+import { ContextObjectType, CreateProductArgsType, ProductArgsType, ProductType, UpdateProductArgsType } from "@core/types";
 import productServiceImpl from "./impl/productServiceImpl";
 
 /**
@@ -35,4 +35,13 @@ export const updateProduct = async (args: UpdateProductArgsType, context: Contex
  */
 export const statusUpdateProduct = async (args: ProductArgsType, context: ContextObjectType) => {
     return await productServiceImpl.statusUpdateProduct(args._id, context);
+}
+
+/**
+ * Controller used to get product variant
+ * @param product
+ * @returns
+ */
+export const getVariantInfo = async (product: ProductType) => {
+    return await productServiceImpl.getVariantInfo(product);
 }
