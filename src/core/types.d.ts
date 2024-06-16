@@ -1,9 +1,13 @@
 /* eslint-disable */
+
+import { PubSub } from "graphql-subscriptions";
+
 /**
  * Define all types here
  */
 export interface ContextObjectType extends UserType {
   permissions: string[];
+  pubsub: PubSub;
 }
 
 export type UserQueryArgsType = {

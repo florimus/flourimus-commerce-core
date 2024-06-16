@@ -11,7 +11,7 @@ const schema = makeExecutableSchema({
   resolvers: definition.resolvers,
 });
 
-const schemaWithMiddleware = applyMiddleware(
+export const schemaWithMiddleware = applyMiddleware(
   schema,
   permissions
 );
