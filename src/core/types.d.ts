@@ -75,6 +75,17 @@ export type CreateProductArgsType = {
   }
 };
 
+export type UpdateProductArgsType = {
+  _id: string
+  productUpdateInput: {
+    name?: string,
+    medias?: string,
+    category?: string,
+    brand?: string,
+    isSellable?: boolean,
+  }
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"

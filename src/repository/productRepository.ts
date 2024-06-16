@@ -11,7 +11,7 @@ export const getProductInfoById = async (
   return (await Product.findOne({ _id })) as ProductType;
 };
 
-export const updateProduct = async (_id: string, data: Partial<ProductType>) => {
+const updateProduct = async (_id: string, data: Partial<ProductType>) => {
   await Product.updateOne({ _id }, data);
   return await Product.findOne({ _id }) as ProductType;
 }
@@ -21,5 +21,6 @@ export const createProduct = async (product: ProductType) => {
 }
 
 export default {
-  createProduct
+  createProduct,
+  updateProduct,
 }

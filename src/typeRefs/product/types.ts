@@ -30,4 +30,12 @@ export const ProductDefs = gql`
     isVariant: Boolean
     isSellable: Boolean
   }
+
+  input ProductUpdateInput {
+    name: String!
+    medias: [String]
+    category: String
+    brand: String
+    isSellable: Boolean
+  }
 `;
