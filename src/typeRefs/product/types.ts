@@ -20,6 +20,11 @@ export const ProductDefs = gql`
     metaStatus: String
   }
 
+  type ProductStatusChangeResponse {
+    success: Boolean
+    status: Boolean
+  }
+
   # =============== Inputs =================
   input ProductCreateInput {
     name: String!

@@ -56,7 +56,7 @@ const createVariantProduct = async (
     createdBy,
   });
   if (!parentProduct.haveVariants) {
-    await productRepository.updateProduct(productId, { haveVariants: true });
+    productRepository.updateProduct(productId, { haveVariants: true });
   }
   return product;
 };
@@ -130,8 +130,38 @@ const updateProduct = async (
   return await productRepository.updateProduct(_id, newProduct);
 };
 
+/**
+ * Controller used to update product status
+ * @param args
+ * @returns
+ */
+export const statusUpdateProduct = async (
+  _id: string,
+  context: ContextObjectType
+) => {
+  if (!_id) {
+    throw new BadRequestError("ProductId is Mandatory");
+  }
+  const product = await getProductInfoById(_id);
+  if (!product?._id) {
+    throw new NotFoundError("Product not found");
+  }
+  const productUpdateBody = {
+    isActive: !product.isActive,
+  } as Partial<ProductType>;
+  const updatedProduct = await productRepository.updateProduct(
+    _id,
+    productUpdateBody
+  );
+  return {
+    success: updatedProduct.isActive === !product.isActive,
+    status: !product.isActive,
+  };
+};
+
 export default {
   getProductById,
   createProduct,
   updateProduct,
+  statusUpdateProduct,
 };

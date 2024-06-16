@@ -4,5 +4,6 @@ export const ProductMutations = gql`
   type Mutation {
     productCreate(productCreateInput: ProductCreateInput): Product
     productUpdate(_id: ID!, productUpdateInput: ProductUpdateInput): Product
+    productStatusChange(_id: ID!): ProductStatusChangeResponse
   }
 `;
