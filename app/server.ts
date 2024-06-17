@@ -6,7 +6,7 @@ import { permissions } from "src/permissions";
 
 const { ApolloServer } = require("apollo-server-express");
 
-const schema = makeExecutableSchema({
+export const schema = makeExecutableSchema({
   typeDefs: definition.typeDefs,
   resolvers: definition.resolvers,
 });

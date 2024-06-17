@@ -4,7 +4,11 @@ import {
   ProductArgsType,
   UpdateProductArgsType,
 } from "@core/types";
-import { createProduct, updateProduct, statusUpdateProduct } from "@services/productService";
+import {
+  createProduct,
+  updateProduct,
+  statusUpdateProduct,
+} from "@services/productService";
 
 export const resolverMutations = {
   Mutation: {
@@ -25,5 +29,10 @@ export const resolverMutations = {
       args: ProductArgsType,
       context: ContextObjectType
     ) => await statusUpdateProduct(args, context),
+
+    uploadFile: async (_: unknown, args: any, context: ContextObjectType) => {
+      console.log(args);
+      return true;
+    },
   },
 };
