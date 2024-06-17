@@ -7,11 +7,14 @@ import {
   UpdateProductArgsType,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
+import { readXlsx } from "@core/utils/xlsxUtils";
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
 import productRepository, {
   getProductInfoById,
 } from "@repositories/productRepository";
+import { File } from "buffer";
+import { FileUpload } from "graphql-upload-ts";
 
 /**
  * Controller used to get product by Id
@@ -221,13 +224,38 @@ export const getProductList = async (
     isEnd: page >= totalPages - 1,
     totalPages,
     totalMatches: count,
-    currentMatchs: products.length
-  }
-  
+    currentMatchs: products.length,
+  };
+
   return {
     products,
-    pageInfo
+    pageInfo,
   };
+};
+
+/**
+ * Controller used to bulk upload product
+ * @param args
+ * @returns
+ */
+export const bulkUploadProduct = async (
+  inputFile: {
+    file: Promise<FileUpload>;
+  },
+  context: ContextObjectType
+) => {
+  if (!inputFile) {
+    throw new BadRequestError("Invalid file");
+  }
+
+  try {
+    const jsonData = await readXlsx(inputFile.file);
+    console.log(jsonData);
+  } catch (error) {
+    console.log(error);
+  }
+
+  return true;
 };
 
 export default {
@@ -237,4 +265,5 @@ export default {
   statusUpdateProduct,
   getVariantInfo,
   getProductList,
+  bulkUploadProduct,
 };

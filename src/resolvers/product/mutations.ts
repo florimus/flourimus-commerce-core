@@ -2,12 +2,14 @@ import {
   ContextObjectType,
   CreateProductArgsType,
   ProductArgsType,
+  ProductBulkUploadArgs,
   UpdateProductArgsType,
 } from "@core/types";
 import {
   createProduct,
   updateProduct,
   statusUpdateProduct,
+  bulkUploadProduct,
 } from "@services/productService";
 
 export const resolverMutations = {
@@ -30,9 +32,10 @@ export const resolverMutations = {
       context: ContextObjectType
     ) => await statusUpdateProduct(args, context),
 
-    uploadFile: async (_: unknown, args: any, context: ContextObjectType) => {
-      console.log(args);
-      return true;
-    },
+    productBulkUpload: async (
+      _: unknown,
+      args: ProductBulkUploadArgs,
+      context: ContextObjectType
+    ) => await bulkUploadProduct(args, context),
   },
 };

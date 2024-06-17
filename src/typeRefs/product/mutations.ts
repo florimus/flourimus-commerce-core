@@ -6,6 +6,6 @@ export const ProductMutations = gql`
     productCreate(productCreateInput: ProductCreateInput): Product
     productUpdate(_id: ID!, productUpdateInput: ProductUpdateInput): Product
     productStatusChange(_id: ID!): ProductStatusChangeResponse
-    uploadFile(file: Upload!): Boolean
+    productBulkUpload(file: Upload!): Boolean
   }
 `;

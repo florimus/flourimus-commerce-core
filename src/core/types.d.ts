@@ -1,6 +1,7 @@
 /* eslint-disable */
 
 import { PubSub } from "graphql-subscriptions";
+import { FileUpload } from "graphql-upload-ts";
 
 /**
  * Define all types here
@@ -65,6 +66,12 @@ export type ResetPasswordMutationArgsType = {
 
 export type ProductArgsType = {
   _id: string;
+};
+
+export type ProductBulkUploadArgs = {
+  file: {
+    file: Promise<FileUpload>;
+  };
 };
 
 export type ProductListArgsType = {
