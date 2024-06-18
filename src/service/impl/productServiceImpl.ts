@@ -247,14 +247,7 @@ export const bulkUploadProduct = async (
   if (!inputFile) {
     throw new BadRequestError("Invalid file");
   }
-
-  try {
-    const jsonData = await readXlsx(inputFile.file);
-    console.log(jsonData);
-  } catch (error) {
-    console.log(error);
-  }
-
+  const jsonData = await readXlsx(inputFile.file);
   return true;
 };
 
