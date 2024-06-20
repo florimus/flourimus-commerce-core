@@ -3,6 +3,7 @@ import { customerPermissions } from "@resolvers/customer";
 import { isAuthenticated } from "./permissions";
 import { productPermissions } from "@resolvers/product";
 import UnAuthorizationError from "@errors/UnAuthorizationError";
+import { priceTablePermissions } from "@resolvers/price";
 
 export const permissions = shield({
   Query: {
@@ -13,7 +14,8 @@ export const permissions = shield({
   Mutation: {
     "*": isAuthenticated,
     ...customerPermissions.mutations,
-    ...productPermissions.mutations
+    ...productPermissions.mutations,
+    ...priceTablePermissions.mutations
   }
 },
   {

@@ -98,6 +98,17 @@ export type CreateProductArgsType = {
   };
 };
 
+export type ProductPriceEntryArgsType = {
+  productPriceEntryInput: {
+    parentId: string;
+    productId: string;
+    isVariant: boolean;
+    listPrice: number
+    sellPrice: number
+    taxId: String
+  };
+};
+
 export type UpdateProductArgsType = {
   _id: string;
   productUpdateInput: {
