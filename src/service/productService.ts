@@ -73,6 +73,15 @@ export const getProductList = async (args: ProductListArgsType) => {
 };
 
 /**
+ * Controller used to check status of bulk upload product
+ * @param args
+ * @returns
+ */
+export const productBulkUploadStatusCheck = () => {
+  return productServiceImpl.productBulkUploadStatusCheck();
+};
+
+/**
  * Controller used to bulk upload product
  * @param args
  * @returns

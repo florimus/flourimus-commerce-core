@@ -1,13 +1,9 @@
-import pubsub from "@core/pubSub";
-import contants from "@core/constants/contants";
+import { productBulkUploadStatusCheck } from "@services/productService";
 
 export const resolverSubscriptions = {
   Subscription: {
     productBulkUploadStatus: {
-      subscribe: () =>
-        pubsub?.asyncIterator([
-          contants.subscribtionKeys.PRODUCTS_UPLOAD_STATUS,
-        ]),
+      subscribe: productBulkUploadStatusCheck,
     },
   },
 };

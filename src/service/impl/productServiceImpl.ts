@@ -1,5 +1,8 @@
+import contants from "@core/constants/contants";
+import pubsub from "@core/pubSub";
 import sequence from "@core/sequence";
 import {
+  BulkProductUploadStatusResponse,
   ContextObjectType,
   CreateProductArgsType,
   ProductListArgsType,
@@ -10,11 +13,15 @@ import { getCurrentTime } from "@core/utils/timeUtils";
 import { readXlsx } from "@core/utils/xlsxUtils";
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
+import {
+  getSystemConfigurations,
+  updateBulkProductQueueStatus,
+} from "@repositories/organizationRepository";
 import productRepository, {
   getProductInfoById,
 } from "@repositories/productRepository";
-import { File } from "buffer";
 import { FileUpload } from "graphql-upload-ts";
+import productBulkUploader from "./productBulkUploader";
 
 /**
  * Controller used to get product by Id
@@ -124,7 +131,11 @@ const updateProduct = async (
   }
   const updatedProduct = {
     name: productUpdateInput.name || product.name,
-    medias: productUpdateInput?.medias || product.medias,
+    medias:
+      Array.isArray(productUpdateInput?.medias) &&
+      productUpdateInput.medias.length > 0
+        ? productUpdateInput.medias
+        : product.medias,
     isSellable: productUpdateInput?.isSellable || product.isSellable,
     updatedAt: getCurrentTime(),
     updatedBy: context.email,
@@ -233,6 +244,38 @@ export const getProductList = async (
   };
 };
 
+const getProductBulkUploadDBConfigs = async () => {
+  const configs = await getSystemConfigurations("PRODUCT_BULK_UPLOAD_QUEUE");
+  const defaultConfig =
+    configs.defaultConfigurations as BulkProductUploadStatusResponse;
+  if (configs.isActive && defaultConfig?.isAvailable) {
+    pubsub.publish(contants.subscribtionKeys.PRODUCTS_UPLOAD_STATUS, {
+      productBulkUploadStatus: defaultConfig,
+    });
+  }
+};
+
+/**
+ * Controller used to check status of bulk upload product
+ * @param args
+ * @returns
+ */
+export const productBulkUploadStatusCheck = () => {
+  getProductBulkUploadDBConfigs();
+  return pubsub?.asyncIterator([
+    contants.subscribtionKeys.PRODUCTS_UPLOAD_STATUS,
+  ]);
+};
+
+const bulkProductSignalGenerator = async (
+  status: BulkProductUploadStatusResponse
+) => {
+  await updateBulkProductQueueStatus(status);
+  pubsub.publish(contants.subscribtionKeys.PRODUCTS_UPLOAD_STATUS, {
+    productBulkUploadStatus: status,
+  });
+};
+
 /**
  * Controller used to bulk upload product
  * @param args
@@ -247,7 +290,64 @@ export const bulkUploadProduct = async (
   if (!inputFile) {
     throw new BadRequestError("Invalid file");
   }
-  const jsonData = await readXlsx(inputFile.file);
+
+  const configs = await getSystemConfigurations("PRODUCT_BULK_UPLOAD_QUEUE");
+  const defaultConfig =
+    configs.defaultConfigurations as BulkProductUploadStatusResponse;
+
+  if (!configs.isActive || !defaultConfig?.isAvailable) {
+    throw new BadRequestError("Product Bulk Upload Option Disabled");
+  }
+
+  const status: BulkProductUploadStatusResponse = {
+    isAvailable: false,
+    createdBy: context.email,
+    startTime: getCurrentTime(),
+    Estimate: "Calculating...",
+  };
+  await bulkProductSignalGenerator(status);
+  const jsonData = (await readXlsx(inputFile.file)) || [];
+  await bulkProductSignalGenerator({
+    isAvailable: false,
+    totalDocuments: jsonData?.length,
+    completedDocuments: 0,
+    Estimate: `${
+      Math.trunc(jsonData?.length / contants.bulkUploadProduct.BATCH_SIZE) + 1
+    } sec`,
+    progress: 0,
+  });
+
+  let currentBatchNumber = 0;
+  for (
+    let i = 0;
+    i < jsonData.length;
+    i += contants.bulkUploadProduct.BATCH_SIZE
+  ) {
+    const batch = jsonData.slice(i, i + contants.bulkUploadProduct.BATCH_SIZE);
+    await productBulkUploader(batch as ProductType[], context.email);
+    currentBatchNumber += batch.length;
+    await bulkProductSignalGenerator({
+      ...status,
+      completedDocuments: currentBatchNumber,
+      totalDocuments: jsonData?.length,
+      Estimate: `${
+        Math.trunc(
+          (jsonData?.length - currentBatchNumber) /
+            contants.bulkUploadProduct.BATCH_SIZE
+        ) + 1
+      } sec`,
+      progress: Math.trunc((currentBatchNumber * 100) / jsonData.length),
+    });
+  }
+  await bulkProductSignalGenerator({
+    ...status,
+    Estimate: "completed",
+    completedDocuments: jsonData?.length,
+    totalDocuments: jsonData?.length,
+    isAvailable: true,
+    progress: 100,
+  });
+
   return true;
 };
 
@@ -258,5 +358,6 @@ export default {
   statusUpdateProduct,
   getVariantInfo,
   getProductList,
+  productBulkUploadStatusCheck,
   bulkUploadProduct,
 };

@@ -46,6 +46,7 @@ export const ProductDefs = gql`
     totalDocuments: Int
     completedDocuments: Int
     createdBy: String
+    progress: Int
   }
 
   # =============== Inputs =================
