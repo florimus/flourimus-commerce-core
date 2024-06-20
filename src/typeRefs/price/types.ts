@@ -22,9 +22,7 @@ export const ProductTableDefs = gql`
   # =============== Inputs =================
 
   input ProductPriceEntryInput {
-    parentId: String
     productId: String
-    isVariant: Boolean
     listPrice: Float
     sellPrice: Float
     taxId: String

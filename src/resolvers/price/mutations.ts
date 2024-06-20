@@ -1,4 +1,5 @@
 import { ContextObjectType, ProductPriceEntryArgsType } from "@core/types";
+import { saveProductPrice } from "@services/priceTableService";
 
 export const resolverMutations = {
   Mutation: {
@@ -6,9 +7,6 @@ export const resolverMutations = {
       _: unknown,
       args: ProductPriceEntryArgsType,
       context: ContextObjectType
-    ) => {
-      console.log(args);
-      return {};
-    },
+    ) => await saveProductPrice(args, context),
   },
 };
