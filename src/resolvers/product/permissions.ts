@@ -1,5 +1,5 @@
 import { hasRole, isAuthenticated } from "@permissions/permissions";
-import { allow, and } from "graphql-shield";
+import { and } from "graphql-shield";
 
 export const quriesPermissions = {
   product: isAuthenticated,

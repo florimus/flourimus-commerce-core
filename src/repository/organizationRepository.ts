@@ -21,7 +21,7 @@ export const updateSequenceNumberConfiguration: (
 
 export const updateBulkProductQueueStatus: (
   input: BulkProductUploadStatusResponse
-) => Promise<Boolean> = async (input) => {
+) => Promise<boolean> = async (input) => {
   await System.updateOne(
     { code: "PRODUCT_BULK_UPLOAD_QUEUE" },
     {
