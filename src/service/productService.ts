@@ -2,6 +2,7 @@ import {
   ContextObjectType,
   CreateProductArgsType,
   ProductArgsType,
+  ProductBulkUploadArgs,
   ProductListArgsType,
   ProductType,
   UpdateProductArgsType,
@@ -69,4 +70,25 @@ export const getVariantInfo = async (product: ProductType) => {
  */
 export const getProductList = async (args: ProductListArgsType) => {
   return await productServiceImpl.getProductList(args.productListInput);
+};
+
+/**
+ * Controller used to check status of bulk upload product
+ * @param args
+ * @returns
+ */
+export const productBulkUploadStatusCheck = () => {
+  return productServiceImpl.productBulkUploadStatusCheck();
+};
+
+/**
+ * Controller used to bulk upload product
+ * @param args
+ * @returns
+ */
+export const bulkUploadProduct = async (
+  args: ProductBulkUploadArgs,
+  context: ContextObjectType
+) => {
+  return await productServiceImpl.bulkUploadProduct(args.file, context);
 };

@@ -5,4 +5,9 @@ export const ProductQuries = gql`
     product(_id: String!): Product
     productList(productListInput: ProductListInput): ProductList
   }
+
+  type Message {
+    id: String
+    content: String
+  }
 `;

@@ -3,27 +3,34 @@ import { ContextObjectType, SystemConfigsType, UserType } from "@types";
 import { getUserByIdOrEmail } from "@repositories/userRepository";
 import { getSystemConfigurations } from "@repositories/organizationRepository";
 import { verifyAuthenticationToken } from "@services/authenticationService";
+import pubsub from "@core/pubSub";
 
 const configurations = async (role: string) => {
-  const systemConfigurations: SystemConfigsType = await getSystemConfigurations("PERMISSIONS_OF_ROLES");
+  const systemConfigurations: SystemConfigsType = await getSystemConfigurations(
+    "PERMISSIONS_OF_ROLES"
+  );
 
   if (systemConfigurations && systemConfigurations.isActive) {
     return systemConfigurations.defaultConfigurations?.[role] as string[];
   }
 
-  throw Error("Invalid role")
-}
+  throw Error("Invalid role");
+};
 
-export default async function userContext({ req }: { req: Request }): Promise<ContextObjectType> {
+export default async function userContext({
+  req,
+}: {
+  req: Request;
+}): Promise<ContextObjectType> {
   const { headers } = req || {};
 
-  const { authorization } = headers || {}
+  const { authorization } = headers || {};
 
   if (authorization) {
     const token = authorization?.split(" ")?.[1];
     const userId = verifyAuthenticationToken(token);
     if (userId) {
-      const user: UserType = await getUserByIdOrEmail(userId, "", true);      
+      const user: UserType = await getUserByIdOrEmail(userId, "", true);
       if (user) {
         const userPermissions = await configurations(user.role);
         return {
@@ -36,10 +43,11 @@ export default async function userContext({ req }: { req: Request }): Promise<Co
           loginType: user.loginType,
           phone: user.phone,
           role: user.role,
-          permissions: userPermissions
+          permissions: userPermissions,
+          pubsub,
         };
       }
     }
   }
-  return {} as ContextObjectType;
+  return { pubsub } as ContextObjectType;
 }

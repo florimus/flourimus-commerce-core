@@ -1,9 +1,14 @@
 /* eslint-disable */
+
+import { PubSub } from "graphql-subscriptions";
+import { FileUpload } from "graphql-upload-ts";
+
 /**
  * Define all types here
  */
 export interface ContextObjectType extends UserType {
   permissions: string[];
+  pubsub: PubSub;
 }
 
 export type UserQueryArgsType = {
@@ -63,6 +68,12 @@ export type ProductArgsType = {
   _id: string;
 };
 
+export type ProductBulkUploadArgs = {
+  file: {
+    file: Promise<FileUpload>;
+  };
+};
+
 export type ProductListArgsType = {
   productListInput: {
     search: string;
@@ -82,7 +93,7 @@ export type CreateProductArgsType = {
     category: string;
     brand: string;
     isVariant: boolean;
-    medias: [string];
+    medias: string[];
     isSellable: boolean;
   };
 };
@@ -91,7 +102,7 @@ export type UpdateProductArgsType = {
   _id: string;
   productUpdateInput: {
     name?: string;
-    medias?: string;
+    medias?: string[];
     category?: string;
     brand?: string;
     isSellable?: boolean;
@@ -140,14 +151,14 @@ export interface UserType {
 export interface ProductType {
   _id: string;
   name: string;
-  medias: [string];
+  medias: string[];
   parentId?: string;
   category: string;
   brand: string;
   haveVariants: boolean;
   isVariant: boolean;
   isSellable: boolean;
-  variantInfo?: [string];
+  variantInfo?: string[];
   createdAt?: string;
   updatedAt?: string;
   isActive?: Boolean;
@@ -160,4 +171,14 @@ export interface BasicDBEmailConfig {
   from: string;
   name: string;
   templateId: string;
+}
+
+export interface BulkProductUploadStatusResponse {
+  isAvailable: boolean;
+  startTime?: string;
+  Estimate?: string;
+  totalDocuments?: number;
+  completedDocuments?: number;
+  createdBy?: string;
+  progress?: number;
 }
