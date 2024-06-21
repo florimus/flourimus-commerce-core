@@ -15,7 +15,12 @@ Please review our [Code of Conduct](CODE_OF_CONDUCT.md) to understand the standa
 
    ```bash
    git clone https://github.com/Anoopoo7/express-graphql-server-template.git
-3. Initialize DB scripts
+3. Initialize DB by scripts
+
+    ```bash
+    cd database
+    sh dbstart.sh
+4. Do not close the terminal. tak a new terminal and run below command to perform migraions.
 
     ```bash
     cd database
@@ -32,7 +37,6 @@ Please review our [Code of Conduct](CODE_OF_CONDUCT.md) to understand the standa
 7. Once everything seems fine, open a pull request (PR) against the main branch of the original repository.
     ```bash
     git push origin feature/your-feature-name
-
 ## Code Style
 Follow the existing code style and conventions used in the project. Ensure that your code is clean, readable, and well-documented.
 

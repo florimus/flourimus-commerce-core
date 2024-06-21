@@ -1,4 +1,8 @@
-# Express GraphQL Starter
+# Flourimus Commerce Core
+
+<h1 align="center">
+  <img src="https://i.ibb.co/1bX043N/undraw-web-shopping-re-owap.png" alt="image">
+</h1>
 
 A comprehensive starter template for building an Express.js server with TypeScript, GraphQL, MongoDB integration, RBAC, ESLint configurations, and Database scripts for release planning.
 
@@ -34,4 +38,3 @@ Before running the project, ensure you have the following installed on your mach
 
 - Node.js
 - MongoDB
-
