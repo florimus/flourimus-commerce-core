@@ -4,6 +4,7 @@ import {
   getVariantInfo,
   getProductList,
   getProductPriceInfo,
+  findProductAvailableStocks,
 } from "@services/productService";
 
 export const resolverQuries = {
@@ -18,5 +19,7 @@ export const resolverQuries = {
   Product: {
     variants: async (product: ProductType) => await getVariantInfo(product),
     price: async (product: ProductType) => await getProductPriceInfo(product),
+    availableStocks: async (product: ProductType) =>
+      await findProductAvailableStocks(product),
   },
 };

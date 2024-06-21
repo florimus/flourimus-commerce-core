@@ -50,9 +50,16 @@ const getWarehouseList = async (
   return { warehouses, count };
 };
 
+export const findWarehousesWithProductStocks = async (productId: string) => {
+  return (await Warehouse.find({
+    "stocks.productId": productId,
+  })) as WarehouseType[];
+};
+
 export default {
   createWarehouse,
   getWarehouseById,
   updateWarehouse,
   getWarehouseList,
+  findWarehousesWithProductStocks,
 };

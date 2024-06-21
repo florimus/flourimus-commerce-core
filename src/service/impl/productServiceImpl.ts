@@ -24,6 +24,7 @@ import productRepository, {
 import { FileUpload } from "graphql-upload-ts";
 import productBulkUploader from "./productBulkUploader";
 import { productPriceInfo } from "@services/priceTableService";
+import { findProductAvailableStocksByProductId } from "@services/warehouseService";
 
 /**
  * Controller used to get product by Id
@@ -369,6 +370,15 @@ export const getProductPriceInfo = async (product: ProductType) => {
   };
 };
 
+/**
+ * Controller used to find product available purchasable quantity
+ * @param product
+ * @returns
+ */
+export const findProductAvailableStocks = async (product: ProductType) => {
+  return await findProductAvailableStocksByProductId(product._id);
+};
+
 export default {
   getProductById,
   createProduct,
@@ -379,4 +389,5 @@ export default {
   productBulkUploadStatusCheck,
   bulkUploadProduct,
   getProductPriceInfo,
+  findProductAvailableStocks,
 };

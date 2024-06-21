@@ -57,3 +57,7 @@ export const productStockEntry = async (
     context
   );
 };
+
+export const findProductAvailableStocksByProductId = async (productId: string) => {
+  return await warehouseServiceImpl.findProductAvailableStocksByProductId(productId);
+};

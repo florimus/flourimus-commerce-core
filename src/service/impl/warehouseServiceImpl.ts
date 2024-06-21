@@ -11,6 +11,7 @@ import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
 import warehouseRepository, {
+  findWarehousesWithProductStocks,
   getWarehouseById,
 } from "@repositories/warehouseRepository";
 import productServiceImpl from "./productServiceImpl";
@@ -158,9 +159,41 @@ export const productStockEntry = async (
   return stockDetails;
 };
 
+export const findProductAvailableStocksByProductId = async (
+  productId: string
+): Promise<number> => {
+  const warehouses: WarehouseType[] = await findWarehousesWithProductStocks(
+    productId
+  );
+
+  if (!Array.isArray(warehouses) || warehouses.length === 0) {
+    return 0;
+  }
+
+  const { totalStocks, saftyStock, allocatedStocks } = warehouses.reduce(
+    (acc, warehouse) => {
+      const productStock: ProductStockType | undefined = warehouse.stocks?.find(
+        (stock) => stock.productId === productId
+      );
+
+      if (productStock) {
+        acc.totalStocks += productStock.totalStocks || 0;
+        acc.saftyStock += productStock.saftyStock || 0;
+        acc.allocatedStocks += productStock.allocatedStocks || 0;
+      }
+
+      return acc;
+    },
+    { totalStocks: 0, saftyStock: 0, allocatedStocks: 0 }
+  );
+
+  return totalStocks - (saftyStock + allocatedStocks);
+};
+
 export default {
   warehouseCreate,
   WarehouseStatusChange,
   warehouseList,
   productStockEntry,
+  findProductAvailableStocksByProductId,
 };
