@@ -86,6 +86,17 @@ export type ProductListArgsType = {
   };
 };
 
+export type WarehouseListArgsType = {
+  warehouseListInput: {
+    search: string;
+    page: number;
+    size: number;
+    sortBy: string;
+    sortDirection: "ASC" | "DESC";
+    active: "ACTIVE" | "INACTIVE" | "ALL";
+  };
+};
+
 export type CreateProductArgsType = {
   productCreateInput: {
     name: string;

@@ -26,6 +26,19 @@ export const WarehouseDefs = gql`
     status: Boolean
   }
 
+  type WarehouseList {
+    warehouses: [Warehouse]
+    pageInfo: WarehousePageInfo
+  }
+
+  type WarehousePageInfo {
+    isStart: Boolean
+    isEnd: Boolean
+    totalPages: Int
+    totalMatches: Int
+    currentMatchs: Int
+  }
+
   # =============== Inputs =================
 
   input ProductStockEntryInput {
@@ -38,5 +51,14 @@ export const WarehouseDefs = gql`
   input WarehouseCreateInput {
     name: String
     country: String
+  }
+
+  input WarehouseListInput {
+    search: String
+    page: Int
+    size: Int
+    sortBy: String
+    sortDirection: String
+    active: String
   }
 `;

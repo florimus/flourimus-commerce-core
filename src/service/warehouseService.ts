@@ -2,6 +2,7 @@ import {
   ChangeWarehouseStatusArgsType,
   ContextObjectType,
   WarehouseCreateArgsType,
+  WarehouseListArgsType,
 } from "@core/types";
 import warehouseServiceImpl from "./impl/warehouseServiceImpl";
 
@@ -30,4 +31,13 @@ export const WarehouseStatusChange = async (
   context: ContextObjectType
 ) => {
   return await warehouseServiceImpl.WarehouseStatusChange(args._id, context);
+};
+
+/**
+ * Controller used to list warehouses
+ * @param args
+ * @returns
+ */
+export const WarehouseList = async (args: WarehouseListArgsType) => {
+  return await warehouseServiceImpl.warehouseList(args.warehouseListInput);
 };

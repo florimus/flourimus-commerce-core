@@ -12,6 +12,7 @@ export const permissions = shield(
       "*": isAuthenticated,
       ...customerPermissions.quries,
       ...productPermissions.quries,
+      ...warehousePermissions.quries,
     },
     Mutation: {
       "*": isAuthenticated,
