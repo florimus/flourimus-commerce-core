@@ -1,7 +1,6 @@
 import sequence from "@core/sequence";
 import {
   ContextObjectType,
-  ProductStockType,
   StockEntryArgsType,
   WarehouseCreateArgsType,
   WarehouseListArgsType,

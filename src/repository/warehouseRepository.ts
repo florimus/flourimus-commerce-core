@@ -4,7 +4,7 @@ import {
   WarehouseType,
 } from "@core/types";
 import Warehouse from "@schemas/WarehouseSchema";
-import mongoose, { FilterQuery } from "mongoose";
+import { FilterQuery } from "mongoose";
 
 const createWarehouse = async (warehouse: WarehouseType) => {
   return await new Warehouse(warehouse).save();
