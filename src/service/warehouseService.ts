@@ -2,6 +2,7 @@ import {
   ChangeWarehouseStatusArgsType,
   ContextObjectType,
   StockEntryArgsType,
+  WarehouseArgsType,
   WarehouseCreateArgsType,
   WarehouseListArgsType,
 } from "@core/types";
@@ -58,6 +59,19 @@ export const productStockEntry = async (
   );
 };
 
-export const findProductAvailableStocksByProductId = async (productId: string) => {
-  return await warehouseServiceImpl.findProductAvailableStocksByProductId(productId);
+/**
+ * Controller used to get warehouse details
+ * @param args
+ * @returns
+ */
+export const warehouseInfo = async (args: WarehouseArgsType) => {
+  return await warehouseServiceImpl.warehouseInfo(args._id);
+};
+
+export const findProductAvailableStocksByProductId = async (
+  productId: string
+) => {
+  return await warehouseServiceImpl.findProductAvailableStocksByProductId(
+    productId
+  );
 };

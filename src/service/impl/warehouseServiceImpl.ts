@@ -3,6 +3,7 @@ import {
   ContextObjectType,
   ProductStockType,
   StockEntryArgsType,
+  WarehouseArgsType,
   WarehouseCreateArgsType,
   WarehouseListArgsType,
   WarehouseType,
@@ -159,6 +160,22 @@ export const productStockEntry = async (
   return stockDetails;
 };
 
+/**
+ * Controller used to get warehouse details
+ * @param args
+ * @returns
+ */
+export const warehouseInfo = async (_id: string) => {
+  if (!_id) {
+    throw new BadRequestError("Id is mandatory");
+  }
+  const warehouse = await warehouseRepository.getWarehouseById(_id);
+  if (warehouse?._id) {
+    return warehouse;
+  }
+  throw new NotFoundError("Warehouse not found");
+};
+
 export const findProductAvailableStocksByProductId = async (
   productId: string
 ): Promise<number> => {
@@ -195,5 +212,6 @@ export default {
   WarehouseStatusChange,
   warehouseList,
   productStockEntry,
+  warehouseInfo,
   findProductAvailableStocksByProductId,
 };

@@ -2,6 +2,7 @@ import { hasRole, isAuthenticated } from "@permissions/permissions";
 import { and } from "graphql-shield";
 
 export const quriesPermissions = {
+  warehouse: isAuthenticated,
   warehouseList: isAuthenticated,
 };
 
