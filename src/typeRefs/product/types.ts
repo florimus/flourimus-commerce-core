@@ -19,6 +19,7 @@ export const ProductDefs = gql`
     updatedBy: String
     metaStatus: String
     variants: [Product]
+    price: ProductPrice
   }
 
   type ProductStatusChangeResponse {

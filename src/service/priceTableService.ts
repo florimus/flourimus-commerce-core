@@ -15,3 +15,15 @@ export const saveProductPrice = async (
     context
   );
 };
+
+export const productPriceInfo = async (
+  productId: string,
+  isVariant: boolean,
+  parentId?: string
+) => {
+  return await priceTableServiceImpl.productPriceInfo(
+    productId,
+    isVariant,
+    parentId
+  );
+};

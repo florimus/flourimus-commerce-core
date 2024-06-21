@@ -14,7 +14,9 @@ import productServiceImpl from "./impl/productServiceImpl";
  * @param args
  * @returns
  */
-export const getProductById = async (args: ProductArgsType) => {
+export const getProductById: (
+  args: ProductArgsType
+) => Promise<ProductType> = async (args: ProductArgsType) => {
   return await productServiceImpl.getProductById(args._id);
 };
 
@@ -91,4 +93,13 @@ export const bulkUploadProduct = async (
   context: ContextObjectType
 ) => {
   return await productServiceImpl.bulkUploadProduct(args.file, context);
+};
+
+/**
+ * Controller used to get product price
+ * @param product
+ * @returns
+ */
+export const getProductPriceInfo = async (product: ProductType) => {
+  return await productServiceImpl.getProductPriceInfo(product);
 };

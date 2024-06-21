@@ -15,10 +15,10 @@ import { getProductInfoById } from "@repositories/productRepository";
 
 /**
  * Create New Price table and add price
- * @param parentId 
- * @param price 
- * @param context 
- * @returns 
+ * @param parentId
+ * @param price
+ * @param context
+ * @returns
  */
 const createNewPriceTable = async (
   parentId: string,
@@ -39,11 +39,11 @@ const createNewPriceTable = async (
 
 /**
  * Add new price to existing price table
- * @param parentId 
- * @param price 
- * @param prices 
- * @param context 
- * @returns 
+ * @param parentId
+ * @param price
+ * @param prices
+ * @param context
+ * @returns
  */
 const addPriceToPriceTable = async (
   parentId: string,
@@ -61,11 +61,11 @@ const addPriceToPriceTable = async (
 
 /**
  * Update existing price of existing price table
- * @param parentId 
- * @param price 
- * @param prices 
- * @param context 
- * @returns 
+ * @param parentId
+ * @param price
+ * @param prices
+ * @param context
+ * @returns
  */
 const updatePriceToPriceTable = async (
   parentId: string,
@@ -156,6 +156,24 @@ export const saveProductPrice = async (
   throw new NotFoundError("Product price cannot be set");
 };
 
+export const productPriceInfo = async (
+  productId: string,
+  isVariant: boolean,
+  parentId?: string
+) => {
+  if (isVariant && parentId) {
+    const priceTable = await getPriceTableByParentId(parentId);
+    return Array.isArray(priceTable?.prices)
+      ? priceTable.prices.find((each) => each?.productId === productId)
+      : null;
+  }
+  const priceTable = await getPriceTableByParentId(productId);
+  return Array.isArray(priceTable?.prices)
+    ? priceTable.prices.find((each) => each?.productId === productId)
+    : null;
+};
+
 export default {
   saveProductPrice,
+  productPriceInfo,
 };
