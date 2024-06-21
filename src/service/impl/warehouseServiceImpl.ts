@@ -1,6 +1,8 @@
 import sequence from "@core/sequence";
 import {
   ContextObjectType,
+  ProductStockType,
+  StockEntryArgsType,
   WarehouseCreateArgsType,
   WarehouseListArgsType,
   WarehouseType,
@@ -11,6 +13,7 @@ import NotFoundError from "@errors/NotFoundError";
 import warehouseRepository, {
   getWarehouseById,
 } from "@repositories/warehouseRepository";
+import productServiceImpl from "./productServiceImpl";
 
 /**
  * Controller used to create warehouse
@@ -106,8 +109,58 @@ export const warehouseList = async (
   };
 };
 
+/**
+ * Controller used to update product stock in warehouse
+ * @param args
+ * @returns
+ */
+export const productStockEntry = async (
+  stockEntryInput: StockEntryArgsType["productStockEntryInput"],
+  context: ContextObjectType
+) => {
+  const { productId, saftyStock, totalStocks, warehouseId } =
+    stockEntryInput || {};
+  if (!productId || !warehouseId) {
+    throw new BadRequestError("Invalid request");
+  }
+  const warehouse = await warehouseRepository.getWarehouseById(warehouseId);
+  if (!warehouse?._id) {
+    throw new NotFoundError("Warehouse not found");
+  }
+  const product = await productServiceImpl.getProductById(productId);
+  if (!product?._id) {
+    throw new NotFoundError("Product not found");
+  }
+  const stockDetails: ProductStockType = {
+    productId,
+    saftyStock,
+    totalStocks,
+    allocatedStocks: 0,
+  };
+  const allStocks = Array.isArray(warehouse.stocks) ? warehouse.stocks : [];
+  const existingStock = allStocks.find((each) => each?.productId === productId);
+  if (!existingStock) {
+    await warehouseRepository.updateWarehouse(warehouseId, {
+      stocks: [...allStocks, stockDetails],
+      updatedAt: getCurrentTime(),
+      updatedBy: context.email,
+    });
+    return stockDetails;
+  }
+  const updatedStock = allStocks.map((each) =>
+    each?.productId === productId ? stockDetails : each
+  );
+  await warehouseRepository.updateWarehouse(warehouseId, {
+    stocks: updatedStock,
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+  });
+  return stockDetails;
+};
+
 export default {
   warehouseCreate,
   WarehouseStatusChange,
   warehouseList,
+  productStockEntry,
 };

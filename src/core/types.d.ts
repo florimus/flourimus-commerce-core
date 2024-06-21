@@ -140,6 +140,15 @@ export type ChangeWarehouseStatusArgsType = {
   _id: string;
 };
 
+export type StockEntryArgsType = {
+  productStockEntryInput: {
+    warehouseId: string;
+    productId: string;
+    totalStocks: number;
+    saftyStock: number;
+  };
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"
@@ -243,7 +252,7 @@ export interface ProductStockType {
 export interface WarehouseType {
   _id: string;
   name: string;
-  stocks: ProductPriceType[];
+  stocks: ProductStockType[];
   country: string;
   createdAt: string;
   updatedAt: string;

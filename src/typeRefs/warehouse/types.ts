@@ -16,9 +16,9 @@ export const WarehouseDefs = gql`
 
   type ProductStocks {
     productId: String
-    totalStocks: Float
-    saftyStock: Float
-    allocatedStocks: Float
+    totalStocks: Int
+    saftyStock: Int
+    allocatedStocks: Int
   }
 
   type WarehouseStatusChangeResponse {
@@ -44,8 +44,8 @@ export const WarehouseDefs = gql`
   input ProductStockEntryInput {
     warehouseId: String
     productId: String
-    totalStocks: Float
-    saftyStock: Float
+    totalStocks: Int
+    saftyStock: Int
   }
 
   input WarehouseCreateInput {

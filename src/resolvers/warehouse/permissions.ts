@@ -6,6 +6,7 @@ export const quriesPermissions = {
 };
 
 export const mutationPermissions = {
-  WarehouseCreate: and(isAuthenticated, hasRole("prd:u")),
-  WarehouseStatusChange: and(isAuthenticated, hasRole("prd:u")),
+  warehouseCreate: and(isAuthenticated, hasRole("prd:u")),
+  warehouseStatusChange: and(isAuthenticated, hasRole("prd:u")),
+  productStockEntry: and(isAuthenticated, hasRole("prd:u")),
 };

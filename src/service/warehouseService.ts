@@ -1,6 +1,7 @@
 import {
   ChangeWarehouseStatusArgsType,
   ContextObjectType,
+  StockEntryArgsType,
   WarehouseCreateArgsType,
   WarehouseListArgsType,
 } from "@core/types";
@@ -40,4 +41,19 @@ export const WarehouseStatusChange = async (
  */
 export const WarehouseList = async (args: WarehouseListArgsType) => {
   return await warehouseServiceImpl.warehouseList(args.warehouseListInput);
+};
+
+/**
+ * Controller used to update product stock in warehouse
+ * @param args
+ * @returns
+ */
+export const productStockEntry = async (
+  args: StockEntryArgsType,
+  context: ContextObjectType
+) => {
+  return await warehouseServiceImpl.productStockEntry(
+    args.productStockEntryInput,
+    context
+  );
 };
