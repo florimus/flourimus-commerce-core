@@ -107,6 +107,13 @@ export type ProductPriceEntryArgsType = {
   };
 };
 
+export type WarehouseCreateArgsType = {
+  warehouseCreateInput: {
+    name: string;
+    country: number;
+  };
+};
+
 export type UpdateProductArgsType = {
   _id: string;
   productUpdateInput: {
