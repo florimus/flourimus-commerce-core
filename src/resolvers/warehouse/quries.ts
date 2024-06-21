@@ -1,5 +1,14 @@
-import { WarehouseArgsType, WarehouseListArgsType } from "@core/types";
-import { WarehouseList, warehouseInfo } from "@services/warehouseService";
+import {
+  WarehouseArgsType,
+  WarehouseListArgsType,
+  WarehouseStockListArgsType,
+  WarehouseType,
+} from "@core/types";
+import {
+  WarehouseList,
+  warehouseInfo,
+  warehouseStockList,
+} from "@services/warehouseService";
 
 export const resolverQuries = {
   Query: {
@@ -8,5 +17,11 @@ export const resolverQuries = {
 
     warehouseList: async (_: unknown, args: WarehouseListArgsType) =>
       await WarehouseList(args),
+  },
+  Warehouse: {
+    stockList: async (
+      parent: WarehouseType,
+      args: WarehouseStockListArgsType
+    ) => await warehouseStockList(parent, args),
   },
 };

@@ -4,7 +4,7 @@ export const WarehouseDefs = gql`
   type Warehouse {
     _id: ID
     name: String
-    stocks: [ProductStocks]
+    stockList(stockListInput: StockListInput): StockList
     country: String
     createdAt: String
     updatedAt: String
@@ -28,6 +28,11 @@ export const WarehouseDefs = gql`
 
   type WarehouseList {
     warehouses: [Warehouse]
+    pageInfo: WarehousePageInfo
+  }
+
+  type StockList {
+    stocks: [ProductStocks]
     pageInfo: WarehousePageInfo
   }
 
@@ -60,5 +65,11 @@ export const WarehouseDefs = gql`
     sortBy: String
     sortDirection: String
     active: String
+  }
+
+  input StockListInput {
+    search: String
+    page: Int
+    size: Int
   }
 `;

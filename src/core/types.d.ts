@@ -97,6 +97,14 @@ export type WarehouseListArgsType = {
   };
 };
 
+export type WarehouseStockListArgsType = {
+  stockListInput: {
+    search: string;
+    page: number;
+    size: number;
+  };
+};
+
 export type WarehouseArgsType = {
   _id: string;
 };

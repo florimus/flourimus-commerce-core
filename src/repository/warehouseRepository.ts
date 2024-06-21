@@ -115,6 +115,65 @@ export const updateOldProductStock = async (
   );
 };
 
+export const getPaginatedWarehouseStocksById = async (
+  warehouseId: string,
+  page: number,
+  search: string,
+  size: number
+) => {
+  const warehouseStocks = await Warehouse.aggregate([
+    { $match: { _id: warehouseId } },
+    {
+      $project: {
+        stocks: {
+          $slice: [
+            {
+              $filter: {
+                input: "$stocks", // Array field to filter
+                as: "stock",
+                cond: {
+                  $regexMatch: {
+                    input: "$$stock.productId", // Field to search within
+                    regex: search?.toUpperCase(), // Your search regex or condition
+                  },
+                },
+              },
+            },
+            page * size, // Starting index for pagination
+            size, // Number of items per page
+          ],
+        },
+      },
+    },
+    { $sort: { "stocks.productId": 1 } }, // Sorting by productId ascending, adjust as needed
+  ]);
+  const totalCountResult = await Warehouse.aggregate([
+    { $match: { _id: warehouseId } },
+    {
+      $project: {
+        totalMatchedStocks: {
+          $size: {
+            $filter: {
+              input: "$stocks",
+              as: "stock",
+              cond: {
+                $regexMatch: {
+                  input: "$$stock.productId",
+                  regex: search?.toUpperCase(),
+                },
+              },
+            },
+          },
+        },
+      },
+    },
+  ]);
+  return {
+    stocks: warehouseStocks?.[0]?.stocks || [],
+    count: totalCountResult?.[0]?.totalMatchedStocks || 0,
+  };
+};
+
 export default {
   createWarehouse,
   getWarehouseById,
@@ -124,4 +183,5 @@ export default {
   isProductAvailableInWarehouse,
   addNewProductStock,
   updateOldProductStock,
+  getPaginatedWarehouseStocksById,
 };

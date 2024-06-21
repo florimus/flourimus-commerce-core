@@ -6,6 +6,7 @@ import {
   WarehouseCreateArgsType,
   WarehouseListArgsType,
   WarehouseStockFilter,
+  WarehouseStockListArgsType,
   WarehouseType,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
@@ -194,6 +195,39 @@ export const warehouseInfo = async (_id: string) => {
   throw new NotFoundError("Warehouse not found");
 };
 
+/**
+ * Controller used to list warehouses stocks
+ * @param args
+ * @returns
+ */
+export const warehouseStockList = async (
+  _id: string,
+  stockListInput: WarehouseStockListArgsType["stockListInput"]
+) => {
+  const { page = 0, search = "", size = 5 } = stockListInput;
+  const { stocks, count } =
+    await warehouseRepository.getPaginatedWarehouseStocksById(
+      _id,
+      page,
+      search,
+      size
+    );
+
+  const totalPages = Math.ceil(count / size);
+  const pageInfo = {
+    isStart: page === 0,
+    isEnd: page >= totalPages - 1,
+    totalPages,
+    totalMatches: count,
+    currentMatchs: stocks.length,
+  };
+
+  return {
+    stocks,
+    pageInfo,
+  };
+};
+
 export const findProductAvailableStocksByProductId = async (
   productId: string
 ): Promise<number> => {
@@ -223,5 +257,6 @@ export default {
   warehouseList,
   productStockEntry,
   warehouseInfo,
+  warehouseStockList,
   findProductAvailableStocksByProductId,
 };

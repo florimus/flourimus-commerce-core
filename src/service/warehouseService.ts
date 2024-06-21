@@ -5,6 +5,8 @@ import {
   WarehouseArgsType,
   WarehouseCreateArgsType,
   WarehouseListArgsType,
+  WarehouseStockListArgsType,
+  WarehouseType,
 } from "@core/types";
 import warehouseServiceImpl from "./impl/warehouseServiceImpl";
 
@@ -66,6 +68,21 @@ export const productStockEntry = async (
  */
 export const warehouseInfo = async (args: WarehouseArgsType) => {
   return await warehouseServiceImpl.warehouseInfo(args._id);
+};
+
+/**
+ * Controller used to list warehouses stocks
+ * @param args
+ * @returns
+ */
+export const warehouseStockList = async (
+  parent: WarehouseType,
+  args: WarehouseStockListArgsType
+) => {
+  return await warehouseServiceImpl.warehouseStockList(
+    parent?._id,
+    args.stockListInput
+  );
 };
 
 export const findProductAvailableStocksByProductId = async (
