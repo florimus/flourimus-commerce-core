@@ -3,9 +3,9 @@ import {
   ContextObjectType,
   ProductStockType,
   StockEntryArgsType,
-  WarehouseArgsType,
   WarehouseCreateArgsType,
   WarehouseListArgsType,
+  WarehouseStockFilter,
   WarehouseType,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
@@ -179,27 +179,19 @@ export const warehouseInfo = async (_id: string) => {
 export const findProductAvailableStocksByProductId = async (
   productId: string
 ): Promise<number> => {
-  const warehouses: WarehouseType[] = await findWarehousesWithProductStocks(
-    productId
-  );
+  const warehouseStocks: WarehouseStockFilter[] =
+    await findWarehousesWithProductStocks(productId);
 
-  if (!Array.isArray(warehouses) || warehouses.length === 0) {
+  if (!Array.isArray(warehouseStocks) || warehouseStocks.length === 0) {
     return 0;
   }
 
-  const { totalStocks, saftyStock, allocatedStocks } = warehouses.reduce(
-    (acc, warehouse) => {
-      const productStock: ProductStockType | undefined = warehouse.stocks?.find(
-        (stock) => stock.productId === productId
-      );
-
-      if (productStock) {
-        acc.totalStocks += productStock.totalStocks || 0;
-        acc.saftyStock += productStock.saftyStock || 0;
-        acc.allocatedStocks += productStock.allocatedStocks || 0;
-      }
-
-      return acc;
+  const { totalStocks, saftyStock, allocatedStocks } = warehouseStocks.reduce(
+    (accumulator, current) => {
+      accumulator.totalStocks += current.stock?.totalStocks ?? 0;
+      accumulator.saftyStock += current.stock?.saftyStock ?? 0;
+      accumulator.allocatedStocks += current.stock?.allocatedStocks ?? 0;
+      return accumulator;
     },
     { totalStocks: 0, saftyStock: 0, allocatedStocks: 0 }
   );

@@ -1,4 +1,4 @@
-import { WarehouseType } from "@core/types";
+import { WarehouseStockFilter, WarehouseType } from "@core/types";
 import Warehouse from "@schemas/WarehouseSchema";
 import { FilterQuery } from "mongoose";
 
@@ -51,9 +51,17 @@ const getWarehouseList = async (
 };
 
 export const findWarehousesWithProductStocks = async (productId: string) => {
-  return (await Warehouse.find({
-    "stocks.productId": productId,
-  })) as WarehouseType[];
+  return (await Warehouse.aggregate([
+    { $match: { "stocks.productId": productId } }, // Match documents where stocks array contains the productId
+    { $unwind: "$stocks" }, // Unwind the stocks array
+    { $match: { "stocks.productId": productId } }, // Match again to filter stocks by productId
+    {
+      $project: {
+        _id: 0, // Exclude the _id field
+        stock: "$stocks", // Project the matched stock object
+      },
+    },
+  ])) as WarehouseStockFilter[];
 };
 
 export default {

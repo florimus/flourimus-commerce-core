@@ -265,3 +265,12 @@ export interface WarehouseType {
   updatedBy: string;
   metaStatus?: string;
 }
+
+export interface WarehouseStockFilter {
+  stock: {
+    productId: string;
+    totalStocks: number;
+    saftyStock: number;
+    allocatedStocks: number;
+  };
+}
