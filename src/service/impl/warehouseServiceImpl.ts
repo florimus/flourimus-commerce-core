@@ -58,6 +58,7 @@ export const WarehouseStatusChange = async (
     throw new BadRequestError("Warehouse id is mandatory");
   }
   const warehouse = await getWarehouseById(_id);
+  console.log(warehouse);
   if (warehouse?._id) {
     await warehouseRepository.updateWarehouse(_id, {
       isActive: !warehouse.isActive,
@@ -113,7 +114,7 @@ export const warehouseList = async (
 
 /**
  * Controller used to update product stock in warehouse
- * @param args
+ * @param stockEntryInput
  * @returns
  */
 export const productStockEntry = async (
@@ -125,39 +126,56 @@ export const productStockEntry = async (
   if (!productId || !warehouseId) {
     throw new BadRequestError("Invalid request");
   }
-  const warehouse = await warehouseRepository.getWarehouseById(warehouseId);
-  if (!warehouse?._id) {
-    throw new NotFoundError("Warehouse not found");
-  }
+
   const product = await productServiceImpl.getProductById(productId);
   if (!product?._id) {
     throw new NotFoundError("Product not found");
   }
-  const stockDetails: ProductStockType = {
+  const warehouse = await warehouseRepository.getWarehouseById(warehouseId);
+  if (!warehouse?._id) {
+    throw new NotFoundError("Warehouse not found");
+  }
+  const isProductExists =
+    await warehouseRepository.isProductAvailableInWarehouse(
+      warehouseId,
+      productId
+    );
+
+  if (!isProductExists) {
+    await warehouseRepository.addNewProductStock(
+      warehouseId,
+      {
+        productId,
+        saftyStock,
+        totalStocks,
+        allocatedStocks: 0,
+      },
+      {
+        updatedAt: getCurrentTime(),
+        updatedBy: context.email,
+      }
+    );
+  } else {
+    await warehouseRepository.updateOldProductStock(
+      warehouseId,
+      {
+        productId,
+        saftyStock,
+        totalStocks,
+        allocatedStocks: 0,
+      },
+      {
+        updatedAt: getCurrentTime(),
+        updatedBy: context.email,
+      }
+    );
+  }
+  return {
     productId,
     saftyStock,
     totalStocks,
     allocatedStocks: 0,
   };
-  const allStocks = Array.isArray(warehouse.stocks) ? warehouse.stocks : [];
-  const existingStock = allStocks.find((each) => each?.productId === productId);
-  if (!existingStock) {
-    await warehouseRepository.updateWarehouse(warehouseId, {
-      stocks: [...allStocks, stockDetails],
-      updatedAt: getCurrentTime(),
-      updatedBy: context.email,
-    });
-    return stockDetails;
-  }
-  const updatedStock = allStocks.map((each) =>
-    each?.productId === productId ? stockDetails : each
-  );
-  await warehouseRepository.updateWarehouse(warehouseId, {
-    stocks: updatedStock,
-    updatedAt: getCurrentTime(),
-    updatedBy: context.email,
-  });
-  return stockDetails;
 };
 
 /**

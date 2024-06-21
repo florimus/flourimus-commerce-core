@@ -1,6 +1,10 @@
-import { WarehouseStockFilter, WarehouseType } from "@core/types";
+import {
+  ProductStockType,
+  WarehouseStockFilter,
+  WarehouseType,
+} from "@core/types";
 import Warehouse from "@schemas/WarehouseSchema";
-import { FilterQuery } from "mongoose";
+import mongoose, { FilterQuery } from "mongoose";
 
 const createWarehouse = async (warehouse: WarehouseType) => {
   return await new Warehouse(warehouse).save();
@@ -8,9 +12,15 @@ const createWarehouse = async (warehouse: WarehouseType) => {
 
 export const getWarehouseById = async (_id: string, isActive?: boolean) => {
   if (isActive) {
-    return (await Warehouse.findOne({ _id, isActive })) as WarehouseType;
+    return (await Warehouse.findOne(
+      { _id, isActive },
+      { stocks: { $slice: 0 } }
+    )) as WarehouseType;
   }
-  return (await Warehouse.findOne({ _id })) as WarehouseType;
+  return (await Warehouse.findOne(
+    { _id },
+    { stocks: { $slice: 0 } }
+  )) as WarehouseType;
 };
 
 export const updateWarehouse = async (
@@ -64,10 +74,54 @@ export const findWarehousesWithProductStocks = async (productId: string) => {
   ])) as WarehouseStockFilter[];
 };
 
+export const isProductAvailableInWarehouse = async (
+  warehouseId: string,
+  productId: string
+) => {
+  const result = await Warehouse.aggregate([
+    { $match: { _id: warehouseId } },
+    {
+      $project: {
+        productExists: {
+          $in: [productId, "$stocks.productId"],
+        },
+      },
+    },
+  ]);
+  return result?.[0]?.productExists || false;
+};
+
+export const addNewProductStock = async (
+  warehouseId: string,
+  newStock: Partial<ProductStockType>,
+  data: Partial<WarehouseType>
+) => {
+  return await Warehouse.findOneAndUpdate(
+    { _id: warehouseId },
+    { $push: { stocks: newStock }, ...data },
+    { new: true }
+  );
+};
+
+export const updateOldProductStock = async (
+  warehouseId: string,
+  stockDetails: Partial<ProductStockType>,
+  data: Partial<WarehouseType>
+) => {
+  return await Warehouse.findOneAndUpdate(
+    { _id: warehouseId, "stocks.productId": stockDetails?.productId },
+    { $set: { "stocks.$`": stockDetails, ...data } },
+    { new: true } // To return the updated document
+  );
+};
+
 export default {
   createWarehouse,
   getWarehouseById,
   updateWarehouse,
   getWarehouseList,
   findWarehousesWithProductStocks,
+  isProductAvailableInWarehouse,
+  addNewProductStock,
+  updateOldProductStock,
 };

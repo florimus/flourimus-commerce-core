@@ -256,7 +256,7 @@ export interface ProductStockType {
 export interface WarehouseType {
   _id: string;
   name: string;
-  stocks: ProductStockType[];
+  stocks?: ProductStockType[];
   country: string;
   createdAt: string;
   updatedAt: string;
