@@ -204,7 +204,7 @@ export const warehouseStockList = async (
   _id: string,
   stockListInput: WarehouseStockListArgsType["stockListInput"]
 ) => {
-  const { page = 0, search = "", size = 5 } = stockListInput;
+  const { page = 0, search = "", size = 5 } = stockListInput || {};
   const { stocks, count } =
     await warehouseRepository.getPaginatedWarehouseStocksById(
       _id,
