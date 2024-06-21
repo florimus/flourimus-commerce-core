@@ -86,6 +86,29 @@ export type ProductListArgsType = {
   };
 };
 
+export type WarehouseListArgsType = {
+  warehouseListInput: {
+    search: string;
+    page: number;
+    size: number;
+    sortBy: string;
+    sortDirection: "ASC" | "DESC";
+    active: "ACTIVE" | "INACTIVE" | "ALL";
+  };
+};
+
+export type WarehouseStockListArgsType = {
+  stockListInput: {
+    search: string;
+    page: number;
+    size: number;
+  };
+};
+
+export type WarehouseArgsType = {
+  _id: string;
+};
+
 export type CreateProductArgsType = {
   productCreateInput: {
     name: string;
@@ -107,6 +130,13 @@ export type ProductPriceEntryArgsType = {
   };
 };
 
+export type WarehouseCreateArgsType = {
+  warehouseCreateInput: {
+    name: string;
+    country: string;
+  };
+};
+
 export type UpdateProductArgsType = {
   _id: string;
   productUpdateInput: {
@@ -115,6 +145,19 @@ export type UpdateProductArgsType = {
     category?: string;
     brand?: string;
     isSellable?: boolean;
+  };
+};
+
+export type ChangeWarehouseStatusArgsType = {
+  _id: string;
+};
+
+export type StockEntryArgsType = {
+  productStockEntryInput: {
+    warehouseId: string;
+    productId: string;
+    totalStocks: number;
+    saftyStock: number;
   };
 };
 
@@ -209,4 +252,33 @@ export interface PriceTableType {
   createdBy: string;
   updatedBy: string;
   metaStatus?: string;
+}
+
+export interface ProductStockType {
+  productId: string;
+  totalStocks: number;
+  saftyStock: number;
+  allocatedStocks: number;
+}
+
+export interface WarehouseType {
+  _id: string;
+  name: string;
+  stocks?: ProductStockType[];
+  country: string;
+  createdAt: string;
+  updatedAt: string;
+  isActive: boolean;
+  createdBy: string;
+  updatedBy: string;
+  metaStatus?: string;
+}
+
+export interface WarehouseStockFilter {
+  stock: {
+    productId: string;
+    totalStocks: number;
+    saftyStock: number;
+    allocatedStocks: number;
+  };
 }

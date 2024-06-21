@@ -103,3 +103,12 @@ export const bulkUploadProduct = async (
 export const getProductPriceInfo = async (product: ProductType) => {
   return await productServiceImpl.getProductPriceInfo(product);
 };
+
+/**
+ * Controller used to find product available purchasable quantity
+ * @param product
+ * @returns
+ */
+export const findProductAvailableStocks = async (product: ProductType) => {
+  return await productServiceImpl.findProductAvailableStocks(product);
+};
