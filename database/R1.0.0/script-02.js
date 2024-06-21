@@ -38,6 +38,13 @@ const script_02 = async (mongoose, env = "local") => {
             length: 6,
             mask: "0",
           },
+          warehouse: {
+            prefix: "WHS",
+            sufix: "",
+            next: 1,
+            length: 6,
+            mask: "0",
+          },
         },
         channelConfigurations: null,
         createdAt: "2024-01-10T10:00:00.000Z",

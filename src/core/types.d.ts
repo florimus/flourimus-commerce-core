@@ -110,7 +110,7 @@ export type ProductPriceEntryArgsType = {
 export type WarehouseCreateArgsType = {
   warehouseCreateInput: {
     name: string;
-    country: number;
+    country: string;
   };
 };
 
@@ -210,6 +210,26 @@ export interface ProductPriceType {
 export interface PriceTableType {
   _id: string;
   prices: ProductPriceType[];
+  createdAt: string;
+  updatedAt: string;
+  isActive: boolean;
+  createdBy: string;
+  updatedBy: string;
+  metaStatus?: string;
+}
+
+export interface ProductStockType {
+  productId: string;
+  totalStocks: number;
+  saftyStock: number;
+  allocatedStocks: number;
+}
+
+export interface WarehouseType {
+  _id: string;
+  name: string;
+  stocks: ProductPriceType[];
+  country: string;
   createdAt: string;
   updatedAt: string;
   isActive: boolean;
