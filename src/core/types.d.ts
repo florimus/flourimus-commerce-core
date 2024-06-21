@@ -208,5 +208,5 @@ export interface PriceTableType {
   isActive: boolean;
   createdBy: string;
   updatedBy: string;
-  metaStatus: string;
+  metaStatus?: string;
 }
