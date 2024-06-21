@@ -6,6 +6,7 @@ import {
   ContextObjectType,
   CreateProductArgsType,
   ProductListArgsType,
+  ProductPriceType,
   ProductType,
   UpdateProductArgsType,
 } from "@core/types";
@@ -22,6 +23,7 @@ import productRepository, {
 } from "@repositories/productRepository";
 import { FileUpload } from "graphql-upload-ts";
 import productBulkUploader from "./productBulkUploader";
+import { productPriceInfo } from "@services/priceTableService";
 
 /**
  * Controller used to get product by Id
@@ -351,6 +353,22 @@ export const bulkUploadProduct = async (
   return true;
 };
 
+/**
+ * Controller used to get product price
+ * @param product
+ * @returns
+ */
+export const getProductPriceInfo = async (product: ProductType) => {
+  const productPrice: ProductPriceType | null | undefined =
+    await productPriceInfo(product._id, product?.isVariant, product?.parentId);
+  return {
+    productId: product._id,
+    listPrice: productPrice?.listPrice || 0,
+    sellPrice: productPrice?.sellPrice || 0,
+    taxPrice: productPrice?.taxPrice || 0,
+  };
+};
+
 export default {
   getProductById,
   createProduct,
@@ -360,4 +378,5 @@ export default {
   getProductList,
   productBulkUploadStatusCheck,
   bulkUploadProduct,
+  getProductPriceInfo,
 };

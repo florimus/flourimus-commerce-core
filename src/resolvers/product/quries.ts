@@ -3,6 +3,7 @@ import {
   getProductById,
   getVariantInfo,
   getProductList,
+  getProductPriceInfo,
 } from "@services/productService";
 
 export const resolverQuries = {
@@ -11,15 +12,11 @@ export const resolverQuries = {
       await getProductById(args),
 
     productList: async (_: unknown, args: ProductListArgsType) => {
-      // const message = {
-      //   id: "1",
-      //   content: "Hello, world!",
-      // };
-      // pubsub.publish("NEW_MESSAGE", { newMessage: message });
       return await getProductList(args);
     },
   },
   Product: {
     variants: async (product: ProductType) => await getVariantInfo(product),
+    price: async (product: ProductType) => await getProductPriceInfo(product),
   },
 };

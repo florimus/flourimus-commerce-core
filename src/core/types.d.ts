@@ -98,6 +98,15 @@ export type CreateProductArgsType = {
   };
 };
 
+export type ProductPriceEntryArgsType = {
+  productPriceEntryInput: {
+    productId: string;
+    listPrice: number;
+    sellPrice: number;
+    taxId: string;
+  };
+};
+
 export type UpdateProductArgsType = {
   _id: string;
   productUpdateInput: {
@@ -181,4 +190,23 @@ export interface BulkProductUploadStatusResponse {
   completedDocuments?: number;
   createdBy?: string;
   progress?: number;
+}
+
+export interface ProductPriceType {
+  productId: string;
+  listPrice: number;
+  sellPrice: number;
+  taxId?: string;
+  taxPrice?: number;
+}
+
+export interface PriceTableType {
+  _id: string;
+  prices: ProductPriceType[];
+  createdAt: string;
+  updatedAt: string;
+  isActive: boolean;
+  createdBy: string;
+  updatedBy: string;
+  metaStatus?: string;
 }
