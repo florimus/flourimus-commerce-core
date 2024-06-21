@@ -25,7 +25,7 @@ const createNewPriceTable = async (
   price: ProductPriceType,
   context: ContextObjectType
 ) => {
-  const priceTable = await createPriceTable({
+  await createPriceTable({
     _id: parentId,
     prices: [price],
     isActive: true,
