@@ -125,6 +125,10 @@ export type UpdateProductArgsType = {
   };
 };
 
+export type ChangeWarehouseStatusArgsType = {
+  _id: string;
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"

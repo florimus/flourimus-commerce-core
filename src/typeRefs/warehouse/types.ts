@@ -21,6 +21,11 @@ export const WarehouseDefs = gql`
     allocatedStocks: Float
   }
 
+  type WarehouseStatusChangeResponse {
+    success: Boolean
+    status: Boolean
+  }
+
   # =============== Inputs =================
 
   input ProductStockEntryInput {

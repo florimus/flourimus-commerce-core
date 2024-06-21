@@ -7,5 +7,7 @@ export const WarehouseMutations = gql`
     ): ProductStocks
 
     WarehouseCreate(warehouseCreateInput: WarehouseCreateInput!): Warehouse
+
+    WarehouseStatusChange(_id: ID!): WarehouseStatusChangeResponse
   }
 `;
