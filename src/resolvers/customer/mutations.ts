@@ -1,4 +1,5 @@
 import {
+  AddressCreateArgsType,
   ContextObjectType,
   ForgotPasswordMutationArgsType,
   InviteStaffMutationArgsType,
@@ -6,6 +7,7 @@ import {
   ResetPasswordMutationArgsType,
 } from "@core/types";
 import {
+  createAddress,
   forgotPassword,
   inviteStaffUser,
   onboardInvitedStaff,
@@ -28,5 +30,11 @@ export const resolverMutations = {
 
     resetPassword: async (_: unknown, args: ResetPasswordMutationArgsType) =>
       await resetPassword(args),
+
+    addressCreation: async (
+      _: unknown,
+      args: AddressCreateArgsType,
+      context: ContextObjectType
+    ) => await createAddress(args, context),
   },
 };

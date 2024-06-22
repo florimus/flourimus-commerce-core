@@ -1,5 +1,5 @@
 import { allow, and } from "graphql-shield";
-import { hasRole, isAuthenticated } from "@permissions/permissions";
+import { anyUser, hasRole, isAuthenticated } from "@permissions/permissions";
 
 export const quriesPermissions = {
   me: isAuthenticated,
@@ -7,11 +7,12 @@ export const quriesPermissions = {
   token: allow,
   refresh: allow,
   verifyInvitation: allow,
-}
+};
 
 export const mutationPermissions = {
   inviteStaff: and(isAuthenticated, hasRole("usr:c")),
   onboardStaff: allow,
   forgotPassword: allow,
-  resetPassword: allow
-}
+  resetPassword: allow,
+  addressCreation: anyUser,
+};
