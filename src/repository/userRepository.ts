@@ -1,6 +1,5 @@
 import Address from "@schemas/AddressSchema";
 import { AddressType, UserType } from "@types";
-import mongoose from "mongoose";
 import User from "src/schemas/UserSchema";
 
 export const getUserByIdOrEmail = async (

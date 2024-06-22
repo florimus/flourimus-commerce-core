@@ -14,7 +14,6 @@ import {
   ResetPasswordMutationArgsType,
   AddressCreateArgsType,
   AddressType,
-  AddressQueryArgsType,
 } from "@types";
 import {
   createDeltaToken,
