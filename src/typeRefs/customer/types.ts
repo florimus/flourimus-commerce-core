@@ -1,7 +1,7 @@
 import { gql } from "apollo-server-express";
 
 export const UserDefs = gql`
-  type Phone  {
+  type Phone {
     dialCode: String!
     number: String!
   }
@@ -22,6 +22,20 @@ export const UserDefs = gql`
     updatedBy: String
     metaStatus: String
     permissions: [String]
+    addresses: [Address]
+  }
+
+  type Address {
+    _id: ID
+    userId: String
+    point: String
+    street: String
+    city: String
+    state: String
+    country: String
+    pin: Int
+    landmark: String
+    isDefault: Boolean
   }
 
   type Token {
@@ -67,5 +81,16 @@ export const UserDefs = gql`
   input ResetPasswordInput {
     token: String!
     password: String!
+  }
+
+  input CreateAddressInput {
+    point: String
+    street: String
+    city: String
+    state: String
+    country: String
+    pin: Int
+    landmark: String
+    isDefault: Boolean
   }
 `;

@@ -1,4 +1,6 @@
 import {
+  AddressCreateArgsType,
+  AddressQueryArgsType,
   ContextObjectType,
   ForgotPasswordMutationArgsType,
   InviteStaffMutationArgsType,
@@ -6,10 +8,12 @@ import {
   ResetPasswordMutationArgsType,
 } from "@core/types";
 import {
+  createAddress,
   forgotPassword,
   inviteStaffUser,
   onboardInvitedStaff,
   resetPassword,
+  setDefaultAddress,
 } from "@services/customerService";
 
 export const resolverMutations = {
@@ -28,5 +32,17 @@ export const resolverMutations = {
 
     resetPassword: async (_: unknown, args: ResetPasswordMutationArgsType) =>
       await resetPassword(args),
+
+    addressCreation: async (
+      _: unknown,
+      args: AddressCreateArgsType,
+      context: ContextObjectType
+    ) => await createAddress(args, context),
+
+    addressSetDefault: async (
+      _: unknown,
+      args: AddressQueryArgsType,
+      context: ContextObjectType
+    ) => await setDefaultAddress(args, context),
   },
 };

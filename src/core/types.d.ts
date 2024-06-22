@@ -34,6 +34,10 @@ export type RefreshQueryArgsType = {
   token: string;
 };
 
+export type AddressQueryArgsType = {
+  _id: string;
+};
+
 export type InviteStaffMutationArgsType = {
   inviteStaffInput: {
     email: string;
@@ -84,6 +88,19 @@ export type ProductListArgsType = {
     sortDirection: "ASC" | "DESC";
     active: "ACTIVE" | "INACTIVE" | "ALL";
     type: "product" | "variant" | "all";
+  };
+};
+
+export type AddressCreateArgsType = {
+  createAddressInput: {
+    point: string;
+    street: string;
+    city: string;
+    state: string;
+    country: string;
+    pin: number;
+    landmark: string;
+    isDefault: boolean;
   };
 };
 
@@ -312,6 +329,25 @@ export interface CartType {
   lines?: [LineItemType] | [];
   status: OrderStatusTypes;
   isAnonymous: Boolean;
+  createdAt?: String;
+  updatedAt?: String;
+  isActive?: Boolean;
+  createdBy?: String;
+  updatedBy?: String;
+  metaStatus?: String;
+}
+
+export interface AddressType {
+  _id: string;
+  point: string;
+  street: string;
+  city: string;
+  state: string;
+  country: string;
+  pin: number;
+  userId: string;
+  landmark: string;
+  isDefault: boolean;
   createdAt?: String;
   updatedAt?: String;
   isActive?: Boolean;

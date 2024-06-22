@@ -12,13 +12,15 @@ import {
   OnboardStaffMutationArgsType,
   ForgotPasswordMutationArgsType,
   ResetPasswordMutationArgsType,
+  AddressCreateArgsType,
+  AddressType,
 } from "@types";
 import {
   createDeltaToken,
   createUserToken,
   decodeDeltaToken,
 } from "@core/utils/jwtUtils";
-import {
+import userRepository, {
   createUser,
   getUserByIdOrEmail,
   updateUser,
@@ -259,35 +261,32 @@ export const onboardInvitedStaff = async (
 
 /**
  * Controller used to get forget password link
- * @param args 
- * @returns 
+ * @param args
+ * @returns
  */
 export const forgotPassword = async (args: ForgotPasswordMutationArgsType) => {
   const user = await getUserByIdOrEmail("", args.email, true);
   if (!user || !user._id || user.loginType !== "password") {
     throw new NotFoundError("No user invite founds");
   }
-  const passwordRestToken: string = createDeltaToken(
-    args.email,
-    user._id
-  );
+  const passwordRestToken: string = createDeltaToken(args.email, user._id);
   await updateUser(user._id, {
-    token: passwordRestToken
+    token: passwordRestToken,
   });
   sendEmail(user?.email, emailCodes.USER_FORGOT_PASSWORD, {
     firstName: user?.firstName,
-    link: `${process.env.STORE_FRONT_URL}/reset/${passwordRestToken}`
+    link: `${process.env.STORE_FRONT_URL}/reset/${passwordRestToken}`,
   });
   return {
     email: user.email,
-    send: true
+    send: true,
   };
 };
 
 /**
  * Controller used to get reset password
- * @param args 
- * @returns 
+ * @param args
+ * @returns
  */
 export const resetPassword = async (args: ResetPasswordMutationArgsType) => {
   if (!args?.resetPasswordInput?.token || !args?.resetPasswordInput?.password) {
@@ -298,25 +297,112 @@ export const resetPassword = async (args: ResetPasswordMutationArgsType) => {
   const user = await getUserByIdOrEmail("", tokenData?.email);
 
   if (user?.isActive && user?.token === args?.resetPasswordInput.token) {
-    const hashedPassword = await hashPassword(args?.resetPasswordInput?.password);
+    const hashedPassword = await hashPassword(
+      args?.resetPasswordInput?.password
+    );
 
     await updateUser(user._id, {
       password: hashedPassword,
       token: "",
       updatedAt: getCurrentTime(),
-      updatedBy: user?.email
-    })
+      updatedBy: user?.email,
+    });
     sendEmail(user?.email, emailCodes.USER_RESET_PASSWORD, {
       firstName: user?.firstName,
-      link: `${process.env.STORE_FRONT_URL}`
+      link: `${process.env.STORE_FRONT_URL}`,
     });
     return {
       firstName: user.firstName,
       lastName: user.lastName,
-      success: true
+      success: true,
     };
   }
-  throw new NotFoundError("Password request not found")
+  throw new NotFoundError("Password request not found");
+};
+
+/**
+ * Controller used to create customer address
+ * @param args
+ * @returns
+ */
+const createAddress = async (
+  createAddressInput: AddressCreateArgsType["createAddressInput"],
+  context: ContextObjectType
+) => {
+  if (context.isAnonymous) {
+    throw new BadRequestError("Address cannot save for gust users");
+  }
+  const address: AddressType = {
+    _id: uuidv4(),
+    city: createAddressInput?.city,
+    country: createAddressInput?.country,
+    isDefault: createAddressInput?.isDefault,
+    landmark: createAddressInput?.landmark,
+    pin: createAddressInput?.pin,
+    point: createAddressInput?.point,
+    state: createAddressInput?.state,
+    street: createAddressInput?.street,
+    createdAt: getCurrentTime(),
+    updatedAt: getCurrentTime(),
+    userId: context._id,
+    createdBy: context.email,
+    updatedBy: context.email,
+    isActive: true,
+  };
+  return userRepository.createCustomerAddress(address);
+};
+
+/**
+ * Controller used to get current user's addresses
+ * @param args
+ * @returns
+ */
+export const getCurrentUserAddresses = async (context: ContextObjectType) => {
+  return (await userRepository.getCustomerAddress(context._id)) ?? [];
+};
+
+/**
+ * Controller used to get address info
+ * @param args
+ * @returns
+ */
+export const getAddressInfo = async (_id: string) => {
+  if (!_id) {
+    throw new BadRequestError("Address is is mandatory");
+  }
+  const address = await userRepository.getCustomerAddressById(_id);
+  if (address?.isActive) {
+    return address;
+  }
+  throw new NotFoundError("Address not found");
+};
+
+/**
+ * Controller used to make address default
+ * @param args
+ * @returns
+ */
+export const setDefaultAddress = async (
+  _id: string,
+  context: ContextObjectType
+) => {
+  const address = await userRepository.getCustomerAddressById(_id);
+  if (!address?.isActive) {
+    throw new NotFoundError("Address not found");
+  }
+  if (address.isDefault) {
+    return address
+  }
+  const addressUpdate: Partial<AddressType> = {
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+    isDefault: true,
+  };
+  return await userRepository.setDefaultAddressById(
+    context._id,
+    _id,
+    addressUpdate
+  );
 };
 
 export default {
@@ -329,4 +415,8 @@ export default {
   onboardInvitedStaff,
   forgotPassword,
   resetPassword,
+  createAddress,
+  getCurrentUserAddresses,
+  getAddressInfo,
+  setDefaultAddress,
 };
