@@ -1,5 +1,6 @@
 import Address from "@schemas/AddressSchema";
 import { AddressType, UserType } from "@types";
+import mongoose from "mongoose";
 import User from "src/schemas/UserSchema";
 
 export const getUserByIdOrEmail = async (
@@ -33,7 +34,26 @@ const getCustomerAddress = async (userId: string) => {
   return (await Address.find({ userId })) as AddressType[];
 };
 
+const getCustomerAddressById = async (_id: string) => {
+  return (await Address.findOne({ _id })) as AddressType;
+};
+
+const setDefaultAddressById = async (
+  userId: string,
+  _id: string,
+  addressUpdate: Partial<AddressType>
+) => {
+  await Address.updateMany({ userId }, { $set: { isDefault: false } });
+  return (await Address.findOneAndUpdate(
+    { _id, userId },
+    { $set: addressUpdate },
+    { new: true }
+  )) as AddressType;
+};
+
 export default {
   createCustomerAddress,
   getCustomerAddress,
+  getCustomerAddressById,
+  setDefaultAddressById,
 };

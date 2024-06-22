@@ -34,6 +34,10 @@ export type RefreshQueryArgsType = {
   token: string;
 };
 
+export type AddressQueryArgsType = {
+  _id: string;
+};
+
 export type InviteStaffMutationArgsType = {
   inviteStaffInput: {
     email: string;

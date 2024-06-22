@@ -14,6 +14,7 @@ import {
   ResetPasswordMutationArgsType,
   AddressCreateArgsType,
   AddressType,
+  AddressQueryArgsType,
 } from "@types";
 import {
   createDeltaToken,
@@ -361,6 +362,50 @@ export const getCurrentUserAddresses = async (context: ContextObjectType) => {
   return (await userRepository.getCustomerAddress(context._id)) ?? [];
 };
 
+/**
+ * Controller used to get address info
+ * @param args
+ * @returns
+ */
+export const getAddressInfo = async (_id: string) => {
+  if (!_id) {
+    throw new BadRequestError("Address is is mandatory");
+  }
+  const address = await userRepository.getCustomerAddressById(_id);
+  if (address?.isActive) {
+    return address;
+  }
+  throw new NotFoundError("Address not found");
+};
+
+/**
+ * Controller used to make address default
+ * @param args
+ * @returns
+ */
+export const setDefaultAddress = async (
+  _id: string,
+  context: ContextObjectType
+) => {
+  const address = await userRepository.getCustomerAddressById(_id);
+  if (!address?.isActive) {
+    throw new NotFoundError("Address not found");
+  }
+  if (address.isDefault) {
+    return address
+  }
+  const addressUpdate: Partial<AddressType> = {
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+    isDefault: true,
+  };
+  return await userRepository.setDefaultAddressById(
+    context._id,
+    _id,
+    addressUpdate
+  );
+};
+
 export default {
   getCurrentUserInfo,
   getUserInfo,
@@ -373,4 +418,6 @@ export default {
   resetPassword,
   createAddress,
   getCurrentUserAddresses,
+  getAddressInfo,
+  setDefaultAddress,
 };

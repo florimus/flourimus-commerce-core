@@ -1,4 +1,5 @@
 import {
+  AddressQueryArgsType,
   ContextObjectType,
   RefreshQueryArgsType,
   TokenQueryArgsType,
@@ -12,6 +13,7 @@ import {
   getVerifiedStaffInfo,
   getCurrentUserInfo,
   getCurrentUserAddresses,
+  getAddressInfo,
 } from "@services/customerService";
 
 export const resolverQuries = {
@@ -29,6 +31,9 @@ export const resolverQuries = {
 
     refresh: async (_: unknown, args: RefreshQueryArgsType) =>
       await getRefreshToken(args),
+
+    address: async (_: unknown, args: AddressQueryArgsType) =>
+      await getAddressInfo(args),
   },
   User: {
     addresses: async (_: unknown, __: unknown, context: ContextObjectType) =>

@@ -9,6 +9,7 @@ import {
   ForgotPasswordMutationArgsType,
   ResetPasswordMutationArgsType,
   AddressCreateArgsType,
+  AddressQueryArgsType,
 } from "@types";
 
 import customerServiceImpl from "@services/impl/customerServiceImpl";
@@ -123,4 +124,25 @@ export const createAddress = async (
  */
 export const getCurrentUserAddresses = async (context: ContextObjectType) => {
   return await customerServiceImpl.getCurrentUserAddresses(context);
+};
+
+/**
+ * Controller used to get address info
+ * @param args
+ * @returns
+ */
+export const getAddressInfo = async (args: AddressQueryArgsType) => {
+  return await customerServiceImpl.getAddressInfo(args?._id);
+};
+
+/**
+ * Controller used to make address default
+ * @param args
+ * @returns
+ */
+export const setDefaultAddress = async (
+  args: AddressQueryArgsType,
+  context: ContextObjectType
+) => {
+  return await customerServiceImpl.setDefaultAddress(args._id, context);
 };

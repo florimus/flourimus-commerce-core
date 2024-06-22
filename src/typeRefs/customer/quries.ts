@@ -7,5 +7,6 @@ export const UserQuries = gql`
     verifyInvitation(token: String): User
     token(tokenRequestInput:TokenRequestInput): Token
     refresh(token: String): Token
+    address(_id: ID!): Address
   }
 `;

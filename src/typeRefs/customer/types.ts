@@ -26,7 +26,7 @@ export const UserDefs = gql`
   }
 
   type Address {
-    _id: ID!
+    _id: ID
     userId: String
     point: String
     street: String

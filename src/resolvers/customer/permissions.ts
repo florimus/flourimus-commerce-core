@@ -7,6 +7,7 @@ export const quriesPermissions = {
   token: allow,
   refresh: allow,
   verifyInvitation: allow,
+  address: anyUser,
 };
 
 export const mutationPermissions = {
@@ -15,4 +16,5 @@ export const mutationPermissions = {
   forgotPassword: allow,
   resetPassword: allow,
   addressCreation: anyUser,
+  addressSetDefault: anyUser,
 };
