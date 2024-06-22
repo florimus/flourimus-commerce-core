@@ -1,8 +1,14 @@
-import { CartType, ContextObjectType, cartItemAddArgsType } from "@core/types";
+import {
+  CartType,
+  ContextObjectType,
+  cartItemAddArgsType,
+  cartItemRemoveArgsType,
+} from "@core/types";
 import {
   addItemToCart,
   createUserCart,
   fetchCartLineItemProducts,
+  removeItemFromCart,
 } from "@services/cartService";
 
 export const resolverMutations = {
@@ -15,6 +21,12 @@ export const resolverMutations = {
       args: cartItemAddArgsType,
       context: ContextObjectType
     ) => await addItemToCart(args, context),
+
+    cartItemRemove: async (
+      _: unknown,
+      args: cartItemRemoveArgsType,
+      context: ContextObjectType
+    ) => await removeItemFromCart(args, context),
   },
   Cart: {
     lines: async (parent: CartType) => await fetchCartLineItemProducts(parent),

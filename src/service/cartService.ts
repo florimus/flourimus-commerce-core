@@ -3,6 +3,7 @@ import {
   ContextObjectType,
   LineItemType,
   cartItemAddArgsType,
+  cartItemRemoveArgsType,
 } from "@core/types";
 import cartServiceImpl from "./impl/cartServiceImpl";
 
@@ -28,6 +29,18 @@ export const addItemToCart = async (
     args?.addToCartInput?.lineIds,
     context
   );
+};
+
+/**
+ * Controller used to add product to cart
+ * @param context
+ * @returns
+ */
+export const removeItemFromCart = async (
+  args: cartItemRemoveArgsType,
+  context: ContextObjectType
+) => {
+  return await cartServiceImpl.removeItemFromCart(args.productId, context);
 };
 
 /**

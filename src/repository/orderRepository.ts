@@ -43,10 +43,26 @@ export const updateOldProductCart = async (
   );
 };
 
+export const removeProductsFromCart = async (
+  orderId: string,
+  lineItemIds: string[],
+  data: Partial<CartType>
+) => {
+  return await Cart.findOneAndUpdate(
+    { _id: orderId },
+    {
+      $pull: { lines: { productId: { $in: lineItemIds } } },
+      $set: data,
+    },
+    { new: true }
+  );
+};
+
 export default {
   createCart,
   getCartByUserIdAndStatus,
   addNewProductCart,
   updateOldProductCart,
   getCartById,
+  removeProductsFromCart,
 };

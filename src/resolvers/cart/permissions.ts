@@ -8,4 +8,5 @@ import { anyUser } from "@permissions/permissions";
 export const mutationPermissions = {
   cartCreate: anyUser,
   cartItemAdd: anyUser,
+  cartItemRemove: anyUser,
 };

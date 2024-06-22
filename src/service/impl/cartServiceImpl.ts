@@ -1,6 +1,7 @@
 import { CartType, ContextObjectType, cartItemAddArgsType } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
+import NotFoundError from "@errors/NotFoundError";
 import orderRepository from "@repositories/orderRepository";
 import productRepository, {
   getProductInfoById,
@@ -37,7 +38,7 @@ export const createUserCart = async (context: ContextObjectType) => {
 };
 
 /**
- * Controller used to add product to cart
+ * Controller used to add products to cart
  * @param context
  * @returns
  */
@@ -75,19 +76,55 @@ export const addItemToCart = async (
         },
         { updatedAt: getCurrentTime(), updatedBy: context.email }
       );
-    } else {
-      return await orderRepository.addNewProductCart(
+    }
+    return await orderRepository.addNewProductCart(
+      cart._id,
+      {
+        productId: lineIds[i],
+        quantity: 1,
+        adjustments: "",
+      },
+      { updatedAt: getCurrentTime(), updatedBy: context.email }
+    );
+  }
+};
+
+/**
+ * Controller used to remove products to cart
+ * @param context
+ * @returns
+ */
+export const removeItemFromCart = async (
+  lineIds: string[],
+  context: ContextObjectType
+) => {
+  const cart = await createUserCart(context);
+  const cartItems = cart?.lines || [];
+
+  for (let i = 0; i < lineIds.length; i++) {
+    const exisingItem = cartItems?.find(
+      (item) => item?.productId === lineIds[i]
+    );
+    if (!exisingItem) {
+      throw new NotFoundError("Product not found in the cart");
+    }
+    if (exisingItem.quantity > 1) {
+      return await orderRepository.updateOldProductCart(
         cart._id,
         {
-          productId: lineIds[i],
-          quantity: 1,
-          adjustments: "",
+          productId: exisingItem.productId,
+          quantity: exisingItem.quantity - 1,
+          adjustments: exisingItem.adjustments || "",
         },
         { updatedAt: getCurrentTime(), updatedBy: context.email }
       );
     }
+    return await orderRepository.removeProductsFromCart(
+      cart._id,
+      [lineIds[i]],
+      { updatedAt: getCurrentTime(), updatedBy: context.email }
+    );
   }
-  return {};
 };
 
 /**
@@ -119,4 +156,5 @@ export default {
   createUserCart,
   addItemToCart,
   fetchCartLineItemProducts,
+  removeItemFromCart,
 };

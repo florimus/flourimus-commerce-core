@@ -168,6 +168,10 @@ export type cartItemAddArgsType = {
   };
 };
 
+export type cartItemRemoveArgsType = {
+  productId: string[];
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"
