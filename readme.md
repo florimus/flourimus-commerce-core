@@ -1,24 +1,27 @@
 # Flourimus Commerce Core
 
 <h1 align="center">
-  <img src="https://i.ibb.co/1bX043N/undraw-web-shopping-re-owap.png" alt="image">
+  <img src="https://i.ibb.co/nPC90jM/Group-231.png" alt="image">
 </h1>
 
-A comprehensive starter template for building an Express.js server with TypeScript, GraphQL, MongoDB integration, RBAC, ESLint configurations, and Database scripts for release planning.
+A comprehensive platform for building an E-Commerce platform
 
 ## Introduction
 
-This project serves as a boilerplate for building robust and scalable web applications with Express.js, TypeScript, and GraphQL. It includes pre-configured setups for authentication, MongoDB integration, ESLint, and database scripts to streamline the development process. Whether you're starting a new project or looking to enhance an existing one, this starter provides a solid foundation to build upon.
+We excited to introduce you to **Flourimus Commerce Core**, our new open-source e-commerce backend application. The goal of this project is to provide a scalable, customizable, and user-friendly e-commerce solution that anyone can use, contribute to, and benefit from.
+
+## Vision
+
+In today’s digital age, having an online presence is crucial for any business. However, setting up and maintaining an e-commerce platform can be challenging, especially for small businesses and individual entrepreneurs. Our vision with [Project Name] is to bridge this gap by offering a backend solution that requires minimal configuration while allowing maximum customization. We want to empower businesses of all sizes to go online effortlessly and efficiently.
 
 ## Features
 
-- **Express.js Server**: Quickly set up a server with Express.js for handling HTTP requests.
-- **TypeScript**: Write clean and maintainable code with TypeScript, ensuring type safety and improved developer experience.
-- **GraphQL**: Implement a GraphQL API for querying and manipulating data efficiently.
-- **MongoDB Integration**: Seamlessly connect your application to MongoDB for storing and retrieving data.
-- **Authenticated Routes With Shield**: Secure specific routes with Shield authentication to restrict access.
-- **ESLint Configurations**: Enforce coding standards and catch errors early with ESLint configurations.
-- **Database Scripts**: Include scripts for managing database migrations and release planning.
+- **Scalable Architecture**: Easily handle growth from small businesses to large enterprises.
+- **Minimal Configuration**: Get started quickly with out-of-the-box defaults, yet enjoy the flexibility to configure as needed.
+- **Maximum Customization**: Customize every aspect of the backend to suit your specific needs, from plugins to themes.
+- **Open Source**: Free to use, modify, and distribute, fostering a collaborative community.
+- **Secure and Reliable**: Built with best practices in security and reliability to ensure your business runs smoothly.
+
 
 ## Technologies Used
 

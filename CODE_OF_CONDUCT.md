@@ -1,5 +1,9 @@
 # Code of Conduct
 
+## Project Vision
+
+Our vision is to empower businesses worldwide by providing a robust, scalable, and highly customizable e-commerce backend that is free and open-source. We aim to help everyone bring their business online effortlessly.
+
 ## Our Pledge
 
 We are dedicated to providing a harassment-free experience for everyone, regardless of gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age, nationality, or religion. We do not tolerate harassment of participants in any form.
