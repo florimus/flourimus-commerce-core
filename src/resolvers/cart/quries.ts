@@ -1,5 +1,9 @@
 import { CartArgsType, CartType } from "@core/types";
-import { fetchCartLineItemProducts, viewCart } from "@services/cartService";
+import {
+  calucateCartPrice,
+  fetchCartLineItemProducts,
+  viewCart,
+} from "@services/cartService";
 
 export const resolverQuries = {
   Query: {
@@ -7,5 +11,6 @@ export const resolverQuries = {
   },
   Cart: {
     lines: async (parent: CartType) => await fetchCartLineItemProducts(parent),
+    price: async (parent: CartType) => await calucateCartPrice(parent),
   },
 };

@@ -1,7 +1,4 @@
-import {
-  CartType,
-  ContextObjectType,
-} from "@core/types";
+import { CartType, ContextObjectType } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
@@ -11,6 +8,7 @@ import productRepository, {
 } from "@repositories/productRepository";
 import { findProductAvailableStocksByProductId } from "@services/warehouseService";
 import { v4 as uuidv4 } from "uuid";
+import cartPriceCalculator from "./priceCalculator";
 
 /**
  * Controller used to create cart
@@ -55,7 +53,7 @@ export const addItemToCart = async (
   const cart = await createUserCart(context);
   const cartItems = cart?.lines || [];
   for (let i = 0; i < lineIds.length; i++) {
-    const productDetails = await getProductInfoById(lineIds[i]);
+    const productDetails = await getProductInfoById(lineIds[i], true);
     if (!productDetails?._id) {
       throw new BadRequestError(`Product not found: ${lineIds[i]}`);
     }
@@ -141,18 +139,22 @@ export const fetchCartLineItemProducts = async (cart: CartType) => {
   if (!products) {
     return [];
   }
-  return Promise.all(
-    products.map(async (lineItem) => {
+  const allLineItems = Promise.all(
+    products.map(async (lineItem: any) => {
       const product = await productRepository.getProductInfoById(
-        lineItem?.productId
+        lineItem?.productId,
+        true
       );
-      return {
-        quantity: lineItem?.quantity,
-        product,
-        adjustments: lineItem?.adjustments,
-      };
+      if (product?.isSellable) {
+        return {
+          quantity: lineItem?.quantity,
+          product,
+          adjustments: lineItem?.adjustments,
+        };
+      }
     })
   );
+  return (await allLineItems).filter((each) => each?.product);
 };
 
 /**
@@ -171,10 +173,24 @@ export const viewCart = async (_id: string) => {
   throw new NotFoundError("Cart not found");
 };
 
+/**
+ * Controller used to calculate cart price
+ * @param context
+ * @returns
+ */
+export const calucateCartPrice = async (cart: CartType) => {
+  const products =
+    Array.isArray(cart?.lines) && cart?.lines.length > 0 ? cart.lines : null;
+  if (Array.isArray(products) && products.length) {
+    return await cartPriceCalculator(products);
+  }
+};
+
 export default {
   createUserCart,
   addItemToCart,
   fetchCartLineItemProducts,
   removeItemFromCart,
   viewCart,
+  calucateCartPrice,
 };

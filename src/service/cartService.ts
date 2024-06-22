@@ -60,3 +60,12 @@ export const fetchCartLineItemProducts = async (cart: CartType) => {
 export const viewCart = async (args: CartArgsType) => {
   return await cartServiceImpl.viewCart(args._id);
 };
+
+/**
+ * Controller used to calculate cart price
+ * @param context
+ * @returns
+ */
+export const calucateCartPrice = async (cart: CartType) => {
+  return await cartServiceImpl.calucateCartPrice(cart);
+};
