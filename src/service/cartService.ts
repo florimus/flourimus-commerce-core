@@ -1,7 +1,7 @@
 import {
+  CartArgsType,
   CartType,
   ContextObjectType,
-  LineItemType,
   cartItemAddArgsType,
   cartItemRemoveArgsType,
 } from "@core/types";
@@ -48,6 +48,15 @@ export const removeItemFromCart = async (
  * @param context
  * @returns
  */
-export const fetchCartLineItemProducts: any = async (cart: CartType) => {
+export const fetchCartLineItemProducts = async (cart: CartType) => {
   return await cartServiceImpl.fetchCartLineItemProducts(cart);
+};
+
+/**
+ * Controller used to get cart details
+ * @param context
+ * @returns
+ */
+export const viewCart = async (args: CartArgsType) => {
+  return await cartServiceImpl.viewCart(args._id);
 };

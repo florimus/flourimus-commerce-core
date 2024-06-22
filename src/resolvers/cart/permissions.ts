@@ -1,9 +1,8 @@
-import { anyUser } from "@permissions/permissions";
+import { anyUser, isAuthenticated } from "@permissions/permissions";
 
-// export const quriesPermissions = {
-//   warehouse: isAuthenticated,
-//   warehouseList: isAuthenticated,
-// };
+export const quriesPermissions = {
+  viewCart: isAuthenticated,
+};
 
 export const mutationPermissions = {
   cartCreate: anyUser,

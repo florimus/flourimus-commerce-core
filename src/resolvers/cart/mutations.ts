@@ -1,5 +1,4 @@
 import {
-  CartType,
   ContextObjectType,
   cartItemAddArgsType,
   cartItemRemoveArgsType,
@@ -7,7 +6,6 @@ import {
 import {
   addItemToCart,
   createUserCart,
-  fetchCartLineItemProducts,
   removeItemFromCart,
 } from "@services/cartService";
 
@@ -27,8 +25,5 @@ export const resolverMutations = {
       args: cartItemRemoveArgsType,
       context: ContextObjectType
     ) => await removeItemFromCart(args, context),
-  },
-  Cart: {
-    lines: async (parent: CartType) => await fetchCartLineItemProducts(parent),
   },
 };

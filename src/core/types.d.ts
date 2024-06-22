@@ -172,6 +172,10 @@ export type cartItemRemoveArgsType = {
   productId: string[];
 };
 
+export type CartArgsType = {
+  _id: string;
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"

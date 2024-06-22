@@ -1,4 +1,7 @@
-import { CartType, ContextObjectType, cartItemAddArgsType } from "@core/types";
+import {
+  CartType,
+  ContextObjectType,
+} from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
@@ -152,9 +155,26 @@ export const fetchCartLineItemProducts = async (cart: CartType) => {
   );
 };
 
+/**
+ * Controller used to get cart details
+ * @param context
+ * @returns
+ */
+export const viewCart = async (_id: string) => {
+  if (!_id) {
+    throw new BadRequestError("CardId is mandatory");
+  }
+  const cart = await orderRepository.getCartById(_id);
+  if (cart?._id) {
+    return cart;
+  }
+  throw new NotFoundError("Cart not found");
+};
+
 export default {
   createUserCart,
   addItemToCart,
   fetchCartLineItemProducts,
   removeItemFromCart,
+  viewCart,
 };

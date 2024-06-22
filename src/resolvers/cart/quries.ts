@@ -1,27 +1,11 @@
-import {
-  WarehouseArgsType,
-  WarehouseListArgsType,
-  WarehouseStockListArgsType,
-  WarehouseType,
-} from "@core/types";
-import {
-  WarehouseList,
-  warehouseInfo,
-  warehouseStockList,
-} from "@services/warehouseService";
+import { CartArgsType, CartType } from "@core/types";
+import { fetchCartLineItemProducts, viewCart } from "@services/cartService";
 
 export const resolverQuries = {
   Query: {
-    warehouse: async (_: unknown, args: WarehouseArgsType) =>
-      await warehouseInfo(args),
-
-    warehouseList: async (_: unknown, args: WarehouseListArgsType) =>
-      await WarehouseList(args),
+    cart: async (_: unknown, args: CartArgsType) => await viewCart(args),
   },
-  Warehouse: {
-    stockList: async (
-      parent: WarehouseType,
-      args: WarehouseStockListArgsType
-    ) => await warehouseStockList(parent, args),
+  Cart: {
+    lines: async (parent: CartType) => await fetchCartLineItemProducts(parent),
   },
 };
