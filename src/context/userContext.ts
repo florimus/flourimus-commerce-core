@@ -45,8 +45,10 @@ export default async function userContext({
           role: user.role,
           permissions: userPermissions,
           pubsub,
+          isAnonymous: false,
         };
       }
+      return { _id: userId, isAnonymous: true, pubsub } as ContextObjectType;
     }
   }
   return { pubsub } as ContextObjectType;
