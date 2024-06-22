@@ -5,6 +5,10 @@ const createCart = async (cart: Partial<CartType>) => {
   return await new Cart(cart).save();
 };
 
+const getCartById = async (_id: string) => {
+  return await Cart.findOne({ _id });
+};
+
 const getCartByUserIdAndStatus = async (
   userId: string,
   statuses: OrderStatusTypes[]
@@ -44,4 +48,5 @@ export default {
   getCartByUserIdAndStatus,
   addNewProductCart,
   updateOldProductCart,
+  getCartById,
 };

@@ -2,7 +2,9 @@ import { CartType, ContextObjectType, cartItemAddArgsType } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
 import orderRepository from "@repositories/orderRepository";
-import { getProductInfoById } from "@repositories/productRepository";
+import productRepository, {
+  getProductInfoById,
+} from "@repositories/productRepository";
 import { findProductAvailableStocksByProductId } from "@services/warehouseService";
 import { v4 as uuidv4 } from "uuid";
 
@@ -88,7 +90,33 @@ export const addItemToCart = async (
   return {};
 };
 
+/**
+ * Controller used to find product details of cartLineItems
+ * @param context
+ * @returns
+ */
+export const fetchCartLineItemProducts = async (cart: CartType) => {
+  const products =
+    Array.isArray(cart?.lines) && cart?.lines.length > 0 ? cart.lines : null;
+  if (!products) {
+    return [];
+  }
+  return Promise.all(
+    products.map(async (lineItem) => {
+      const product = await productRepository.getProductInfoById(
+        lineItem?.productId
+      );
+      return {
+        quantity: lineItem?.quantity,
+        product,
+        adjustments: lineItem?.adjustments,
+      };
+    })
+  );
+};
+
 export default {
   createUserCart,
   addItemToCart,
+  fetchCartLineItemProducts,
 };

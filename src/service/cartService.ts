@@ -1,4 +1,9 @@
-import { ContextObjectType, cartItemAddArgsType } from "@core/types";
+import {
+  CartType,
+  ContextObjectType,
+  LineItemType,
+  cartItemAddArgsType,
+} from "@core/types";
 import cartServiceImpl from "./impl/cartServiceImpl";
 
 /**
@@ -23,4 +28,13 @@ export const addItemToCart = async (
     args?.addToCartInput?.lineIds,
     context
   );
+};
+
+/**
+ * Controller used to find product details of cartLineItems
+ * @param context
+ * @returns
+ */
+export const fetchCartLineItemProducts: any = async (cart: CartType) => {
+  return await cartServiceImpl.fetchCartLineItemProducts(cart);
 };

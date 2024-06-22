@@ -1,5 +1,9 @@
-import { ContextObjectType, cartItemAddArgsType } from "@core/types";
-import { addItemToCart, createUserCart } from "@services/cartService";
+import { CartType, ContextObjectType, cartItemAddArgsType } from "@core/types";
+import {
+  addItemToCart,
+  createUserCart,
+  fetchCartLineItemProducts,
+} from "@services/cartService";
 
 export const resolverMutations = {
   Mutation: {
@@ -11,5 +15,8 @@ export const resolverMutations = {
       args: cartItemAddArgsType,
       context: ContextObjectType
     ) => await addItemToCart(args, context),
+  },
+  Cart: {
+    lines: async (parent: CartType) => await fetchCartLineItemProducts(parent),
   },
 };

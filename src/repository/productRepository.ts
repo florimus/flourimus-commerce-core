@@ -70,4 +70,5 @@ export default {
   getProductVariants,
   updateVariants,
   getProductList,
+  getProductInfoById,
 };
