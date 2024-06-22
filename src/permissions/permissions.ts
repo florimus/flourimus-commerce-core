@@ -7,6 +7,12 @@ export const isAuthenticated = rule()(
   }
 );
 
+export const anyUser = rule()(
+  async (_parent: unknown, _args: unknown, context: ContextObjectType) => {
+    return Boolean(context._id );
+  }
+);
+
 export const hasRole = (role: string) =>
   rule()(async (_parent: unknown, _args: unknown, context: ContextObjectType) => {
     const { permissions } = context || {}

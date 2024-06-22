@@ -9,6 +9,7 @@ import { FileUpload } from "graphql-upload-ts";
 export interface ContextObjectType extends UserType {
   permissions: string[];
   pubsub: PubSub;
+  isAnonymous: boolean;
 }
 
 export type UserQueryArgsType = {
@@ -161,6 +162,20 @@ export type StockEntryArgsType = {
   };
 };
 
+export type cartItemAddArgsType = {
+  addToCartInput: {
+    lineIds: string[];
+  };
+};
+
+export type cartItemRemoveArgsType = {
+  productId: string[];
+};
+
+export type CartArgsType = {
+  _id: string;
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"
@@ -281,4 +296,26 @@ export interface WarehouseStockFilter {
     saftyStock: number;
     allocatedStocks: number;
   };
+}
+
+export type OrderStatusTypes = "CREATED" | "PAYMENT_DECLINED" | "ORDER";
+
+export type LineItemType = {
+  quantity: number;
+  productId: string;
+  adjustments: string;
+};
+
+export interface CartType {
+  _id: string;
+  userId: string;
+  lines?: [LineItemType] | [];
+  status: OrderStatusTypes;
+  isAnonymous: Boolean;
+  createdAt?: String;
+  updatedAt?: String;
+  isActive?: Boolean;
+  createdBy?: String;
+  updatedBy?: String;
+  metaStatus?: String;
 }
