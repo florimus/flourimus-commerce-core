@@ -1,7 +1,7 @@
 # Flourimus Commerce Core
 
 <h1 align="center">
-  <img src="https://i.ibb.co/1bX043N/undraw-web-shopping-re-owap.png" alt="image">
+  <img src="https://i.ibb.co/nPC90jM/Group-231.png" alt="image">
 </h1>
 
 A comprehensive starter template for building an Express.js server with TypeScript, GraphQL, MongoDB integration, RBAC, ESLint configurations, and Database scripts for release planning.
