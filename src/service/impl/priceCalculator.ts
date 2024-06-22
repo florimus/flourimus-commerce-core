@@ -5,9 +5,9 @@ import { productPriceInfo } from "@services/priceTableService";
 const cartPriceCalculator = async (products: LineItemType[]) => {
   let gross = 0;
   let net = 0;
-  let discounts = 0;
-  let shipping = 0;
-  let tax = 0;
+  const discounts = 0;
+  const shipping = 0;
+  const tax = 0;
 
   const productPromises = products.map(({ productId }) => getProductInfoById(productId, true));
   const productInfos = await Promise.all(productPromises);

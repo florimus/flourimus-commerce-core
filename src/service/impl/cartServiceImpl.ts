@@ -1,4 +1,4 @@
-import { CartType, ContextObjectType } from "@core/types";
+import { CartType, ContextObjectType, LineItemType } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
@@ -140,7 +140,7 @@ export const fetchCartLineItemProducts = async (cart: CartType) => {
     return [];
   }
   const allLineItems = Promise.all(
-    products.map(async (lineItem: any) => {
+    products.map(async (lineItem: LineItemType) => {
       const product = await productRepository.getProductInfoById(
         lineItem?.productId,
         true
