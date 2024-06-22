@@ -4,7 +4,7 @@ export const CartDefs = gql`
   type Cart {
     _id: ID
     userId: String
-    lines: [Product]
+    lines: [LineItem]
     price: CartPrice
     status: String
     isAnonymous: Boolean
@@ -14,7 +14,13 @@ export const CartDefs = gql`
     createdBy: String
     updatedBy: String
     metaStatus: String
-    customerInfo: User 
+    customerInfo: User
+  }
+
+  type LineItem {
+    quantity: Int
+    product: Product
+    adjustments: String
   }
 
   type CartPrice {
@@ -26,4 +32,7 @@ export const CartDefs = gql`
     total: Int
   }
   # =============== Inputs =================
+  input AddToCartInput {
+    lineIds: [String]
+  }
 `;

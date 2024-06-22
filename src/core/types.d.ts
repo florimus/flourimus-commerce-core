@@ -162,6 +162,12 @@ export type StockEntryArgsType = {
   };
 };
 
+export type cartItemAddArgsType = {
+  addToCartInput: {
+    lineIds: string[];
+  };
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"
@@ -286,10 +292,16 @@ export interface WarehouseStockFilter {
 
 export type OrderStatusTypes = "CREATED" | "PAYMENT_DECLINED" | "ORDER";
 
+export type LineItemType = {
+  quantity: number;
+  productId: string;
+  adjustments: string;
+};
+
 export interface CartType {
   _id: string;
   userId: string;
-  lines?: [string] | [];
+  lines?: [LineItemType] | [];
   status: OrderStatusTypes;
   isAnonymous: Boolean;
   createdAt?: String;

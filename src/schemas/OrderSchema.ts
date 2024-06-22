@@ -3,6 +3,23 @@ import commonFieldsSchema from "./CommonSchema";
 
 const Schema = mongoose.Schema;
 
+export const lineItemSchema = new Schema(
+  {
+    quantity: {
+      type: Number,
+      required: true,
+    },
+    productId: {
+      type: String,
+      required: true,
+    },
+    adjustments: {
+      type: String,
+    },
+  },
+  { _id: false }
+);
+
 export const orderSchema = new Schema({
   _id: {
     type: String,
@@ -14,7 +31,7 @@ export const orderSchema = new Schema({
     required: true,
   },
   lines: {
-    type: [String],
+    type: [lineItemSchema],
   },
   status: {
     type: String,
