@@ -14,7 +14,7 @@ Please review our [Code of Conduct](CODE_OF_CONDUCT.md) to understand the standa
 2. Clone the forked repository to your local machine:
 
    ```bash
-   git clone https://github.com/Anoopoo7/express-graphql-server-template.git
+   git clone https://github.com/florimus/flourimus-commerce-core.git
 3. Initialize DB by scripts
 
     ```bash
