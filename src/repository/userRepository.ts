@@ -29,6 +29,11 @@ const createCustomerAddress = async (address: AddressType) => {
   return await new Address(address).save();
 };
 
+const getCustomerAddress = async (userId: string) => {
+  return (await Address.find({ userId })) as AddressType[];
+};
+
 export default {
   createCustomerAddress,
+  getCustomerAddress,
 };

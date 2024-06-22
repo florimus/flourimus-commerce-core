@@ -352,6 +352,15 @@ const createAddress = async (
   return userRepository.createCustomerAddress(address);
 };
 
+/**
+ * Controller used to get current user's addresses
+ * @param args
+ * @returns
+ */
+export const getCurrentUserAddresses = async (context: ContextObjectType) => {
+  return (await userRepository.getCustomerAddress(context._id)) ?? [];
+};
+
 export default {
   getCurrentUserInfo,
   getUserInfo,
@@ -363,4 +372,5 @@ export default {
   forgotPassword,
   resetPassword,
   createAddress,
+  getCurrentUserAddresses,
 };

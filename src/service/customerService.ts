@@ -115,3 +115,12 @@ export const createAddress = async (
     context
   );
 };
+
+/**
+ * Controller used to get current user's addresses
+ * @param args
+ * @returns
+ */
+export const getCurrentUserAddresses = async (context: ContextObjectType) => {
+  return await customerServiceImpl.getCurrentUserAddresses(context);
+};

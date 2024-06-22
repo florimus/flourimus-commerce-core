@@ -22,6 +22,7 @@ export const UserDefs = gql`
     updatedBy: String
     metaStatus: String
     permissions: [String]
+    addresses: [Address]
   }
 
   type Address {
