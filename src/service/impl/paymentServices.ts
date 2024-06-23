@@ -27,6 +27,7 @@ const initiatePayment = async (
     id: session.id,
   };
 };
+
 export default {
   initiatePayment,
 };
