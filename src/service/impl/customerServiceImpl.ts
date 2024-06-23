@@ -419,10 +419,11 @@ export const updateAddress = async (
   if (!_id) {
     throw new BadRequestError("Address is is mandatory");
   }
-  const updatedAddress = await userRepository.updateAddress(
-    _id,
-    updateAdressInput
-  );
+  const updatedAddress = await userRepository.updateAddress(_id, {
+    ...updateAdressInput,
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+  });
   if (updatedAddress?.isActive) {
     return updatedAddress;
   }

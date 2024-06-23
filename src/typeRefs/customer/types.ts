@@ -92,5 +92,4 @@ export const UserDefs = gql`
     pin: Int
     landmark: String
   }
-
 `;
