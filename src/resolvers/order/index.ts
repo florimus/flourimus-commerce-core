@@ -2,14 +2,14 @@ import { resolverMutations } from "./mutations";
 import { mutationPermissions, quriesPermissions } from "./permissions";
 import { resolverQuries } from "./quries";
 
-export default function cartResolvers() {
+export default function orderResolvers() {
   return {
     ...resolverMutations,
     ...resolverQuries,
   };
 }
 
-export const cartPermissions = {
+export const orderPermissions = {
   quries: quriesPermissions,
   mutations: mutationPermissions,
 };

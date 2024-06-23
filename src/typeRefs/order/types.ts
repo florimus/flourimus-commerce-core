@@ -1,6 +1,6 @@
 import { gql } from "apollo-server-express";
 
-export const CartDefs = gql`
+export const OrderDefs = gql`
   type Cart {
     _id: ID
     userId: String

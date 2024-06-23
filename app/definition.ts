@@ -6,8 +6,8 @@ import priceTableRefs from "src/typeRefs/price";
 import priceTableResolvers from "@resolvers/price";
 import warehouseRefs from "src/typeRefs/warehouse";
 import warehouseResolvers from "@resolvers/warehouse";
-import cartRefs from "src/typeRefs/cart";
-import cartResolvers from "@resolvers/cart";
+import orderRefs from "src/typeRefs/order";
+import orderResolvers from "@resolvers/order";
 
 export default {
   typeDefs: [
@@ -15,13 +15,13 @@ export default {
     productRefs().typeDefs,
     priceTableRefs().typeDefs,
     warehouseRefs().typeDefs,
-    cartRefs().typeDefs,
+    orderRefs().typeDefs,
   ],
   resolvers: [
     customerResolvers(),
     productResolvers(),
     priceTableResolvers(),
     warehouseResolvers(),
-    cartResolvers(),
+    orderResolvers(),
   ],
 };
