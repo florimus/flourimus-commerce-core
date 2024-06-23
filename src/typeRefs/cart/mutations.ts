@@ -5,6 +5,11 @@ export const CartMutations = gql`
     cartCreate: Cart
     cartItemAdd(addToCartInput: AddToCartInput!): Cart
     cartItemRemove(productId: [String]!): Cart
-    addcartAddresses(shipping: AddressInput, billing: AddressInput, isSameAsBilling: Boolean): Cart
+    addcartAddresses(
+      shipping: AddressInput
+      billing: AddressInput
+      isSameAsBilling: Boolean
+    ): Cart
+    initiatePayment: InitiatePaymentResponse
   }
 `;

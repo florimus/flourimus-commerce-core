@@ -11,4 +11,7 @@ export default {
   bulkUploadProduct: {
     BATCH_SIZE: 100,
   },
+  paymentConstants: {
+    INR_STD: 100,
+  },
 };

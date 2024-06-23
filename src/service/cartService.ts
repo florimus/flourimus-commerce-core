@@ -82,3 +82,14 @@ export const addAddressToCart = async (
 ) => {
   return await cartServiceImpl.addAddressToCart(args, context);
 };
+
+/**
+ * Controller used to initiate payment
+ * @param context
+ * @returns
+ */
+export const initiateCartPayment = async (
+  context: ContextObjectType
+) => {
+  return await cartServiceImpl.initiateCartPayment(context);
+};

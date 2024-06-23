@@ -43,6 +43,10 @@ export const CartDefs = gql`
     shipping: Int
     total: Int
   }
+
+  type InitiatePaymentResponse {
+    link: String
+  }
   # =============== Inputs =================
   input AddToCartInput {
     lineIds: [String]

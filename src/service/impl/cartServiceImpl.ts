@@ -1,7 +1,12 @@
 import {
+  CartAddressesType,
   CartType,
   ContextObjectType,
   LineItemType,
+  PaymentCustomerType,
+  PaymentLineItem,
+  PaymentShippingCharge,
+  ProductType,
   cartAddressArgsType,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
@@ -13,7 +18,11 @@ import productRepository, {
 } from "@repositories/productRepository";
 import { findProductAvailableStocksByProductId } from "@services/warehouseService";
 import { v4 as uuidv4 } from "uuid";
-import cartPriceCalculator from "./priceCalculator";
+import cartPriceCalculator, {
+  productPriceCalculatorInPayment,
+} from "./priceCalculator";
+import paymentServices from "./paymentServices";
+import contants from "@core/constants/contants";
 
 /**
  * Controller used to create cart
@@ -227,6 +236,93 @@ export const addAddressToCart = async (
   throw new NotFoundError("No progressing cart found");
 };
 
+/**
+ * Controller used to initiate payment
+ * @param context
+ * @returns
+ */
+export const initiateCartPayment = async (context: ContextObjectType) => {
+  const currentCart = await orderRepository.getCartByUserIdAndStatus(
+    context._id,
+    ["CREATED", "PAYMENT_DECLINED"]
+  );
+  if (!currentCart?.isActive) {
+    throw new BadRequestError("no cart available");
+  }
+  const cartAddress: CartAddressesType | undefined =
+    currentCart.shippingAddress;
+  if (!cartAddress) {
+    throw new BadRequestError("No addresses in cart");
+  }
+  const customerInfo: PaymentCustomerType = {
+    name: context.isAnonymous
+      ? "anonymous"
+      : `${context.firstName} ${context.lastName}`,
+    address: {
+      line1: cartAddress.point,
+      postal_code: cartAddress.pin.toString(),
+      city: cartAddress.city,
+      state: "kl",
+      country: "in",
+    },
+  };
+  const lineItems = Array.isArray(currentCart.lines) ? currentCart.lines : [];
+  if (!lineItems.length) {
+    throw new BadRequestError("No products in cart");
+  }
+  const productPromises = lineItems.map(({ productId }) =>
+    getProductInfoById(productId, true)
+  );
+  const productInfos: ProductType[] = await Promise.all(productPromises);
+
+  if (!Array.isArray(productInfos) || !productInfos.length) {
+    throw new BadRequestError("Products not sellablble");
+  }
+
+  const paymentLineItemsPromise = Promise.all(
+    productInfos.map(async (product: ProductType) => {
+      const quantity = lineItems.find(
+        (item) => item.productId === product._id
+      )?.quantity;
+      const productPrice = await productPriceCalculatorInPayment(product);
+      return {
+        price_data: {
+          currency: "inr",
+          product_data: {
+            name: product.name,
+            images: product.medias,
+          },
+          unit_amount: productPrice.total * contants.paymentConstants.INR_STD,
+        },
+        quantity,
+      } as PaymentLineItem;
+    })
+  );
+
+  const shippingOptions: PaymentShippingCharge = {
+    shipping_rate_data: {
+      display_name: "Standard Shipping",
+      type: "fixed_amount",
+      fixed_amount: {
+        amount: 5000,
+        currency: "inr",
+      },
+    },
+  };
+
+  const initiatePaymentInfo = await paymentServices.initiatePayment(
+    customerInfo,
+    await paymentLineItemsPromise,
+    shippingOptions
+  );
+  if (!initiatePaymentInfo.url || !initiatePaymentInfo.id) {
+    throw new BadRequestError("Cannot initialize the cart now");
+  }
+  return {
+    link: initiatePaymentInfo.url,
+  };
+};
+
 export default {
   createUserCart,
   addItemToCart,
@@ -235,4 +331,5 @@ export default {
   viewCart,
   calucateCartPrice,
   addAddressToCart,
+  initiateCartPayment,
 };

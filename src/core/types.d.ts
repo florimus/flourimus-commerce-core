@@ -381,3 +381,47 @@ export interface AddressType extends CartAddressesType {
   updatedBy?: String;
   metaStatus?: String;
 }
+
+/**************  Payments */
+export interface PaymentSessionType {
+  id: string;
+  url: string;
+}
+
+export interface PaymentCustomerType {
+  name: string;
+  address: {
+    line1: string;
+    postal_code: string;
+    city: string;
+    state: string;
+    country: string;
+  };
+}
+
+export type PaymentCurrency = "inr";
+
+export interface PaymentLineItem {
+  price_data: {
+    currency: PaymentCurrency;
+    product_data: {
+      name: string;
+      images: string[];
+    };
+    unit_amount: number;
+  };
+  quantity: number;
+}
+
+export type PaymentShippingChargeType = "fixed_amount";
+
+export interface PaymentShippingCharge {
+  shipping_rate_data: {
+    display_name: string;
+    type: PaymentShippingChargeType;
+    fixed_amount: {
+      amount: number;
+      currency: PaymentCurrency;
+    };
+  };
+}
