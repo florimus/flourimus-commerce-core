@@ -355,6 +355,7 @@ export const submitUserOrder = async (
     throw new NotFoundError("User order not found");
   }
   const paymentDetails = await paymentServices.fetchPaymentDetails(sessionId);
+  console.log(paymentDetails); //TODO: remove later
   return {};
 };
 
