@@ -68,7 +68,7 @@ export const orderSchema = new Schema({
   },
   status: {
     type: String,
-    enum: ["CREATED", "PAYMENT_DECLINED", "ORDER"],
+    enum: ["CREATED", "PAYMENT_INITIATED", "PAYMENT_DECLINED", "ORDER"],
   },
   isAnonymous: {
     type: Boolean,
@@ -79,6 +79,9 @@ export const orderSchema = new Schema({
   },
   billingAddress: {
     type: addressSchema,
+  },
+  sessionId: {
+    type: String,
   },
 });
 

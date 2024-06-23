@@ -8,6 +8,7 @@ import {
   addAddressToCart,
   addItemToCart,
   createUserCart,
+  initiateCartPayment,
   removeItemFromCart,
 } from "@services/cartService";
 
@@ -33,5 +34,11 @@ export const resolverMutations = {
       args: cartAddressArgsType,
       context: ContextObjectType
     ) => await addAddressToCart(args, context),
+
+    initiatePayment: async (
+      _: unknown,
+      __: unknown,
+      context: ContextObjectType
+    ) => await initiateCartPayment(context),
   },
 };

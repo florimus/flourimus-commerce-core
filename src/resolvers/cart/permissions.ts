@@ -8,4 +8,6 @@ export const mutationPermissions = {
   cartCreate: anyUser,
   cartItemAdd: anyUser,
   cartItemRemove: anyUser,
+  addcartAddresses: anyUser,
+  initiatePayment: anyUser,
 };
