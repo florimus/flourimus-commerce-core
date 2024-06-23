@@ -27,7 +27,7 @@ export const permissions = shield(
   {
     fallbackError: (errors) => {
       if (!errors) {
-        return new UnAuthorizationError("Permission Denyed");
+        return new UnAuthorizationError("Permission Denied");
       }
       return errors as Error;
     },

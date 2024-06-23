@@ -2,9 +2,10 @@ import {
   CartArgsType,
   CartType,
   ContextObjectType,
-  cartAddressArgsType,
-  cartItemAddArgsType,
-  cartItemRemoveArgsType,
+  CartAddressArgsType,
+  CartItemAddArgsType,
+  CartItemRemoveArgsType,
+  SubmitOrderArgsType,
 } from "@core/types";
 import cartServiceImpl from "./impl/cartServiceImpl";
 
@@ -23,7 +24,7 @@ export const createUserCart = async (context: ContextObjectType) => {
  * @returns
  */
 export const addItemToCart = async (
-  args: cartItemAddArgsType,
+  args: CartItemAddArgsType,
   context: ContextObjectType
 ) => {
   return await cartServiceImpl.addItemToCart(
@@ -38,7 +39,7 @@ export const addItemToCart = async (
  * @returns
  */
 export const removeItemFromCart = async (
-  args: cartItemRemoveArgsType,
+  args: CartItemRemoveArgsType,
   context: ContextObjectType
 ) => {
   return await cartServiceImpl.removeItemFromCart(args.productId, context);
@@ -77,7 +78,7 @@ export const calucateCartPrice = async (cart: CartType) => {
  * @returns
  */
 export const addAddressToCart = async (
-  args: cartAddressArgsType,
+  args: CartAddressArgsType,
   context: ContextObjectType
 ) => {
   return await cartServiceImpl.addAddressToCart(args, context);
@@ -92,4 +93,16 @@ export const initiateCartPayment = async (
   context: ContextObjectType
 ) => {
   return await cartServiceImpl.initiateCartPayment(context);
+};
+
+/**
+ * Controller used to submit order
+ * @param context
+ * @returns
+ */
+export const submitUserOrder = async (
+  args: SubmitOrderArgsType,
+  context: ContextObjectType
+) => {
+  return await cartServiceImpl.submitUserOrder(args, context);
 };

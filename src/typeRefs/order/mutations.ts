@@ -11,5 +11,6 @@ export const OrderMutations = gql`
       isSameAsBilling: Boolean
     ): Cart
     initiatePayment: InitiatePaymentResponse
+    submitOrder(sessionId: String!): Cart
   }
 `;

@@ -1,8 +1,9 @@
 import {
   ContextObjectType,
-  cartAddressArgsType,
-  cartItemAddArgsType,
-  cartItemRemoveArgsType,
+  CartAddressArgsType,
+  CartItemAddArgsType,
+  CartItemRemoveArgsType,
+  SubmitOrderArgsType,
 } from "@core/types";
 import {
   addAddressToCart,
@@ -10,6 +11,7 @@ import {
   createUserCart,
   initiateCartPayment,
   removeItemFromCart,
+  submitUserOrder,
 } from "@services/cartService";
 
 export const resolverMutations = {
@@ -19,19 +21,19 @@ export const resolverMutations = {
 
     cartItemAdd: async (
       _: unknown,
-      args: cartItemAddArgsType,
+      args: CartItemAddArgsType,
       context: ContextObjectType
     ) => await addItemToCart(args, context),
 
     cartItemRemove: async (
       _: unknown,
-      args: cartItemRemoveArgsType,
+      args: CartItemRemoveArgsType,
       context: ContextObjectType
     ) => await removeItemFromCart(args, context),
 
     addcartAddresses: async (
       _: unknown,
-      args: cartAddressArgsType,
+      args: CartAddressArgsType,
       context: ContextObjectType
     ) => await addAddressToCart(args, context),
 
@@ -40,5 +42,11 @@ export const resolverMutations = {
       __: unknown,
       context: ContextObjectType
     ) => await initiateCartPayment(context),
+
+    submitOrder: async (
+      _: unknown,
+      args: SubmitOrderArgsType,
+      context: ContextObjectType
+    ) => await submitUserOrder(args, context),
   },
 };
