@@ -62,13 +62,13 @@ export const removeProductsFromCart = async (
   );
 };
 
-export const savecartAddresses = async (
+export const updateOrder = async (
   orderId: string,
-  addressInfo: Partial<CartType>
+  orderInfo: Partial<CartType>
 ) => {
   return (await Cart.findOneAndUpdate(
     { _id: orderId },
-    { $set: addressInfo },
+    { $set: orderInfo },
     { new: true }
   )) as CartType;
 };
@@ -80,5 +80,5 @@ export default {
   updateOldProductCart,
   getCartById,
   removeProductsFromCart,
-  savecartAddresses,
+  updateOrder,
 };

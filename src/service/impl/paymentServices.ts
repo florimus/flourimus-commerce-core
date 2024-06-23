@@ -17,8 +17,8 @@ const initiatePayment = async (
     line_items: lines,
     mode: "payment",
     shipping_options: [shippingOptions],
-    success_url: `${process.env.STORE_FRONT_URL}/payment/success`,
-    cancel_url: `${process.env.STORE_FRONT_URL}/payment/declined`,
+    success_url: `${process.env.STORE_FRONT_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
+    cancel_url: `${process.env.STORE_FRONT_URL}/payment/declined?session_id={CHECKOUT_SESSION_ID}`,
     customer: customer.id,
   });
   return {

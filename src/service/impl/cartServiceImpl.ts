@@ -32,7 +32,7 @@ import contants from "@core/constants/contants";
 export const createUserCart = async (context: ContextObjectType) => {
   const esxistingCart = await orderRepository.getCartByUserIdAndStatus(
     context._id,
-    ["CREATED", "PAYMENT_DECLINED"]
+    ["CREATED", "PAYMENT_DECLINED", "PAYMENT_INITIATED"]
   );
   if (esxistingCart?._id) {
     return esxistingCart;
@@ -212,7 +212,7 @@ export const addAddressToCart = async (
   const { shipping, billing, isSameAsBilling } = args || {};
   const esxistingCart = await orderRepository.getCartByUserIdAndStatus(
     context._id,
-    ["CREATED", "PAYMENT_DECLINED"]
+    ["CREATED", "PAYMENT_DECLINED", "PAYMENT_INITIATED"]
   );
   if (!shipping) {
     throw new BadRequestError("Invalid shipping address");
@@ -226,7 +226,7 @@ export const addAddressToCart = async (
     updatedAt: getCurrentTime(),
     updatedBy: context.email,
   };
-  const updatedcart = await orderRepository.savecartAddresses(
+  const updatedcart = await orderRepository.updateOrder(
     esxistingCart?._id,
     updatedAddress
   );
@@ -244,7 +244,7 @@ export const addAddressToCart = async (
 export const initiateCartPayment = async (context: ContextObjectType) => {
   const currentCart = await orderRepository.getCartByUserIdAndStatus(
     context._id,
-    ["CREATED", "PAYMENT_DECLINED"]
+    ["CREATED", "PAYMENT_DECLINED", "PAYMENT_INITIATED"]
   );
   if (!currentCart?.isActive) {
     throw new BadRequestError("no cart available");
@@ -318,6 +318,12 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
   if (!initiatePaymentInfo.url || !initiatePaymentInfo.id) {
     throw new BadRequestError("Cannot initialize the cart now");
   }
+  await orderRepository.updateOrder(currentCart._id, {
+    status: "PAYMENT_INITIATED",
+    sessionId: initiatePaymentInfo.id,
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+  });
   return {
     link: initiatePaymentInfo.url,
   };

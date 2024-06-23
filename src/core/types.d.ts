@@ -333,7 +333,7 @@ export interface WarehouseStockFilter {
   };
 }
 
-export type OrderStatusTypes = "CREATED" | "PAYMENT_DECLINED" | "ORDER";
+export type OrderStatusTypes = "CREATED" | "PAYMENT_INITIATED" | "PAYMENT_DECLINED" | "ORDER";
 
 export type LineItemType = {
   quantity: number;
@@ -355,6 +355,7 @@ export interface CartType {
   metaStatus?: String;
   shippingAddress?: CartAddressesType;
   billingAddress?: CartAddressesType;
+  sessionId?: string;
 }
 
 export type CartAddressType = "SHIPPING" | "BILLING";
