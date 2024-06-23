@@ -201,6 +201,12 @@ export type cartItemRemoveArgsType = {
   productId: string[];
 };
 
+export type cartAddressArgsType = {
+  shipping: CartAddressesType;
+  billing: CartAddressesType;
+  isSameAsBilling: boolean;
+};
+
 export type CartArgsType = {
   _id: string;
 };
@@ -347,16 +353,24 @@ export interface CartType {
   createdBy?: String;
   updatedBy?: String;
   metaStatus?: String;
+  shippingAddress?: CartAddressesType;
+  billingAddress?: CartAddressesType;
 }
 
-export interface AddressType {
-  _id: string;
+export type CartAddressType = "SHIPPING" | "BILLING";
+
+export interface CartAddressesType {
+  type?: CartAddressType;
   point: string;
   street: string;
   city: string;
   state: string;
   country: string;
   pin: number;
+}
+
+export interface AddressType extends CartAddressesType {
+  _id: string;
   userId: string;
   landmark: string;
   isDefault: boolean;

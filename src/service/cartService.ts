@@ -2,6 +2,7 @@ import {
   CartArgsType,
   CartType,
   ContextObjectType,
+  cartAddressArgsType,
   cartItemAddArgsType,
   cartItemRemoveArgsType,
 } from "@core/types";
@@ -68,4 +69,16 @@ export const viewCart = async (args: CartArgsType) => {
  */
 export const calucateCartPrice = async (cart: CartType) => {
   return await cartServiceImpl.calucateCartPrice(cart);
+};
+
+/**
+ * Controller used to add address to cart
+ * @param context
+ * @returns
+ */
+export const addAddressToCart = async (
+  args: cartAddressArgsType,
+  context: ContextObjectType
+) => {
+  return await cartServiceImpl.addAddressToCart(args, context);
 };

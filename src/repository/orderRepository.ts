@@ -1,4 +1,8 @@
-import { CartType, LineItemType, OrderStatusTypes } from "@core/types";
+import {
+  CartType,
+  LineItemType,
+  OrderStatusTypes,
+} from "@core/types";
 import Cart from "@schemas/OrderSchema";
 
 const createCart = async (cart: Partial<CartType>) => {
@@ -58,6 +62,17 @@ export const removeProductsFromCart = async (
   );
 };
 
+export const savecartAddresses = async (
+  orderId: string,
+  addressInfo: Partial<CartType>
+) => {
+  return (await Cart.findOneAndUpdate(
+    { _id: orderId },
+    { $set: addressInfo },
+    { new: true }
+  )) as CartType;
+};
+
 export default {
   createCart,
   getCartByUserIdAndStatus,
@@ -65,4 +80,5 @@ export default {
   updateOldProductCart,
   getCartById,
   removeProductsFromCart,
+  savecartAddresses,
 };

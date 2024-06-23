@@ -1,4 +1,9 @@
-import { CartType, ContextObjectType, LineItemType } from "@core/types";
+import {
+  CartType,
+  ContextObjectType,
+  LineItemType,
+  cartAddressArgsType,
+} from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
@@ -186,6 +191,42 @@ export const calucateCartPrice = async (cart: CartType) => {
   }
 };
 
+/**
+ * Controller used to add address to cart
+ * @param context
+ * @returns
+ */
+export const addAddressToCart = async (
+  args: cartAddressArgsType,
+  context: ContextObjectType
+) => {
+  const { shipping, billing, isSameAsBilling } = args || {};
+  const esxistingCart = await orderRepository.getCartByUserIdAndStatus(
+    context._id,
+    ["CREATED", "PAYMENT_DECLINED"]
+  );
+  if (!shipping) {
+    throw new BadRequestError("Invalid shipping address");
+  }
+  if (!isSameAsBilling && !billing) {
+    throw new BadRequestError("Invalid billing address");
+  }
+  const updatedAddress: Partial<CartType> = {
+    shippingAddress: isSameAsBilling ? billing : shipping,
+    billingAddress: billing,
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+  };
+  const updatedcart = await orderRepository.savecartAddresses(
+    esxistingCart?._id,
+    updatedAddress
+  );
+  if (updatedcart?.isActive) {
+    return updatedcart;
+  }
+  throw new NotFoundError("No progressing cart found");
+};
+
 export default {
   createUserCart,
   addItemToCart,
@@ -193,4 +234,5 @@ export default {
   removeItemFromCart,
   viewCart,
   calucateCartPrice,
+  addAddressToCart,
 };

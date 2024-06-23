@@ -15,6 +15,18 @@ export const CartDefs = gql`
     updatedBy: String
     metaStatus: String
     customerInfo: User
+    shippingAddress: CheckoutAddress
+    billingAddress: CheckoutAddress
+  }
+
+  type CheckoutAddress {
+    point: String
+    street: String
+    city: String
+    state: String
+    country: String
+    pin: Int
+    landmark: String
   }
 
   type LineItem {
@@ -34,5 +46,16 @@ export const CartDefs = gql`
   # =============== Inputs =================
   input AddToCartInput {
     lineIds: [String]
+  }
+
+  input AddressInput {
+    type: String!
+    point: String!
+    street: String!
+    city: String!
+    state: String!
+    country: String!
+    pin: Int!
+    landmark: String
   }
 `;
