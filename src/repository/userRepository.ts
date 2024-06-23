@@ -50,9 +50,18 @@ const setDefaultAddressById = async (
   )) as AddressType;
 };
 
+export const updateAddress = async (_id: string, data: Partial<AddressType>) => {
+  return (await Address.findOneAndUpdate(
+    { _id },
+    { $set: data },
+    { new: true }
+  )) as AddressType;
+};
+
 export default {
   createCustomerAddress,
   getCustomerAddress,
   getCustomerAddressById,
   setDefaultAddressById,
+  updateAddress,
 };

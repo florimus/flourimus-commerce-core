@@ -100,7 +100,19 @@ export type AddressCreateArgsType = {
     country: string;
     pin: number;
     landmark: string;
-    isDefault: boolean;
+  };
+};
+
+export type AddressUpdateArgsType = {
+  _id: string;
+  updateAdressInput: {
+    point: string;
+    street: string;
+    city: string;
+    state: string;
+    country: string;
+    pin: number;
+    landmark: string;
   };
 };
 
