@@ -1,9 +1,11 @@
 import {
   ContextObjectType,
+  cartAddressArgsType,
   cartItemAddArgsType,
   cartItemRemoveArgsType,
 } from "@core/types";
 import {
+  addAddressToCart,
   addItemToCart,
   createUserCart,
   removeItemFromCart,
@@ -25,5 +27,11 @@ export const resolverMutations = {
       args: cartItemRemoveArgsType,
       context: ContextObjectType
     ) => await removeItemFromCart(args, context),
+
+    addcartAddresses: async (
+      _: unknown,
+      args: cartAddressArgsType,
+      context: ContextObjectType
+    ) => await addAddressToCart(args, context),
   },
 };
