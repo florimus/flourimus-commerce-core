@@ -10,6 +10,7 @@ import {
   ResetPasswordMutationArgsType,
   AddressCreateArgsType,
   AddressQueryArgsType,
+  AddressUpdateArgsType,
 } from "@types";
 
 import customerServiceImpl from "@services/impl/customerServiceImpl";
@@ -145,4 +146,16 @@ export const setDefaultAddress = async (
   context: ContextObjectType
 ) => {
   return await customerServiceImpl.setDefaultAddress(args._id, context);
+};
+
+/**
+ * Controller used to update address
+ * @param args
+ * @returns
+ */
+export const updateAddress = async (
+  args: AddressUpdateArgsType,
+  context: ContextObjectType
+) => {
+  return await customerServiceImpl.updateAddress(args, context);
 };

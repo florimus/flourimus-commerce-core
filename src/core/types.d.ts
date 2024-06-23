@@ -103,6 +103,19 @@ export type AddressCreateArgsType = {
   };
 };
 
+export type AddressUpdateArgsType = {
+  _id: string;
+  updateAdressInput: {
+    point: string;
+    street: string;
+    city: string;
+    state: string;
+    country: string;
+    pin: number;
+    landmark: string;
+  };
+};
+
 export type WarehouseListArgsType = {
   warehouseListInput: {
     search: string;

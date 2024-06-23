@@ -1,6 +1,7 @@
 import {
   AddressCreateArgsType,
   AddressQueryArgsType,
+  AddressUpdateArgsType,
   ContextObjectType,
   ForgotPasswordMutationArgsType,
   InviteStaffMutationArgsType,
@@ -14,6 +15,7 @@ import {
   onboardInvitedStaff,
   resetPassword,
   setDefaultAddress,
+  updateAddress,
 } from "@services/customerService";
 
 export const resolverMutations = {
@@ -44,5 +46,11 @@ export const resolverMutations = {
       args: AddressQueryArgsType,
       context: ContextObjectType
     ) => await setDefaultAddress(args, context),
+
+    addressUpdate: async (
+      _: unknown,
+      args: AddressUpdateArgsType,
+      context: ContextObjectType
+    ) => await updateAddress(args, context),
   },
 };

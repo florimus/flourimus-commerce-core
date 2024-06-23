@@ -14,6 +14,7 @@ import {
   ResetPasswordMutationArgsType,
   AddressCreateArgsType,
   AddressType,
+  AddressUpdateArgsType,
 } from "@types";
 import {
   createDeltaToken,
@@ -391,7 +392,7 @@ export const setDefaultAddress = async (
     throw new NotFoundError("Address not found");
   }
   if (address.isDefault) {
-    return address
+    return address;
   }
   const addressUpdate: Partial<AddressType> = {
     updatedAt: getCurrentTime(),
@@ -403,6 +404,29 @@ export const setDefaultAddress = async (
     _id,
     addressUpdate
   );
+};
+
+/**
+ * Controller used to update address
+ * @param args
+ * @returns
+ */
+export const updateAddress = async (
+  args: AddressUpdateArgsType,
+  context: ContextObjectType
+) => {
+  const { _id, updateAdressInput } = args || {};
+  if (!_id) {
+    throw new BadRequestError("Address is is mandatory");
+  }
+  const updatedAddress = await userRepository.updateAddress(
+    _id,
+    updateAdressInput
+  );
+  if (updatedAddress?.isActive) {
+    return updatedAddress;
+  }
+  throw new NotFoundError("Address not found");
 };
 
 export default {
@@ -419,4 +443,5 @@ export default {
   getCurrentUserAddresses,
   getAddressInfo,
   setDefaultAddress,
+  updateAddress,
 };
