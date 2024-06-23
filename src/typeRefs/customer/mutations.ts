@@ -6,7 +6,7 @@ export const UserMutations = gql`
     onboardStaff(onboardStaffInput: OnboardStaffInput): User
     forgotPassword(email: String): ForgotPassword
     resetPassword(resetPasswordInput: ResetPasswordInput): ResetPassword
-    addressCreation(createAddressInput: CreateAddressInput!): Address
+    addressCreation(createAddressInput: AddressInput!): Address
     addressSetDefault(_id: String): Address
   }
 `;

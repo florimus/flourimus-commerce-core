@@ -100,7 +100,6 @@ export type AddressCreateArgsType = {
     country: string;
     pin: number;
     landmark: string;
-    isDefault: boolean;
   };
 };
 

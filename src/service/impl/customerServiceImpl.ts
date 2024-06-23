@@ -336,7 +336,7 @@ const createAddress = async (
     _id: uuidv4(),
     city: createAddressInput?.city,
     country: createAddressInput?.country,
-    isDefault: createAddressInput?.isDefault,
+    isDefault: false,
     landmark: createAddressInput?.landmark,
     pin: createAddressInput?.pin,
     point: createAddressInput?.point,

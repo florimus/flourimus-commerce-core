@@ -83,7 +83,7 @@ export const UserDefs = gql`
     password: String!
   }
 
-  input CreateAddressInput {
+  input AddressInput {
     point: String
     street: String
     city: String
@@ -91,6 +91,5 @@ export const UserDefs = gql`
     country: String
     pin: Int
     landmark: String
-    isDefault: Boolean
   }
 `;
