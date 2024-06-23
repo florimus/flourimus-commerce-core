@@ -1,10 +1,12 @@
-const stripe = require("stripe")(process.env.STRIPE_SECRET);
+import Stripe from 'stripe';
 import {
   PaymentCustomerType,
   PaymentLineItem,
   PaymentSessionType,
   PaymentShippingCharge,
 } from "@core/types";
+
+const stripe = new Stripe(process.env.STRIPE_SECRET!);
 
 const initiatePayment = async (
   customerInfo: PaymentCustomerType,
@@ -13,14 +15,14 @@ const initiatePayment = async (
 ) => {
 
   const customer = await stripe.customers.create(customerInfo);
-  const session: PaymentSessionType = await stripe.checkout.sessions.create({
+  const session = await stripe.checkout.sessions.create({
     line_items: lines,
     mode: "payment",
     shipping_options: [shippingOptions],
     success_url: `${process.env.STORE_FRONT_URL}/payment/success?session_id={CHECKOUT_SESSION_ID}`,
     cancel_url: `${process.env.STORE_FRONT_URL}/payment/declined?session_id={CHECKOUT_SESSION_ID}`,
     customer: customer.id,
-  });
+  }) as PaymentSessionType;
   return {
     url: session.url,
     id: session.id,
