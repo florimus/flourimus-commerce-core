@@ -53,6 +53,47 @@ export const lineItemSchema = new Schema(
   { _id: false }
 );
 
+export const priceSchema = new Schema(
+  {
+    gross: {
+      type: Number,
+      required: true,
+    },
+    net: {
+      type: Number,
+      required: true,
+    },
+    discounts: {
+      type: Number,
+    },
+    tax: {
+      type: Number,
+    },
+    total: {
+      type: Number,
+    },
+  },
+  { _id: false }
+);
+
+export const orderPriceSchema = new Schema(
+  {
+    id: {
+      type: String,
+      required: true,
+    },
+    unit: {
+      type: priceSchema,
+      required: true,
+    },
+    order: {
+      type: priceSchema,
+      required: true,
+    },
+  },
+  { _id: false }
+);
+
 export const orderSchema = new Schema({
   _id: {
     type: String,
@@ -82,6 +123,12 @@ export const orderSchema = new Schema({
   },
   sessionId: {
     type: String,
+  },
+  orderItemsPrices: {
+    type: [orderPriceSchema],
+  },
+  ordrPrice: {
+    type: [priceSchema],
   },
 });
 

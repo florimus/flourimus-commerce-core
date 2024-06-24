@@ -6,10 +6,10 @@ import {
   PaymentCustomerType,
   PaymentLineItem,
   PaymentShippingCharge,
-  ProductType,
   CartAddressArgsType,
   SubmitOrderArgsType,
   PaymentIntentType,
+  PaymentLineItemPrice,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
@@ -20,9 +20,7 @@ import productRepository, {
 } from "@repositories/productRepository";
 import { findProductAvailableStocksByProductId } from "@services/warehouseService";
 import { v4 as uuidv4 } from "uuid";
-import cartPriceCalculator, {
-  productPriceCalculatorInPayment,
-} from "./priceCalculator";
+import cartPriceCalculator from "./priceCalculator";
 import paymentServices from "./paymentServices";
 import contants from "@core/constants/contants";
 
@@ -238,6 +236,49 @@ export const addAddressToCart = async (
   throw new NotFoundError("No progressing cart found");
 };
 
+export const populateLineItemsInfoForPayments = async (
+  cart: CartType,
+  user: string
+) => {
+  const { pricedProductInfos, ...ordrPrice } = await cartPriceCalculator(
+    cart.lines!
+  );
+
+  const productPrices: PaymentLineItemPrice[] = [];
+  const stripeLineItems: PaymentLineItem[] = [];
+
+  pricedProductInfos?.forEach((productPriceResponse) => {
+    const { product, order, quantity, unit } = productPriceResponse || {};
+    const productPrice = {
+      id: product._id,
+      unit,
+      order,
+      quantity,
+    };
+    const stripeLineItem = {
+      price_data: {
+        currency: contants.paymentConstants.CURRENCY.IND,
+        product_data: {
+          name: product.name,
+          images: product.medias,
+          description: product._id,
+        },
+        unit_amount: unit.net! * contants.paymentConstants.INR_STD,
+      },
+      quantity,
+    };
+    productPrices.push(productPrice);
+    stripeLineItems.push(stripeLineItem);
+  });
+  await orderRepository.updateOrder(cart._id, {
+    orderItemsPrices: productPrices,
+    updatedAt: getCurrentTime(),
+    updatedBy: user,
+    ordrPrice,
+  });
+  return stripeLineItems;
+};
+
 /**
  * Controller used to initiate payment
  * @param context
@@ -248,14 +289,18 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
     context._id,
     ["CREATED", "PAYMENT_DECLINED", "PAYMENT_INITIATED"]
   );
+
   if (!currentCart?.isActive) {
     throw new BadRequestError("no cart available");
   }
+
   const cartAddress: CartAddressesType | undefined =
     currentCart.shippingAddress;
+
   if (!cartAddress) {
     throw new BadRequestError("No addresses in cart");
   }
+
   const customerInfo: PaymentCustomerType = {
     name: context.isAnonymous
       ? "anonymous"
@@ -268,45 +313,19 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
       country: "in",
     },
   };
-  const lineItems = Array.isArray(currentCart.lines) ? currentCart.lines : [];
-  if (!lineItems.length) {
-    throw new BadRequestError("No products in cart");
-  }
-  const productPromises = lineItems.map(({ productId }) =>
-    getProductInfoById(productId, true)
-  );
-  const productInfos: ProductType[] = await Promise.all(productPromises);
 
-  if (!Array.isArray(productInfos) || !productInfos.length) {
-    throw new BadRequestError("Products not sellablble");
-  }
-
-  const paymentLineItemsPromise = Promise.all(
-    productInfos.map(async (product: ProductType) => {
-      const quantity = lineItems.find(
-        (item) => item.productId === product._id
-      )?.quantity;
-      const productPrice = await productPriceCalculatorInPayment(product);
-      return {
-        price_data: {
-          currency: contants.paymentConstants.CURRENCY.IND,
-          product_data: {
-            name: product.name,
-            images: product.medias,
-          },
-          unit_amount: productPrice.total * contants.paymentConstants.INR_STD,
-        },
-        quantity,
-      } as PaymentLineItem;
-    })
+  const lineitems = await populateLineItemsInfoForPayments(
+    currentCart,
+    context.email
   );
 
+  //TODO: need to calculate in payment service
   const shippingOptions: PaymentShippingCharge = {
     shipping_rate_data: {
       display_name: "Standard Shipping",
       type: "fixed_amount",
       fixed_amount: {
-        amount: 5000,
+        amount: 0,
         currency: contants.paymentConstants.CURRENCY.IND,
       },
     },
@@ -314,18 +333,21 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
 
   const initiatePaymentInfo = await paymentServices.initiatePayment(
     customerInfo,
-    await paymentLineItemsPromise,
+    lineitems,
     shippingOptions
   );
+
   if (!initiatePaymentInfo.url || !initiatePaymentInfo.id) {
     throw new BadRequestError("Cannot initialize the cart now");
   }
+
   await orderRepository.updateOrder(currentCart._id, {
     status: "PAYMENT_INITIATED",
     sessionId: initiatePaymentInfo.id,
     updatedAt: getCurrentTime(),
     updatedBy: context.email,
   });
+
   return {
     link: initiatePaymentInfo.url,
   };
