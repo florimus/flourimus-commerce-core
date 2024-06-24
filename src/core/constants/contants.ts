@@ -12,6 +12,9 @@ export default {
     BATCH_SIZE: 100,
   },
   paymentConstants: {
+    CURRENCY: {
+      IND: "inr",
+    },
     INR_STD: 100,
   },
 };
