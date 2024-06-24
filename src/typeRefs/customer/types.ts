@@ -8,12 +8,12 @@ export const UserDefs = gql`
 
   type User {
     _id: ID!
-    firstName: String!
+    firstName: String
     lastName: String
-    email: String!
+    email: String
     phone: Phone
-    role: String!
-    loginType: String!
+    role: String
+    loginType: String
     lastOnline: String
     createdAt: String
     updatedAt: String

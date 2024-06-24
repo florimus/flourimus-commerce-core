@@ -191,20 +191,24 @@ export type StockEntryArgsType = {
   };
 };
 
-export type cartItemAddArgsType = {
+export type CartItemAddArgsType = {
   addToCartInput: {
     lineIds: string[];
   };
 };
 
-export type cartItemRemoveArgsType = {
+export type CartItemRemoveArgsType = {
   productId: string[];
 };
 
-export type cartAddressArgsType = {
+export type CartAddressArgsType = {
   shipping: CartAddressesType;
   billing: CartAddressesType;
   isSameAsBilling: boolean;
+};
+
+export type SubmitOrderArgsType = {
+  sessionId: string;
 };
 
 export type CartArgsType = {
@@ -333,7 +337,11 @@ export interface WarehouseStockFilter {
   };
 }
 
-export type OrderStatusTypes = "CREATED" | "PAYMENT_INITIATED" | "PAYMENT_DECLINED" | "ORDER";
+export type OrderStatusTypes =
+  | "CREATED"
+  | "PAYMENT_INITIATED"
+  | "PAYMENT_DECLINED"
+  | "ORDER";
 
 export type LineItemType = {
   quantity: number;
@@ -425,4 +433,24 @@ export interface PaymentShippingCharge {
       currency: PaymentCurrency;
     };
   };
+}
+
+export interface PaymenyIntentCardInfo {
+  brand: string;
+  last4: string;
+}
+
+export interface PaymentIntentMethodType {
+  type: string;
+  card: PaymenyIntentCardInfo;
+}
+
+export interface PaymentIntentType {
+  id: string;
+  amount_received: number;
+  status: "succeeded" | "decliend";
+  payment_method: PaymentIntentMethodType;
+  type?: string;
+  card?: string;
+  digit?: string;
 }

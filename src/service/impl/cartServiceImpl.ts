@@ -7,7 +7,8 @@ import {
   PaymentLineItem,
   PaymentShippingCharge,
   ProductType,
-  cartAddressArgsType,
+  CartAddressArgsType,
+  SubmitOrderArgsType,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
@@ -206,7 +207,7 @@ export const calucateCartPrice = async (cart: CartType) => {
  * @returns
  */
 export const addAddressToCart = async (
-  args: cartAddressArgsType,
+  args: CartAddressArgsType,
   context: ContextObjectType
 ) => {
   const { shipping, billing, isSameAsBilling } = args || {};
@@ -329,6 +330,35 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
   };
 };
 
+/**
+ * Controller used to submit order
+ * @param context
+ * @returns
+ */
+export const submitUserOrder = async (
+  args: SubmitOrderArgsType,
+  context: ContextObjectType
+) => {
+  const { sessionId } = args || {};
+  if (!sessionId) {
+    throw new BadRequestError("sessionId is mandatory");
+  }
+  const userOrder = await orderRepository.getCartByUserIdAndStatus(
+    context._id,
+    ["PAYMENT_INITIATED"]
+  );
+  if (
+    !userOrder?.isActive ||
+    !userOrder?.sessionId ||
+    userOrder?.sessionId !== sessionId
+  ) {
+    throw new NotFoundError("User order not found");
+  }
+  const paymentDetails = await paymentServices.fetchPaymentDetails(sessionId);
+  console.log(paymentDetails); //TODO: remove later
+  return {};
+};
+
 export default {
   createUserCart,
   addItemToCart,
@@ -338,4 +368,5 @@ export default {
   calucateCartPrice,
   addAddressToCart,
   initiateCartPayment,
+  submitUserOrder,
 };
