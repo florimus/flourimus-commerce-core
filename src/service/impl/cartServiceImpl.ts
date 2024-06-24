@@ -9,6 +9,7 @@ import {
   ProductType,
   CartAddressArgsType,
   SubmitOrderArgsType,
+  PaymentIntentType,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
@@ -288,7 +289,7 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
       const productPrice = await productPriceCalculatorInPayment(product);
       return {
         price_data: {
-          currency: "inr",
+          currency: contants.paymentConstants.CURRENCY.IND,
           product_data: {
             name: product.name,
             images: product.medias,
@@ -306,7 +307,7 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
       type: "fixed_amount",
       fixed_amount: {
         amount: 5000,
-        currency: "inr",
+        currency: contants.paymentConstants.CURRENCY.IND,
       },
     },
   };
@@ -354,8 +355,8 @@ export const submitUserOrder = async (
   ) {
     throw new NotFoundError("User order not found");
   }
-  const paymentDetails = await paymentServices.fetchPaymentDetails(sessionId);
-  console.log(paymentDetails); //TODO: remove later
+  const paymentDetails: PaymentIntentType =
+    await paymentServices.fetchPaymentDetails(sessionId);
   return {};
 };
 

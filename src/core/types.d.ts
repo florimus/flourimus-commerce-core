@@ -408,11 +408,9 @@ export interface PaymentCustomerType {
   };
 }
 
-export type PaymentCurrency = "inr";
-
 export interface PaymentLineItem {
   price_data: {
-    currency: PaymentCurrency;
+    currency: string;
     product_data: {
       name: string;
       images: string[];
@@ -430,7 +428,7 @@ export interface PaymentShippingCharge {
     type: PaymentShippingChargeType;
     fixed_amount: {
       amount: number;
-      currency: PaymentCurrency;
+      currency: string;
     };
   };
 }
