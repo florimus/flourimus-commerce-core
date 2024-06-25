@@ -11,6 +11,7 @@ export const ProductDefs = gql`
     haveVariants: Boolean
     isVariant: Boolean
     isSellable: Boolean
+    isCodAvailable: Boolean
     variantInfo: [String]
     createdAt: String
     updatedAt: String
@@ -60,6 +61,7 @@ export const ProductDefs = gql`
     brand: String
     isVariant: Boolean
     isSellable: Boolean
+    isCodAvailable: Boolean
   }
 
   input ProductUpdateInput {
@@ -68,6 +70,7 @@ export const ProductDefs = gql`
     category: String
     brand: String
     isSellable: Boolean
+    isCodAvailable: Boolean
   }
 
   input ProductListInput {

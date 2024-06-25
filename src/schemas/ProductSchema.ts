@@ -7,11 +7,16 @@ export const productSchema = new Schema({
   _id: {
     type: String,
     required: true,
-    unique: true
+    unique: true,
   },
   name: {
     type: String,
-    required: true
+    required: true,
+  },
+  isCodAvailable: {
+    type: Boolean,
+    required: true,
+    default: false,
   },
   medias: {
     type: [String],
@@ -23,7 +28,7 @@ export const productSchema = new Schema({
     type: String,
   },
   brand: {
-    type: String
+    type: String,
   },
   isVariant: {
     type: Boolean,
@@ -39,8 +44,8 @@ export const productSchema = new Schema({
   },
   variantInfo: {
     type: [String],
-    default: []
-  }
+    default: [],
+  },
 });
 
 productSchema.add(commonFieldsSchema);

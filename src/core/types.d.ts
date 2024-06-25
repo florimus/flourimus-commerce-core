@@ -148,6 +148,7 @@ export type CreateProductArgsType = {
     isVariant: boolean;
     medias: string[];
     isSellable: boolean;
+    isCodAvailable: boolean;
   };
 };
 
@@ -175,6 +176,7 @@ export type UpdateProductArgsType = {
     category?: string;
     brand?: string;
     isSellable?: boolean;
+    isCodAvailable?: boolean;
   };
 };
 
@@ -264,6 +266,7 @@ export interface ProductType {
   haveVariants: boolean;
   isVariant: boolean;
   isSellable: boolean;
+  isCodAvailable?: boolean;
   variantInfo?: string[];
   createdAt?: string;
   updatedAt?: string;
