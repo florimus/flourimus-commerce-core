@@ -13,4 +13,8 @@ export const resolverQuries = {
     lines: async (parent: CartType) => await fetchCartLineItemProducts(parent),
     price: async (parent: CartType) => await calucateCartPrice(parent),
   },
+  Order: {
+    lines: async (parent: CartType) => await fetchCartLineItemProducts(parent),
+    price: async (parent: CartType) => await calucateCartPrice(parent),
+  },
 };

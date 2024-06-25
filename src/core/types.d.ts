@@ -351,6 +351,7 @@ export type LineItemType = {
 
 export interface CartType {
   _id: string;
+  orderId?: string;
   userId: string;
   lines?: LineItemType[] | [];
   status: OrderStatusTypes;
@@ -366,6 +367,11 @@ export interface CartType {
   sessionId?: string;
   orderItemsPrices?: PaymentLineItemPrice[];
   ordrPrice?: PaymentCalculatedPriceInfoType;
+  orderDetails?: {
+    paymentMethod: "cod" | "card";
+    cardName?: string;
+    lastDigits?: string;
+  };
 }
 
 export type CartAddressType = "SHIPPING" | "BILLING";

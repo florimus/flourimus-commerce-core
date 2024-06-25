@@ -94,8 +94,29 @@ export const orderPriceSchema = new Schema(
   { _id: false }
 );
 
+export const orderDetailsSchema = new Schema(
+  {
+    paymentMethod: {
+      type: ["cod", "card"],
+      required: true,
+    },
+    cardName: {
+      type: String,
+    },
+    lastDigits: {
+      type: String,
+    },
+  },
+  { _id: false }
+);
+
 export const orderSchema = new Schema({
   _id: {
+    type: String,
+    required: true,
+    unique: true,
+  },
+  orderId: {
     type: String,
     required: true,
     unique: true,
@@ -128,7 +149,10 @@ export const orderSchema = new Schema({
     type: [orderPriceSchema],
   },
   ordrPrice: {
-    type: [priceSchema],
+    type: priceSchema,
+  },
+  orderDetails: {
+    type: orderDetailsSchema,
   },
 });
 

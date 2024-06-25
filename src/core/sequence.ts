@@ -4,7 +4,7 @@ import {
 } from "@repositories/organizationRepository";
 import { SystemConfigsType } from "@types";
 
-type EntityType = "product" | "customer" | "sku" | "warehouse";
+type EntityType = "product" | "customer" | "sku" | "warehouse" | "order";
 type SequenceConfigurationTypes = {
   prefix: string;
   sufix: string;
@@ -55,6 +55,7 @@ const sequence = {
   customerId: async () => await sequenceGenerator("customer"),
   skuId: async () => await sequenceGenerator("sku"),
   warehouseId: async () => await sequenceGenerator("warehouse"),
+  orderId: async () => await sequenceGenerator("order"),
 };
 
 export default sequence;

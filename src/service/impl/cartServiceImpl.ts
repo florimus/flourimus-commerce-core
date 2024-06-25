@@ -23,6 +23,7 @@ import { v4 as uuidv4 } from "uuid";
 import cartPriceCalculator from "./priceCalculator";
 import paymentServices from "./paymentServices";
 import contants from "@core/constants/contants";
+import sequence from "@core/sequence";
 
 /**
  * Controller used to create cart
@@ -377,10 +378,30 @@ export const submitUserOrder = async (
   ) {
     throw new NotFoundError("User order not found");
   }
+  if (!userOrder?.ordrPrice?.total) {
+    throw new BadRequestError("Invalid price");
+  }
   const paymentDetails: PaymentIntentType =
     await paymentServices.fetchPaymentDetails(sessionId);
-  console.log(paymentDetails); //TODO: remove later
-  return {};
+  const orderPrice =
+    userOrder?.ordrPrice?.total * contants.paymentConstants.INR_STD;
+  if (paymentDetails.amount_received !== orderPrice) {
+    throw new BadRequestError("Prices not match");
+  }
+  const orderId = await sequence.orderId();
+  const orderDetails: Partial<CartType> = {
+    orderId,
+    sessionId: paymentDetails.id,
+    status: "ORDER",
+    orderDetails: {
+      paymentMethod: "card",
+      cardName: paymentDetails.card,
+      lastDigits: paymentDetails.digit,
+    },
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+  };
+  return await orderRepository.updateOrder(userOrder._id, orderDetails);
 };
 
 export default {

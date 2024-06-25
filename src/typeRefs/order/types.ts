@@ -29,6 +29,24 @@ export const OrderDefs = gql`
     landmark: String
   }
 
+  type Order {
+    orderId: ID
+    userId: String
+    lines: [LineItem]
+    price: CartPrice
+    status: String
+    isAnonymous: Boolean
+    createdAt: String
+    updatedAt: String
+    isActive: Boolean
+    createdBy: String
+    updatedBy: String
+    metaStatus: String
+    customerInfo: User
+    shippingAddress: CheckoutAddress
+    billingAddress: CheckoutAddress
+  }
+
   type LineItem {
     quantity: Int
     product: Product
