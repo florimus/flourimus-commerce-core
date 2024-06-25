@@ -25,6 +25,7 @@ import cartPriceCalculator from "./priceCalculator";
 import paymentServices from "./paymentServices";
 import contants from "@core/constants/contants";
 import sequence from "@core/sequence";
+import { checkStateByCountryCode } from "@core/constants/country";
 
 /**
  * Controller used to create cart
@@ -202,6 +203,20 @@ export const calucateCartPrice = async (cart: CartType) => {
   }
 };
 
+const validateAddress = (address: CartAddressesType) => {
+  if (address.country !== "IN") {
+    throw new BadRequestError(
+      `Undeliverable Country in ${address?.type} address`
+    );
+  }
+  const state = checkStateByCountryCode(address.country, address.state);
+  if (!state) {
+    throw new BadRequestError(
+      `Undeliverable state in ${address?.type} address`
+    );
+  }
+};
+
 /**
  * Controller used to add address to cart
  * @param context
@@ -221,6 +236,10 @@ export const addAddressToCart = async (
   }
   if (!isSameAsBilling && !billing) {
     throw new BadRequestError("Invalid billing address");
+  }
+  validateAddress(billing);
+  if (!isSameAsBilling) {
+    validateAddress(shipping);
   }
   const updatedAddress: Partial<CartType> = {
     shippingAddress: isSameAsBilling ? billing : shipping,
@@ -339,11 +358,11 @@ export const initiateCartPayment = async (
       ? "anonymous"
       : `${context.firstName} ${context.lastName}`,
     address: {
-      line1: cartAddress.point,
-      postal_code: cartAddress.pin.toString(),
-      city: cartAddress.city,
-      state: "kl",
-      country: "in",
+      line1: cartAddress?.point,
+      postal_code: cartAddress?.pin?.toString(),
+      city: cartAddress?.city,
+      state: cartAddress?.state,
+      country: cartAddress?.country,
     },
   };
 
