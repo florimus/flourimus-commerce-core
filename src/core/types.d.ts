@@ -142,6 +142,8 @@ export type WarehouseArgsType = {
 export type CreateProductArgsType = {
   productCreateInput: {
     name: string;
+    shortDescription?: string;
+    description?: string;
     parentId: string;
     category: string;
     brand: string;
@@ -173,6 +175,8 @@ export type UpdateProductArgsType = {
   productUpdateInput: {
     name?: string;
     medias?: string[];
+    shortDescription?: string;
+    description?: string;
     category?: string;
     brand?: string;
     isSellable?: boolean;
@@ -264,6 +268,8 @@ export interface ProductType {
   _id: string;
   name: string;
   medias: string[];
+  shortDescription?: string;
+  description?: string;
   parentId?: string;
   category: string;
   brand: string;

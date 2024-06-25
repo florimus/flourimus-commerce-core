@@ -58,6 +58,8 @@ const createVariantProduct = async (
     category: parentProduct.category,
     brand: parentProduct.brand,
     haveVariants: false,
+    shortDescription: variantInfo?.shortDescription,
+    description: variantInfo?.description,
     isSellable: variantInfo?.isSellable,
     name: variantInfo.name,
     medias: variantInfo?.medias,
@@ -100,6 +102,8 @@ export const createProduct = async (
   const productId = await sequence.productId();
   const product = await productRepository.createProduct({
     _id: productId,
+    shortDescription: productCreateInput?.shortDescription || "",
+    description: productCreateInput?.description || "",
     category: productCreateInput.category,
     brand: productCreateInput.brand,
     haveVariants: false,
@@ -143,6 +147,8 @@ const updateProduct = async (
         : product.medias,
     isSellable: productUpdateInput?.isSellable || product.isSellable,
     isCodAvailable: productUpdateInput?.isCodAvailable,
+    shortDescription: productUpdateInput?.shortDescription,
+    description: productUpdateInput?.description,
     updatedAt: getCurrentTime(),
     updatedBy: context.email,
   } as Partial<ProductType>;
