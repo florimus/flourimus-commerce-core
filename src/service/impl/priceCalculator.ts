@@ -1,4 +1,8 @@
-import { LineItemType, ProductType } from "@core/types";
+import {
+  LineItemType,
+  PaymentCalculatedPriceInfoResponseType,
+  PricedProductInfo,
+} from "@core/types";
 import { getProductInfoById } from "@repositories/productRepository";
 import { productPriceInfo } from "@services/priceTableService";
 
@@ -8,6 +12,8 @@ const cartPriceCalculator = async (products: LineItemType[]) => {
   const discounts = 0;
   const shipping = 0;
   const tax = 0;
+
+  const pricedProductInfos: PricedProductInfo[] = [];
 
   const productPromises = products.map(({ productId }) =>
     getProductInfoById(productId, true)
@@ -24,53 +30,48 @@ const cartPriceCalculator = async (products: LineItemType[]) => {
   products.forEach((product, index) => {
     const { quantity } = product || {};
     const basicPriceInfo = priceInfos[index];
+    const pricedProductInfo = {
+      product: validProducts[index],
+      unit: {
+        gross: 0,
+        net: 0,
+        discounts: 0,
+        shipping: 0,
+        tax: 0,
+      },
+      order: {
+        gross: 0,
+        net: 0,
+        discounts: 0,
+        shipping: 0,
+        tax: 0,
+      },
+      quantity,
+    } as PricedProductInfo;
     if (basicPriceInfo?.listPrice) {
+      pricedProductInfo.unit.gross = basicPriceInfo.listPrice;
+      pricedProductInfo.order.gross = basicPriceInfo.listPrice * quantity;
       gross += basicPriceInfo.listPrice * quantity;
     }
     if (basicPriceInfo?.sellPrice) {
+      pricedProductInfo.unit.net = basicPriceInfo.sellPrice;
+      pricedProductInfo.order.net = basicPriceInfo.sellPrice * quantity;
       net += basicPriceInfo.sellPrice * quantity;
     }
+    pricedProductInfos.push(pricedProductInfo);
   });
 
   // TODO: Calculate tax, discount calculations...
 
   return {
+    pricedProductInfos,
     gross,
     net,
     discounts,
     shipping,
     tax,
     total: net + shipping + tax - discounts,
-  };
-};
-
-export const productPriceCalculatorInPayment = async (
-  product: ProductType,
-) => {
-  let gross = 0;
-  let net = 0;
-  const discounts = 0;
-  const shipping = 0;
-  const tax = 0;
-  const basicPriceInfo = await productPriceInfo(
-    product._id,
-    product.isVariant,
-    product.parentId
-  );
-  if (basicPriceInfo?.listPrice) {
-    gross += basicPriceInfo.listPrice;
-  }
-  if (basicPriceInfo?.sellPrice) {
-    net += basicPriceInfo.sellPrice;
-  }
-  return {
-    gross,
-    net,
-    discounts,
-    shipping,
-    tax,
-    total: net + shipping + tax - discounts,
-  };
+  } as PaymentCalculatedPriceInfoResponseType;
 };
 
 export default cartPriceCalculator;

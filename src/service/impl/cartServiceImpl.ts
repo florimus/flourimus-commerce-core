@@ -6,10 +6,11 @@ import {
   PaymentCustomerType,
   PaymentLineItem,
   PaymentShippingCharge,
-  ProductType,
   CartAddressArgsType,
   SubmitOrderArgsType,
   PaymentIntentType,
+  PaymentLineItemPrice,
+  InitiateOrderArgsType,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
@@ -20,11 +21,10 @@ import productRepository, {
 } from "@repositories/productRepository";
 import { findProductAvailableStocksByProductId } from "@services/warehouseService";
 import { v4 as uuidv4 } from "uuid";
-import cartPriceCalculator, {
-  productPriceCalculatorInPayment,
-} from "./priceCalculator";
+import cartPriceCalculator from "./priceCalculator";
 import paymentServices from "./paymentServices";
 import contants from "@core/constants/contants";
+import sequence from "@core/sequence";
 
 /**
  * Controller used to create cart
@@ -238,24 +238,102 @@ export const addAddressToCart = async (
   throw new NotFoundError("No progressing cart found");
 };
 
+export const populateLineItemsInfoForPayments = async (
+  cart: CartType,
+  user: string
+) => {
+  const { pricedProductInfos, ...ordrPrice } = await cartPriceCalculator(
+    cart.lines!
+  );
+
+  const productPrices: PaymentLineItemPrice[] = [];
+  const stripeLineItems: PaymentLineItem[] = [];
+
+  let isCodAvailable = true;
+
+  pricedProductInfos?.forEach((productPriceResponse) => {
+    const { product, order, quantity, unit } = productPriceResponse || {};
+    const productPrice = {
+      id: product._id,
+      unit,
+      order,
+      quantity,
+    };
+    if (!product.isCodAvailable) {
+      isCodAvailable = false;
+    }
+    const stripeLineItem = {
+      price_data: {
+        currency: contants.paymentConstants.CURRENCY.IND,
+        product_data: {
+          name: product.name,
+          images: product.medias,
+          description: product._id,
+        },
+        unit_amount: unit.net! * contants.paymentConstants.INR_STD,
+      },
+      quantity,
+    };
+    productPrices.push(productPrice);
+    stripeLineItems.push(stripeLineItem);
+  });
+  await orderRepository.updateOrder(cart._id, {
+    orderItemsPrices: productPrices,
+    updatedAt: getCurrentTime(),
+    updatedBy: user,
+    ordrPrice,
+  });
+  return { isCodAvailable, lineitems: stripeLineItems };
+};
+
 /**
  * Controller used to initiate payment
  * @param context
  * @returns
  */
-export const initiateCartPayment = async (context: ContextObjectType) => {
+export const initiateCartPayment = async (
+  method: InitiateOrderArgsType["method"],
+  context: ContextObjectType
+) => {
   const currentCart = await orderRepository.getCartByUserIdAndStatus(
     context._id,
     ["CREATED", "PAYMENT_DECLINED", "PAYMENT_INITIATED"]
   );
+
   if (!currentCart?.isActive) {
     throw new BadRequestError("no cart available");
   }
+
   const cartAddress: CartAddressesType | undefined =
     currentCart.shippingAddress;
+
   if (!cartAddress) {
     throw new BadRequestError("No addresses in cart");
   }
+
+  const { isCodAvailable, lineitems } = await populateLineItemsInfoForPayments(
+    currentCart,
+    context.email
+  );
+
+  if (method === "cod") {
+    if (!isCodAvailable) {
+      throw new BadRequestError("Cod not available for the cart");
+    }
+    await orderRepository.updateOrder(currentCart._id, {
+      status: "PAYMENT_INITIATED",
+      updatedAt: getCurrentTime(),
+      sessionId: "",
+      orderDetails: {
+        paymentMethod: "cod",
+      },
+      updatedBy: context.email,
+    });
+    return {
+      approve: true,
+    };
+  }
+
   const customerInfo: PaymentCustomerType = {
     name: context.isAnonymous
       ? "anonymous"
@@ -268,45 +346,14 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
       country: "in",
     },
   };
-  const lineItems = Array.isArray(currentCart.lines) ? currentCart.lines : [];
-  if (!lineItems.length) {
-    throw new BadRequestError("No products in cart");
-  }
-  const productPromises = lineItems.map(({ productId }) =>
-    getProductInfoById(productId, true)
-  );
-  const productInfos: ProductType[] = await Promise.all(productPromises);
 
-  if (!Array.isArray(productInfos) || !productInfos.length) {
-    throw new BadRequestError("Products not sellablble");
-  }
-
-  const paymentLineItemsPromise = Promise.all(
-    productInfos.map(async (product: ProductType) => {
-      const quantity = lineItems.find(
-        (item) => item.productId === product._id
-      )?.quantity;
-      const productPrice = await productPriceCalculatorInPayment(product);
-      return {
-        price_data: {
-          currency: contants.paymentConstants.CURRENCY.IND,
-          product_data: {
-            name: product.name,
-            images: product.medias,
-          },
-          unit_amount: productPrice.total * contants.paymentConstants.INR_STD,
-        },
-        quantity,
-      } as PaymentLineItem;
-    })
-  );
-
+  //TODO: need to calculate in payment service
   const shippingOptions: PaymentShippingCharge = {
     shipping_rate_data: {
       display_name: "Standard Shipping",
       type: "fixed_amount",
       fixed_amount: {
-        amount: 5000,
+        amount: 0,
         currency: contants.paymentConstants.CURRENCY.IND,
       },
     },
@@ -314,20 +361,24 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
 
   const initiatePaymentInfo = await paymentServices.initiatePayment(
     customerInfo,
-    await paymentLineItemsPromise,
+    lineitems,
     shippingOptions
   );
+
   if (!initiatePaymentInfo.url || !initiatePaymentInfo.id) {
     throw new BadRequestError("Cannot initialize the cart now");
   }
+
   await orderRepository.updateOrder(currentCart._id, {
     status: "PAYMENT_INITIATED",
     sessionId: initiatePaymentInfo.id,
     updatedAt: getCurrentTime(),
     updatedBy: context.email,
   });
+
   return {
     link: initiatePaymentInfo.url,
+    approve: true,
   };
 };
 
@@ -355,10 +406,61 @@ export const submitUserOrder = async (
   ) {
     throw new NotFoundError("User order not found");
   }
+  if (!userOrder?.ordrPrice?.total) {
+    throw new BadRequestError("Invalid price");
+  }
   const paymentDetails: PaymentIntentType =
     await paymentServices.fetchPaymentDetails(sessionId);
-  console.log(paymentDetails); //TODO: remove later
-  return {};
+  const orderPrice =
+    userOrder?.ordrPrice?.total * contants.paymentConstants.INR_STD;
+  if (paymentDetails.amount_received !== orderPrice) {
+    throw new BadRequestError("Prices not match");
+  }
+  const orderId = await sequence.orderId();
+  const orderDetails: Partial<CartType> = {
+    orderId,
+    sessionId: paymentDetails.id,
+    status: "ORDER",
+    orderDetails: {
+      paymentMethod: "card",
+      cardName: paymentDetails.card,
+      lastDigits: paymentDetails.digit,
+    },
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+  };
+  return await orderRepository.updateOrder(userOrder._id, orderDetails);
+};
+
+/**
+ * Controller used to submit COD order
+ * @param context
+ * @returns
+ */
+export const submitCodOrder = async (context: ContextObjectType) => {
+  const userOrder = await orderRepository.getCartByUserIdAndStatus(
+    context._id,
+    ["PAYMENT_INITIATED"]
+  );
+  if (!userOrder?.isActive) {
+    throw new NotFoundError("User order not found");
+  }
+
+  if (!userOrder?.ordrPrice?.total) {
+    throw new BadRequestError("Invalid price");
+  }
+
+  if (!userOrder?.ordrPrice?.total) {
+    throw new BadRequestError("Invalid price");
+  }
+  const orderId = await sequence.orderId();
+  const orderDetails: Partial<CartType> = {
+    orderId,
+    status: "ORDER",
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+  };
+  return await orderRepository.updateOrder(userOrder._id, orderDetails);
 };
 
 export default {
@@ -371,4 +473,5 @@ export default {
   addAddressToCart,
   initiateCartPayment,
   submitUserOrder,
+  submitCodOrder,
 };

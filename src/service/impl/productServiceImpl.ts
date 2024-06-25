@@ -63,6 +63,7 @@ const createVariantProduct = async (
     medias: variantInfo?.medias,
     isVariant: true,
     isActive: true,
+    isCodAvailable: variantInfo.isCodAvailable,
     parentId: productId,
     createdAt: getCurrentTime(),
     updatedAt: getCurrentTime(),
@@ -107,6 +108,7 @@ export const createProduct = async (
     medias: productCreateInput?.medias,
     isVariant: false,
     isActive: true,
+    isCodAvailable: productCreateInput.isCodAvailable,
     createdAt: getCurrentTime(),
     updatedAt: getCurrentTime(),
     updatedBy: context.email,
@@ -140,6 +142,7 @@ const updateProduct = async (
         ? productUpdateInput.medias
         : product.medias,
     isSellable: productUpdateInput?.isSellable || product.isSellable,
+    isCodAvailable: productUpdateInput?.isCodAvailable,
     updatedAt: getCurrentTime(),
     updatedBy: context.email,
   } as Partial<ProductType>;

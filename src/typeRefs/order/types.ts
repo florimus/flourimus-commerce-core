@@ -29,6 +29,32 @@ export const OrderDefs = gql`
     landmark: String
   }
 
+  type Order {
+    orderId: ID
+    userId: String
+    lines: [LineItem]
+    price: CartPrice
+    status: String
+    isAnonymous: Boolean
+    createdAt: String
+    updatedAt: String
+    isActive: Boolean
+    createdBy: String
+    updatedBy: String
+    metaStatus: String
+    customerInfo: User
+    shippingAddress: CheckoutAddress
+    billingAddress: CheckoutAddress
+    ordrPrice: CartPrice
+    orderDetails: OrderDetails
+  }
+
+  type OrderDetails {
+    paymentMethod: String
+    cardName: String
+    lastDigits: String
+  }
+
   type LineItem {
     quantity: Int
     product: Product
@@ -46,6 +72,7 @@ export const OrderDefs = gql`
 
   type InitiatePaymentResponse {
     link: String
+    approve: Boolean
   }
   # =============== Inputs =================
   input AddToCartInput {

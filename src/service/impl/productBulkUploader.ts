@@ -35,6 +35,7 @@ const handleProductOtions = async (each: ProductType, email: string) => {
             medias: formatMedias(each?.medias as unknown as string),
             isVariant: each?.isVariant,
             parentId: each?.parentId || "",
+            isCodAvailable: each?.isCodAvailable || false,
           },
         },
         { email } as ContextObjectType

@@ -10,7 +10,8 @@ export const OrderMutations = gql`
       billing: AddressInput
       isSameAsBilling: Boolean
     ): Cart
-    initiatePayment: InitiatePaymentResponse
-    submitOrder(sessionId: String!): Cart
+    initiatePayment(method: String!): InitiatePaymentResponse
+    submitOrder(sessionId: String!): Order
+    submitCodOrder: Order
   }
 `;

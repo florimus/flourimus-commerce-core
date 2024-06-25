@@ -148,6 +148,7 @@ export type CreateProductArgsType = {
     isVariant: boolean;
     medias: string[];
     isSellable: boolean;
+    isCodAvailable: boolean;
   };
 };
 
@@ -175,6 +176,7 @@ export type UpdateProductArgsType = {
     category?: string;
     brand?: string;
     isSellable?: boolean;
+    isCodAvailable?: boolean;
   };
 };
 
@@ -209,6 +211,10 @@ export type CartAddressArgsType = {
 
 export type SubmitOrderArgsType = {
   sessionId: string;
+};
+
+export type InitiateOrderArgsType = {
+  method: "cod" | "online";
 };
 
 export type CartArgsType = {
@@ -264,6 +270,7 @@ export interface ProductType {
   haveVariants: boolean;
   isVariant: boolean;
   isSellable: boolean;
+  isCodAvailable?: boolean;
   variantInfo?: string[];
   createdAt?: string;
   updatedAt?: string;
@@ -351,8 +358,9 @@ export type LineItemType = {
 
 export interface CartType {
   _id: string;
+  orderId?: string;
   userId: string;
-  lines?: [LineItemType] | [];
+  lines?: LineItemType[] | [];
   status: OrderStatusTypes;
   isAnonymous: Boolean;
   createdAt?: String;
@@ -364,6 +372,13 @@ export interface CartType {
   shippingAddress?: CartAddressesType;
   billingAddress?: CartAddressesType;
   sessionId?: string;
+  orderItemsPrices?: PaymentLineItemPrice[];
+  ordrPrice?: PaymentCalculatedPriceInfoType;
+  orderDetails?: {
+    paymentMethod: "cod" | "card";
+    cardName?: string;
+    lastDigits?: string;
+  };
 }
 
 export type CartAddressType = "SHIPPING" | "BILLING";
@@ -414,6 +429,7 @@ export interface PaymentLineItem {
     product_data: {
       name: string;
       images: string[];
+      description: string;
     };
     unit_amount: number;
   };
@@ -451,4 +467,31 @@ export interface PaymentIntentType {
   type?: string;
   card?: string;
   digit?: string;
+}
+
+export interface PaymentCalculatedPriceInfoType {
+  gross: number;
+  net: number;
+  discounts: number;
+  tax: number;
+  total: number;
+}
+
+export interface PaymentCalculatedPriceInfoResponseType
+  extends PaymentCalculatedPriceInfoType {
+  pricedProductInfos: PricedProductInfo[];
+}
+
+export interface PricedProductInfo {
+  product: ProductType;
+  unit: Partial<PaymentCalculatedPriceInfoType>;
+  order: Partial<PaymentCalculatedPriceInfoType>;
+  quantity: number;
+}
+
+export interface PaymentLineItemPrice {
+  id: string;
+  unit: Partial<PaymentCalculatedPriceInfoType>;
+  order: Partial<PaymentCalculatedPriceInfoType>;
+  quantity: number;
 }
