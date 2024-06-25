@@ -45,6 +45,14 @@ export const OrderDefs = gql`
     customerInfo: User
     shippingAddress: CheckoutAddress
     billingAddress: CheckoutAddress
+    ordrPrice: CartPrice
+    orderDetails: OrderDetails
+  }
+
+  type OrderDetails {
+    paymentMethod: String
+    cardName: String
+    lastDigits: String
   }
 
   type LineItem {
