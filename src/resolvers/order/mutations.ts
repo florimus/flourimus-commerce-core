@@ -12,6 +12,7 @@ import {
   createUserCart,
   initiateCartPayment,
   removeItemFromCart,
+  submitCodOrder,
   submitUserOrder,
 } from "@services/cartService";
 
@@ -49,5 +50,11 @@ export const resolverMutations = {
       args: SubmitOrderArgsType,
       context: ContextObjectType
     ) => await submitUserOrder(args, context),
+
+    submitCodOrder: async (
+      _: unknown,
+      __: unknown,
+      context: ContextObjectType
+    ) => await submitCodOrder(context),
   },
 };

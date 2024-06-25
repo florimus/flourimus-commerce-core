@@ -12,5 +12,6 @@ export const OrderMutations = gql`
     ): Cart
     initiatePayment(method: String!): InitiatePaymentResponse
     submitOrder(sessionId: String!): Order
+    submitCodOrder: Order
   }
 `;

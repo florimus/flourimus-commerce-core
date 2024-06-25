@@ -432,6 +432,37 @@ export const submitUserOrder = async (
   return await orderRepository.updateOrder(userOrder._id, orderDetails);
 };
 
+/**
+ * Controller used to submit COD order
+ * @param context
+ * @returns
+ */
+export const submitCodOrder = async (context: ContextObjectType) => {
+  const userOrder = await orderRepository.getCartByUserIdAndStatus(
+    context._id,
+    ["PAYMENT_INITIATED"]
+  );
+  if (!userOrder?.isActive) {
+    throw new NotFoundError("User order not found");
+  }
+
+  if (!userOrder?.ordrPrice?.total) {
+    throw new BadRequestError("Invalid price");
+  }
+
+  if (!userOrder?.ordrPrice?.total) {
+    throw new BadRequestError("Invalid price");
+  }
+  const orderId = await sequence.orderId();
+  const orderDetails: Partial<CartType> = {
+    orderId,
+    status: "ORDER",
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+  };
+  return await orderRepository.updateOrder(userOrder._id, orderDetails);
+};
+
 export default {
   createUserCart,
   addItemToCart,
@@ -442,4 +473,5 @@ export default {
   addAddressToCart,
   initiateCartPayment,
   submitUserOrder,
+  submitCodOrder,
 };

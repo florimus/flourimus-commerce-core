@@ -108,3 +108,14 @@ export const submitUserOrder = async (
 ) => {
   return await cartServiceImpl.submitUserOrder(args, context);
 };
+
+/**
+ * Controller used to submit COD order
+ * @param context
+ * @returns
+ */
+export const submitCodOrder = async (
+  context: ContextObjectType
+) => {
+  return await cartServiceImpl.submitCodOrder(context);
+};
