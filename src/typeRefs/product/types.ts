@@ -5,6 +5,8 @@ export const ProductDefs = gql`
     _id: ID
     name: String
     medias: [String]
+    shortDescription: String
+    description: String
     parentId: String
     category: String
     brand: String
@@ -56,6 +58,8 @@ export const ProductDefs = gql`
   input ProductCreateInput {
     name: String!
     medias: [String]
+    shortDescription: String
+    description: String
     parentId: String
     category: String
     brand: String
@@ -67,6 +71,8 @@ export const ProductDefs = gql`
   input ProductUpdateInput {
     name: String
     medias: [String]
+    shortDescription: String
+    description: String
     category: String
     brand: String
     isSellable: Boolean

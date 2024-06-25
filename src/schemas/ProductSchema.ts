@@ -18,6 +18,12 @@ export const productSchema = new Schema({
     required: true,
     default: false,
   },
+  shortDescription: {
+    type: String,
+  },
+  description: {
+    type: String,
+  },
   medias: {
     type: [String],
   },
