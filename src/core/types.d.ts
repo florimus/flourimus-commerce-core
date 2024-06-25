@@ -213,6 +213,10 @@ export type SubmitOrderArgsType = {
   sessionId: string;
 };
 
+export type InitiateOrderArgsType = {
+  method: "cod" | "online";
+};
+
 export type CartArgsType = {
   _id: string;
 };

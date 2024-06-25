@@ -97,7 +97,8 @@ export const orderPriceSchema = new Schema(
 export const orderDetailsSchema = new Schema(
   {
     paymentMethod: {
-      type: ["cod", "card"],
+      type: String,
+      enum: ["cod", "card"],
       required: true,
     },
     cardName: {

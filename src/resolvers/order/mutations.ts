@@ -4,6 +4,7 @@ import {
   CartItemAddArgsType,
   CartItemRemoveArgsType,
   SubmitOrderArgsType,
+  InitiateOrderArgsType,
 } from "@core/types";
 import {
   addAddressToCart,
@@ -39,9 +40,9 @@ export const resolverMutations = {
 
     initiatePayment: async (
       _: unknown,
-      __: unknown,
+      args: InitiateOrderArgsType,
       context: ContextObjectType
-    ) => await initiateCartPayment(context),
+    ) => await initiateCartPayment(args, context),
 
     submitOrder: async (
       _: unknown,

@@ -10,6 +10,7 @@ import {
   SubmitOrderArgsType,
   PaymentIntentType,
   PaymentLineItemPrice,
+  InitiateOrderArgsType,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
@@ -248,6 +249,8 @@ export const populateLineItemsInfoForPayments = async (
   const productPrices: PaymentLineItemPrice[] = [];
   const stripeLineItems: PaymentLineItem[] = [];
 
+  let isCodAvailable = true;
+
   pricedProductInfos?.forEach((productPriceResponse) => {
     const { product, order, quantity, unit } = productPriceResponse || {};
     const productPrice = {
@@ -256,6 +259,9 @@ export const populateLineItemsInfoForPayments = async (
       order,
       quantity,
     };
+    if (!product.isCodAvailable) {
+      isCodAvailable = false;
+    }
     const stripeLineItem = {
       price_data: {
         currency: contants.paymentConstants.CURRENCY.IND,
@@ -277,7 +283,7 @@ export const populateLineItemsInfoForPayments = async (
     updatedBy: user,
     ordrPrice,
   });
-  return stripeLineItems;
+  return { isCodAvailable, lineitems: stripeLineItems };
 };
 
 /**
@@ -285,7 +291,10 @@ export const populateLineItemsInfoForPayments = async (
  * @param context
  * @returns
  */
-export const initiateCartPayment = async (context: ContextObjectType) => {
+export const initiateCartPayment = async (
+  method: InitiateOrderArgsType["method"],
+  context: ContextObjectType
+) => {
   const currentCart = await orderRepository.getCartByUserIdAndStatus(
     context._id,
     ["CREATED", "PAYMENT_DECLINED", "PAYMENT_INITIATED"]
@@ -302,6 +311,29 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
     throw new BadRequestError("No addresses in cart");
   }
 
+  const { isCodAvailable, lineitems } = await populateLineItemsInfoForPayments(
+    currentCart,
+    context.email
+  );
+
+  if (method === "cod") {
+    if (!isCodAvailable) {
+      throw new BadRequestError("Cod not available for the cart");
+    }
+    await orderRepository.updateOrder(currentCart._id, {
+      status: "PAYMENT_INITIATED",
+      updatedAt: getCurrentTime(),
+      sessionId: "",
+      orderDetails: {
+        paymentMethod: "cod",
+      },
+      updatedBy: context.email,
+    });
+    return {
+      approve: true,
+    };
+  }
+
   const customerInfo: PaymentCustomerType = {
     name: context.isAnonymous
       ? "anonymous"
@@ -314,11 +346,6 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
       country: "in",
     },
   };
-
-  const lineitems = await populateLineItemsInfoForPayments(
-    currentCart,
-    context.email
-  );
 
   //TODO: need to calculate in payment service
   const shippingOptions: PaymentShippingCharge = {
@@ -351,6 +378,7 @@ export const initiateCartPayment = async (context: ContextObjectType) => {
 
   return {
     link: initiatePaymentInfo.url,
+    approve: true,
   };
 };
 

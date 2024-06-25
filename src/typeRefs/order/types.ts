@@ -72,6 +72,7 @@ export const OrderDefs = gql`
 
   type InitiatePaymentResponse {
     link: String
+    approve: Boolean
   }
   # =============== Inputs =================
   input AddToCartInput {
