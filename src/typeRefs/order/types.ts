@@ -74,6 +74,20 @@ export const OrderDefs = gql`
     link: String
     approve: Boolean
   }
+
+  type OrderList {
+    orders: [Order]
+    pageInfo: OrderPageInfo
+  }
+
+  type OrderPageInfo {
+    isStart: Boolean
+    isEnd: Boolean
+    totalPages: Int
+    totalMatches: Int
+    currentMatchs: Int
+  }
+
   # =============== Inputs =================
   input AddToCartInput {
     lineIds: [String]
@@ -88,5 +102,15 @@ export const OrderDefs = gql`
     country: String!
     pin: Int!
     landmark: String
+  }
+
+  input OrderListInput {
+    search: String
+    page: Int
+    size: Int
+    sortBy: String
+    sortDirection: String
+    status: String
+    userId: String
   }
 `;

@@ -11,6 +11,7 @@ import {
   PaymentIntentType,
   PaymentLineItemPrice,
   InitiateOrderArgsType,
+  OrderListArgsType,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
@@ -487,15 +488,66 @@ export const submitCodOrder = async (context: ContextObjectType) => {
  * @param context
  * @returns
  */
-export const viewOrder = async (orderId: string) => {
+export const viewOrder = async (
+  orderId: string,
+  context: ContextObjectType
+) => {
   if (!orderId) {
     throw new BadRequestError("OrderId is mandatory");
   }
-  const order = await orderRepository.getOrderById(orderId);
+  const isAdmin = true; // TODO: need a function lvl rule implementation
+  const order = await orderRepository.getOrderById(
+    orderId,
+    isAdmin ? "" : context._id
+  );
   if (order?.isActive) {
     return order;
   }
   throw new NotFoundError("Order not found");
+};
+
+/**
+ * Controller used to get orders details
+ * @param context
+ * @returns
+ */
+export const viewOrders = async (
+  listArgs: OrderListArgsType["orderListInput"],
+  context: ContextObjectType
+) => {
+  const {
+    page = 0,
+    size = 5,
+    search,
+    sortBy = "updatedAt",
+    sortDirection = "desc",
+    status = "ORDER",
+    userId = "",
+  } = listArgs || {};
+  const isAdmin: boolean = false; // TODO: need a function lvl rule implementation
+  const { orders, count } = await orderRepository.getOrderList(
+    page,
+    size,
+    search,
+    sortBy,
+    sortDirection,
+    status,
+    isAdmin ? userId : context._id,
+    isAdmin
+  );
+  const totalPages = Math.ceil(count / size);
+  const pageInfo = {
+    isStart: page === 0,
+    isEnd: page >= totalPages - 1,
+    totalPages,
+    totalMatches: count,
+    currentMatchs: orders.length,
+  };
+
+  return {
+    orders,
+    pageInfo,
+  };
 };
 
 export default {
@@ -510,4 +562,5 @@ export default {
   submitUserOrder,
   submitCodOrder,
   viewOrder,
+  viewOrders,
 };

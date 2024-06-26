@@ -91,6 +91,18 @@ export type ProductListArgsType = {
   };
 };
 
+export type OrderListArgsType = {
+  orderListInput: {
+    search: string;
+    page: number;
+    size: number;
+    sortBy: string;
+    sortDirection: "ASC" | "DESC";
+    status: "ORDER";
+    userId: string;
+  };
+};
+
 export type AddressCreateArgsType = {
   createAddressInput: {
     point: string;
