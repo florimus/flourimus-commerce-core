@@ -1,5 +1,6 @@
 import { CartType, LineItemType, OrderStatusTypes } from "@core/types";
 import Cart from "@schemas/OrderSchema";
+import { FilterQuery } from "mongoose";
 
 const createCart = async (cart: Partial<CartType>) => {
   return await new Cart(cart).save();
@@ -73,6 +74,37 @@ export const updateOrder = async (
   )) as CartType;
 };
 
+const getOrderList = async (
+  page: number,
+  size: number,
+  search: string,
+  sortBy: string,
+  sortDirection: string,
+  status: string,
+  userId: string,
+  isAdmin: boolean
+) => {
+  const query: FilterQuery<CartType> = {};
+  if (search) {
+    query.$or = [
+      { orderId: { $regex: search, $options: "i" } },
+      { userId: { $regex: search, $options: "i" } },
+    ];
+  }
+  query.status = status;
+
+  if (!isAdmin) {
+    query.userId = userId;
+  }
+  const orders = await Cart.find(query)
+    .limit(size)
+    .sort({ [sortBy]: sortDirection === "ASC" ? 1 : -1 })
+    .skip(size * (page ?? 0))
+    .exec();
+  const count = await Cart.countDocuments(query);
+  return { orders, count };
+};
+
 export default {
   createCart,
   getCartByUserIdAndStatus,
@@ -82,4 +114,5 @@ export default {
   removeProductsFromCart,
   updateOrder,
   getOrderById,
+  getOrderList,
 };

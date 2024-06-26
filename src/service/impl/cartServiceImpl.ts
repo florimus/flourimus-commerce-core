@@ -11,6 +11,7 @@ import {
   PaymentIntentType,
   PaymentLineItemPrice,
   InitiateOrderArgsType,
+  OrderListArgsType,
 } from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
@@ -498,6 +499,49 @@ export const viewOrder = async (orderId: string) => {
   throw new NotFoundError("Order not found");
 };
 
+/**
+ * Controller used to get orders details
+ * @param context
+ * @returns
+ */
+export const viewOrders = async (
+  listArgs: OrderListArgsType["orderListInput"],
+  context: ContextObjectType
+) => {
+  const {
+    page = 0,
+    size = 5,
+    search,
+    sortBy = "updatedAt",
+    sortDirection = "desc",
+    status = "ORDER",
+    userId,
+  } = listArgs || {};
+  const { orders, count } = await orderRepository.getOrderList(
+    page,
+    size,
+    search,
+    sortBy,
+    sortDirection,
+    status,
+    userId,
+    !true // TODO: need a function lvl rule implementation
+  );
+  const totalPages = Math.ceil(count / size);
+  const pageInfo = {
+    isStart: page === 0,
+    isEnd: page >= totalPages - 1,
+    totalPages,
+    totalMatches: count,
+    currentMatchs: orders.length,
+  };
+
+  return {
+    orders,
+    pageInfo,
+  };
+};
+
 export default {
   createUserCart,
   addItemToCart,
@@ -510,4 +554,5 @@ export default {
   submitUserOrder,
   submitCodOrder,
   viewOrder,
+  viewOrders,
 };

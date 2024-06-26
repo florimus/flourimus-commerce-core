@@ -8,6 +8,7 @@ import {
   SubmitOrderArgsType,
   InitiateOrderArgsType,
   OrderArgsType,
+  OrderListArgsType,
 } from "@core/types";
 import cartServiceImpl from "./impl/cartServiceImpl";
 
@@ -115,9 +116,7 @@ export const submitUserOrder = async (
  * @param context
  * @returns
  */
-export const submitCodOrder = async (
-  context: ContextObjectType
-) => {
+export const submitCodOrder = async (context: ContextObjectType) => {
   return await cartServiceImpl.submitCodOrder(context);
 };
 
@@ -128,4 +127,16 @@ export const submitCodOrder = async (
  */
 export const viewOrder = async (args: OrderArgsType) => {
   return await cartServiceImpl.viewOrder(args.orderId);
+};
+
+/**
+ * Controller used to get orders details
+ * @param context
+ * @returns
+ */
+export const viewOrders = async (
+  args: OrderListArgsType,
+  context: ContextObjectType
+) => {
+  return await cartServiceImpl.viewOrders(args.orderListInput, context);
 };
