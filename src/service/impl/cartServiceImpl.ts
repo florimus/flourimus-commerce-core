@@ -482,6 +482,22 @@ export const submitCodOrder = async (context: ContextObjectType) => {
   return await orderRepository.updateOrder(userOrder._id, orderDetails);
 };
 
+/**
+ * Controller used to get order details
+ * @param context
+ * @returns
+ */
+export const viewOrder = async (orderId: string) => {
+  if (!orderId) {
+    throw new BadRequestError("OrderId is mandatory");
+  }
+  const order = await orderRepository.getOrderById(orderId);
+  if (order?.isActive) {
+    return order;
+  }
+  throw new NotFoundError("Order not found");
+};
+
 export default {
   createUserCart,
   addItemToCart,
@@ -493,4 +509,5 @@ export default {
   initiateCartPayment,
   submitUserOrder,
   submitCodOrder,
+  viewOrder,
 };

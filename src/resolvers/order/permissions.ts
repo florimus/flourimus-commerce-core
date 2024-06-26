@@ -1,7 +1,8 @@
 import { anyUser, isAuthenticated } from "@permissions/permissions";
 
 export const quriesPermissions = {
-  viewCart: isAuthenticated,
+  cart: isAuthenticated,
+  order: anyUser,
 };
 
 export const mutationPermissions = {
