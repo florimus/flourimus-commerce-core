@@ -10,7 +10,10 @@ const getCartById = async (_id: string) => {
   return (await Cart.findOne({ _id })) as CartType;
 };
 
-const getOrderById = async (orderId: string) => {
+const getOrderById = async (orderId: string, userId?: string) => {
+  if (userId) {
+    return (await Cart.findOne({ orderId, userId })) as CartType;
+  }
   return (await Cart.findOne({ orderId })) as CartType;
 };
 

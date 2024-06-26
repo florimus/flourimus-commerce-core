@@ -125,8 +125,8 @@ export const submitCodOrder = async (context: ContextObjectType) => {
  * @param context
  * @returns
  */
-export const viewOrder = async (args: OrderArgsType) => {
-  return await cartServiceImpl.viewOrder(args.orderId);
+export const viewOrder = async (args: OrderArgsType, context: ContextObjectType) => {
+  return await cartServiceImpl.viewOrder(args.orderId, context);
 };
 
 /**

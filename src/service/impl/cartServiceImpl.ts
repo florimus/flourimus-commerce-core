@@ -488,11 +488,18 @@ export const submitCodOrder = async (context: ContextObjectType) => {
  * @param context
  * @returns
  */
-export const viewOrder = async (orderId: string) => {
+export const viewOrder = async (
+  orderId: string,
+  context: ContextObjectType
+) => {
   if (!orderId) {
     throw new BadRequestError("OrderId is mandatory");
   }
-  const order = await orderRepository.getOrderById(orderId);
+  const isAdmin = true; // TODO: need a function lvl rule implementation
+  const order = await orderRepository.getOrderById(
+    orderId,
+    isAdmin ? "" : context._id
+  );
   if (order?.isActive) {
     return order;
   }

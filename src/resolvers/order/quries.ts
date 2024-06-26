@@ -17,7 +17,11 @@ export const resolverQuries = {
   Query: {
     cart: async (_: unknown, args: CartArgsType) => await viewCart(args),
 
-    order: async (_: unknown, args: OrderArgsType) => await viewOrder(args),
+    order: async (
+      _: unknown,
+      args: OrderArgsType,
+      context: ContextObjectType
+    ) => await viewOrder(args, context),
 
     orders: async (
       _: unknown,
