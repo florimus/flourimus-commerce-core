@@ -95,8 +95,8 @@ const getOrderList = async (
     ];
   }
   query.status = status;
-
-  if (!isAdmin) {
+  
+  if (!isAdmin || (isAdmin && userId)) {
     query.userId = userId;
   }
   const orders = await Cart.find(query)

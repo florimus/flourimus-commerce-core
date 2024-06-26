@@ -522,8 +522,9 @@ export const viewOrders = async (
     sortBy = "updatedAt",
     sortDirection = "desc",
     status = "ORDER",
-    userId,
+    userId = "",
   } = listArgs || {};
+  const isAdmin: boolean = false; // TODO: need a function lvl rule implementation
   const { orders, count } = await orderRepository.getOrderList(
     page,
     size,
@@ -531,8 +532,8 @@ export const viewOrders = async (
     sortBy,
     sortDirection,
     status,
-    userId,
-    !true // TODO: need a function lvl rule implementation
+    isAdmin ? userId : context._id,
+    isAdmin
   );
   const totalPages = Math.ceil(count / size);
   const pageInfo = {
