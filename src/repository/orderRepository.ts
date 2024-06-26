@@ -1,8 +1,4 @@
-import {
-  CartType,
-  LineItemType,
-  OrderStatusTypes,
-} from "@core/types";
+import { CartType, LineItemType, OrderStatusTypes } from "@core/types";
 import Cart from "@schemas/OrderSchema";
 
 const createCart = async (cart: Partial<CartType>) => {
@@ -10,7 +6,11 @@ const createCart = async (cart: Partial<CartType>) => {
 };
 
 const getCartById = async (_id: string) => {
-  return await Cart.findOne({ _id });
+  return (await Cart.findOne({ _id })) as CartType;
+};
+
+const getOrderById = async (orderId: string) => {
+  return (await Cart.findOne({ orderId })) as CartType;
 };
 
 const getCartByUserIdAndStatus = async (
@@ -81,4 +81,5 @@ export default {
   getCartById,
   removeProductsFromCart,
   updateOrder,
+  getOrderById,
 };

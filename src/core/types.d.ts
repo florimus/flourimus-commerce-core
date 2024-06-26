@@ -225,6 +225,10 @@ export type CartArgsType = {
   _id: string;
 };
 
+export type OrderArgsType = {
+  orderId: string;
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"
