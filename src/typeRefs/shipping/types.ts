@@ -39,8 +39,37 @@ export const ShippingDefs = gql`
     maxQuantity: Int
   }
 
+  type ShippingsList {
+    shippings: [ShippingMethods]
+    pageInfo: ShippingsPageInfo
+  }
+
+  type ShippingsPageInfo {
+    isStart: Boolean
+    isEnd: Boolean
+    totalPages: Int
+    totalMatches: Int
+    currentMatchs: Int
+  }
+
   # =============== Inputs =================
   input ShippingMethodCreateInput {
+    name: String
+    country: [String]
+    state: [String]
+    allCountry: Boolean
+    allStates: Boolean
+    sellPrice: Int
+    listPrice: Int
+    priceConfig: ShippingMethodPriceLimitsInput
+    weightConfig: ShippingMethodWeightLimitsInput
+    quantityConfig: ShippingMethodQuantityLimitsInput
+    enabledPriceLimits: Boolean
+    enabledWeightLimits: Boolean
+    enabledQuantityLimits: Boolean
+  }
+
+  input ShippingMethodUpdateInput {
     name: String
     country: [String]
     state: [String]
@@ -69,5 +98,11 @@ export const ShippingDefs = gql`
   input ShippingMethodQuantityLimitsInput {
     minQuantity: Int
     maxQuantity: Int
+  }
+
+  input ShippingsListInput {
+    search: String
+    page: Int
+    size: Int
   }
 `;

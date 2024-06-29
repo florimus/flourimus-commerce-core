@@ -278,6 +278,25 @@ export type ShippingMethodCreateArgsType = {
   };
 };
 
+export type ShippingMethodUpdateArgsType = {
+  _id: string;
+  shippingMethodUpdateInput: {
+    enabledPriceLimits: boolean;
+    enabledWeightLimits: boolean;
+    enabledQuantityLimits: boolean;
+    name: string;
+    country: string[];
+    state: string[];
+    allCountry: false;
+    allStates: false;
+    sellPrice: number;
+    listPrice: number;
+    priceConfig: ShippingMethodPriceLimits;
+    weightConfig: ShippingMethodWeightLimits;
+    quantityConfig: ShippingMethodQuantityLimits;
+  };
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"

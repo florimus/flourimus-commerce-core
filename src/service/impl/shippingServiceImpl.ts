@@ -8,6 +8,7 @@ import {
   ShippingMethodPriceLimits,
   ShippingMethodQuantityLimits,
   ShippingMethodType,
+  ShippingMethodUpdateArgsType,
   ShippingMethodWeightLimits,
 } from "@core/types";
 import { v4 as uuidv4 } from "uuid";
@@ -149,7 +150,73 @@ export const shippingMethodInfo = async (_id: string) => {
   throw new NotFoundError("Shipping not found");
 };
 
+/**
+ * Controller used to update shipping method
+ * @param args
+ * @returns
+ */
+export const shippingMethodupdate = async (
+  args: ShippingMethodUpdateArgsType,
+  context: ContextObjectType
+) => {
+  const { _id, shippingMethodUpdateInput } = args || {};
+  if (!_id) {
+    throw new BadRequestError("ShippingId is mandatory");
+  }
+  const shippingMethod = await shippingRepository.getShippingMethodById(_id);
+  if (!shippingMethod?._id) {
+    throw new NotFoundError("Shipping not found");
+  }
+  if (shippingMethodUpdateInput?.name) {
+    shippingMethod.name = shippingMethodUpdateInput.name;
+  }
+  if (shippingMethodUpdateInput?.listPrice) {
+    shippingMethod.listPrice = shippingMethodUpdateInput.listPrice;
+  }
+  if (shippingMethodUpdateInput?.sellPrice) {
+    shippingMethod.sellPrice = shippingMethodUpdateInput.sellPrice;
+  }
+  if (
+    validateCountryConfig(
+      shippingMethodUpdateInput?.country,
+      shippingMethodUpdateInput?.allCountry
+    )
+  ) {
+    shippingMethod.country = shippingMethodUpdateInput.country;
+    shippingMethod.allCountry = shippingMethodUpdateInput.allCountry;
+  }
+  if (
+    validateStatesConfig(
+      shippingMethodUpdateInput?.country,
+      shippingMethodUpdateInput?.state,
+      shippingMethodUpdateInput?.allStates
+    )
+  ) {
+    shippingMethod.state = shippingMethodUpdateInput.state;
+    shippingMethod.allStates = shippingMethodUpdateInput.allStates;
+  }
+  populatePriceConfig(
+    shippingMethodUpdateInput?.priceConfig,
+    shippingMethod,
+    shippingMethodUpdateInput?.enabledPriceLimits
+  );
+  populateWeightConfig(
+    shippingMethodUpdateInput?.weightConfig,
+    shippingMethod,
+    shippingMethodUpdateInput?.enabledWeightLimits
+  );
+  populateQuantityConfig(
+    shippingMethodUpdateInput?.quantityConfig,
+    shippingMethod,
+    shippingMethodUpdateInput?.enabledQuantityLimits
+  );
+  shippingMethod.updatedAt = getCurrentTime();
+  shippingMethod.updatedBy = context.email;
+  return await shippingRepository.updateShippingMethod(_id, shippingMethod);
+};
+
 export default {
   shippingMethodCreate,
   shippingMethodInfo,
+  shippingMethodupdate,
 };

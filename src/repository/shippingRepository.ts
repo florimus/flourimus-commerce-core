@@ -14,7 +14,19 @@ const getShippingMethodById = async (_id: string, isActive?: boolean) => {
   return (await Shipping.findOne({ _id })) as ShippingMethodType;
 };
 
+const updateShippingMethod = async (
+  _id: string,
+  shippingMethod: Partial<ShippingMethodType>
+) => {
+  return (await Shipping.findOneAndUpdate(
+    { _id },
+    { $set: shippingMethod },
+    { new: true }
+  )) as ShippingMethodType;
+};
+
 export default {
   createShippingMethod,
   getShippingMethodById,
+  updateShippingMethod,
 };

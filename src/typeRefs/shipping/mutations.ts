@@ -5,5 +5,10 @@ export const ShippingMutations = gql`
     shippingMethodCreate(
       shippingMethodCreateInput: ShippingMethodCreateInput!
     ): ShippingMethods
+
+    shippingMethodUpdate(
+      _id: String
+      shippingMethodUpdateInput: ShippingMethodUpdateInput!
+    ): ShippingMethods
   }
 `;

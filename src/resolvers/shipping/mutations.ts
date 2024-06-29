@@ -1,5 +1,5 @@
-import { ContextObjectType, ShippingMethodCreateArgsType } from "@core/types";
-import { shippingMethodCreate } from "@services/shippingService";
+import { ContextObjectType, ShippingMethodCreateArgsType, ShippingMethodUpdateArgsType } from "@core/types";
+import { shippingMethodCreate, shippingMethodupdate } from "@services/shippingService";
 
 export const resolverMutations = {
   Mutation: {
@@ -8,5 +8,11 @@ export const resolverMutations = {
       args: ShippingMethodCreateArgsType,
       context: ContextObjectType
     ) => await shippingMethodCreate(args, context),
+
+    shippingMethodUpdate: async (
+      _: unknown,
+      args: ShippingMethodUpdateArgsType,
+      context: ContextObjectType
+    ) => await shippingMethodupdate(args, context),
   },
 };
