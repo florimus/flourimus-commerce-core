@@ -241,6 +241,39 @@ export type OrderArgsType = {
   orderId: string;
 };
 
+export type ShippingMethodPriceLimits = {
+  minPrice: number;
+  maxPrice: number;
+};
+
+export type ShippingMethodWeightLimits = {
+  minWeight: number;
+  maxWeight: number;
+};
+
+export type ShippingMethodQuantityLimits = {
+  minQuantity: number;
+  maxQuantity: number;
+};
+
+export type ShippingMethodCreateArgsType = {
+  shippingMethodCreateInput: {
+    enabledPriceLimits: boolean;
+    enabledWeightLimits: boolean;
+    enabledQuantityLimits: boolean;
+    name: string;
+    country: string[];
+    state: string[];
+    allCountry: false;
+    allStates: false;
+    sellPrice: number;
+    listPrice: number;
+    priceConfig: ShippingMethodPriceLimits;
+    weightConfig: ShippingMethodWeightLimits;
+    quantityConfig: ShippingMethodQuantityLimits;
+  };
+};
+
 export type TokenType =
   | "register-access"
   | "register-refresh"
@@ -516,4 +549,27 @@ export interface PaymentLineItemPrice {
   unit: Partial<PaymentCalculatedPriceInfoType>;
   order: Partial<PaymentCalculatedPriceInfoType>;
   quantity: number;
+}
+
+export interface ShippingMethodType {
+  _id: string;
+  name: string;
+  country: string[];
+  state: string[];
+  allCountry: boolean;
+  allStates: boolean;
+  sellPrice: number;
+  listPrice: number;
+  priceConfig: ShippingMethodPriceLimits;
+  weightConfig: ShippingMethodWeightLimits;
+  quantityConfig: ShippingMethodQuantityLimits;
+  enabledPriceLimits: boolean;
+  enabledWeightLimits: boolean;
+  enabledQuantityLimits: boolean;
+  createdAt?: string;
+  updatedAt?: string;
+  isActive: boolean;
+  createdBy?: string;
+  updatedBy?: string;
+  metaStatus?: string;
 }
