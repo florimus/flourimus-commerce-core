@@ -1,5 +1,6 @@
 import { ShippingMethodType } from "@core/types";
 import Shipping from "@schemas/ShippingSchema";
+import { FilterQuery } from "mongoose";
 
 const createShippingMethod = async (
   shippingMethod: Partial<ShippingMethodType>
@@ -25,8 +26,32 @@ const updateShippingMethod = async (
   )) as ShippingMethodType;
 };
 
+const getShippingMethodList = async (
+  page: number,
+  size: number,
+  search: string,
+  sortBy: string,
+  sortDirection: string
+) => {
+  const query: FilterQuery<ShippingMethodType> = {};
+  if (search) {
+    query.$or = [
+      { name: { $regex: search, $options: "i" } },
+      { id: { $regex: search, $options: "i" } },
+    ];
+  }
+  const shippings = await Shipping.find(query)
+    .limit(size)
+    .sort({ [sortBy]: sortDirection === "ASC" ? 1 : -1 })
+    .skip(size * (page ?? 0))
+    .exec();
+  const count = await Shipping.countDocuments(query);
+  return { shippings, count };
+};
+
 export default {
   createShippingMethod,
   getShippingMethodById,
   updateShippingMethod,
+  getShippingMethodList,
 };

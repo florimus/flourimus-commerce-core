@@ -155,6 +155,14 @@ export type ShippingMethodArgsType = {
   _id: string;
 };
 
+export type ShippingMethodListArgsType = {
+  shippingsListInput: {
+    search: string;
+    page: number;
+    size: number;
+  };
+};
+
 export type CreateProductArgsType = {
   productCreateInput: {
     name: string;

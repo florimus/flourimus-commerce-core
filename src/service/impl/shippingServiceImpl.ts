@@ -5,6 +5,7 @@ import {
 import {
   ContextObjectType,
   ShippingMethodCreateArgsType,
+  ShippingMethodListArgsType,
   ShippingMethodPriceLimits,
   ShippingMethodQuantityLimits,
   ShippingMethodType,
@@ -215,8 +216,40 @@ export const shippingMethodupdate = async (
   return await shippingRepository.updateShippingMethod(_id, shippingMethod);
 };
 
+/**
+ * Controller used to list shippingMethods
+ * @param args
+ * @returns
+ */
+export const shippingMethodList = async (
+  listArgs: ShippingMethodListArgsType["shippingsListInput"]
+) => {
+  const { page = 0, size = 5, search } = listArgs || {};
+  const { shippings, count } = await shippingRepository.getShippingMethodList(
+    page,
+    size,
+    search,
+    "updatedAt",
+    "desc"
+  );
+  const totalPages = Math.ceil(count / size);
+  const pageInfo = {
+    isStart: page === 0,
+    isEnd: page >= totalPages - 1,
+    totalPages,
+    totalMatches: count,
+    currentMatchs: shippings.length,
+  };
+
+  return {
+    shippings,
+    pageInfo,
+  };
+};
+
 export default {
   shippingMethodCreate,
   shippingMethodInfo,
   shippingMethodupdate,
+  shippingMethodList,
 };
