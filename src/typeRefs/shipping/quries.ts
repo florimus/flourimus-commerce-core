@@ -1,8 +1,7 @@
 import { gql } from "apollo-server-express";
 
-export const WarehouseQuries = gql`
+export const ShippingQuries = gql`
   type Query {
-    warehouse(_id: ID!): Warehouse
-    warehouseList(warehouseListInput: WarehouseListInput): WarehouseList
+    shippingMethod(_id: ID): ShippingMethods
   }
 `;

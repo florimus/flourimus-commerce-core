@@ -14,6 +14,7 @@ import { v4 as uuidv4 } from "uuid";
 import BadRequestError from "@errors/BadrequestError";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import shippingRepository from "@repositories/shippingRepository";
+import NotFoundError from "@errors/NotFoundError";
 
 const validateCountryConfig = (codes: string[], allCountry: boolean) =>
   allCountry ? true : checkCountries(codes);
@@ -132,6 +133,23 @@ const shippingMethodCreate = async (
   return shippingRepository.createShippingMethod(shippingMethod);
 };
 
+/**
+ * Controller used to get shippingMethod details
+ * @param args
+ * @returns
+ */
+export const shippingMethodInfo = async (_id: string) => {
+  if (!_id) {
+    throw new BadRequestError("ShippingId is mandatory");
+  }
+  const shippingMethod = await shippingRepository.getShippingMethodById(_id);
+  if (shippingMethod?._id) {
+    return shippingMethod;
+  }
+  throw new NotFoundError("Shipping not found");
+};
+
 export default {
   shippingMethodCreate,
+  shippingMethodInfo,
 };

@@ -151,6 +151,10 @@ export type WarehouseArgsType = {
   _id: string;
 };
 
+export type ShippingMethodArgsType = {
+  _id: string;
+};
+
 export type CreateProductArgsType = {
   productCreateInput: {
     name: string;

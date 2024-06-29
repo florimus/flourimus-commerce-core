@@ -1,4 +1,4 @@
-import { ContextObjectType, ShippingMethodCreateArgsType } from "@core/types";
+import { ContextObjectType, ShippingMethodArgsType, ShippingMethodCreateArgsType } from "@core/types";
 import shippingServiceImpl from "./impl/shippingServiceImpl";
 
 /**
@@ -14,4 +14,13 @@ export const shippingMethodCreate = async (
     args.shippingMethodCreateInput,
     context
   );
+};
+
+/**
+ * Controller used to get shippingMethod details
+ * @param args
+ * @returns
+ */
+export const shippingMethodInfo = async (args: ShippingMethodArgsType) => {
+  return await shippingServiceImpl.shippingMethodInfo(args._id);
 };

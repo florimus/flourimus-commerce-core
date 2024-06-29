@@ -7,6 +7,14 @@ const createShippingMethod = async (
   return await new Shipping(shippingMethod).save();
 };
 
+const getShippingMethodById = async (_id: string, isActive?: boolean) => {
+  if (isActive) {
+    return (await Shipping.findOne({ _id, isActive })) as ShippingMethodType;
+  }
+  return (await Shipping.findOne({ _id })) as ShippingMethodType;
+};
+
 export default {
   createShippingMethod,
+  getShippingMethodById,
 };
