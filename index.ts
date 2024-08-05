@@ -12,7 +12,7 @@ import { useServer } from "graphql-ws/lib/use/ws";
 
 import { graphqlUploadExpress } from "graphql-upload-ts";
 
-const PORT = process.env.PORT || 4000;
+const PORT = process.env.PORT || 10000;
 
 async function startServer(): Promise<void> {
   const app = express();
