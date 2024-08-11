@@ -174,6 +174,13 @@ export const getPaginatedWarehouseStocksById = async (
   };
 };
 
+const getWarehousesWithProductId = async (productId: string) => {
+  return await Warehouse.find(
+    { "stocks.productId": productId },
+    { stocks: { $elemMatch: { productId } } }
+  );
+};
+
 export default {
   createWarehouse,
   getWarehouseById,
@@ -184,4 +191,5 @@ export default {
   addNewProductStock,
   updateOldProductStock,
   getPaginatedWarehouseStocksById,
+  getWarehousesWithProductId,
 };

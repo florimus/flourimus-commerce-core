@@ -2,12 +2,14 @@ import {
   WarehouseArgsType,
   WarehouseListArgsType,
   WarehouseStockListArgsType,
+  WarehousesWithProductArgsType,
   WarehouseType,
 } from "@core/types";
 import {
   WarehouseList,
   warehouseInfo,
   warehouseStockList,
+  warehousesWithProduct,
 } from "@services/warehouseService";
 
 export const resolverQuries = {
@@ -17,6 +19,11 @@ export const resolverQuries = {
 
     warehouseList: async (_: unknown, args: WarehouseListArgsType) =>
       await WarehouseList(args),
+
+    warehousesWithProduct: async (
+      _: unknown,
+      args: WarehousesWithProductArgsType
+    ) => await warehousesWithProduct(args),
   },
   Warehouse: {
     stockList: async (
