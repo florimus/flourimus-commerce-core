@@ -175,10 +175,10 @@ export const getPaginatedWarehouseStocksById = async (
 };
 
 const getWarehousesWithProductId = async (productId: string) => {
-  return await Warehouse.find(
+  return (await Warehouse.find(
     { "stocks.productId": productId },
     { stocks: { $elemMatch: { productId } } }
-  );
+  )) as WarehouseType[];
 };
 
 export default {
