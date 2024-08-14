@@ -103,16 +103,40 @@ export const addNewProductStock = async (
   );
 };
 
-export const updateOldProductStock = async (
+const updateOldProductStock = async (
   warehouseId: string,
   stockDetails: Partial<ProductStockType>,
   data: Partial<WarehouseType>
 ) => {
-  return await Warehouse.findOneAndUpdate(
-    { _id: warehouseId, "stocks.productId": stockDetails?.productId },
-    { $set: { "stocks.$`": stockDetails, ...data } },
-    { new: true } // To return the updated document
-  );
+  return await Warehouse.aggregate([
+    {
+      $match: {
+        _id: warehouseId,
+        "stocks.productId": stockDetails?.productId,
+      },
+    },
+    {
+      $set: {
+        stocks: {
+          $map: {
+            input: "$stocks",
+            as: "stock",
+            in: {
+              $cond: {
+                if: { $eq: ["$$stock.productId", stockDetails?.productId] },
+                then: { ...stockDetails, productId: "$$stock.productId" },
+                else: "$$stock",
+              },
+            },
+          },
+        },
+        ...data,
+      },
+    },
+    {
+      $merge: { into: "warehouses", whenMatched: "replace" },
+    },
+  ]);
 };
 
 export const getPaginatedWarehouseStocksById = async (
