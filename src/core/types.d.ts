@@ -139,6 +139,10 @@ export type WarehouseListArgsType = {
   };
 };
 
+export type WarehousesWithProductArgsType = {
+  productId: string;
+};
+
 export type WarehouseStockListArgsType = {
   stockListInput: {
     search: string;

@@ -113,6 +113,21 @@ export const warehouseList = async (
 };
 
 /**
+ * Controller used to list warehouses with matching product
+ * @param args
+ * @returns
+ */
+export const warehousesWithProduct = async (productId: string) => {
+  if (!productId) {
+    throw new BadRequestError("Invalid ProductId");
+  }
+  const warehouses = await warehouseRepository.getWarehousesWithProductId(
+    productId
+  );
+  return warehouses;
+};
+
+/**
  * Controller used to update product stock in warehouse
  * @param stockEntryInput
  * @returns
@@ -258,4 +273,5 @@ export default {
   warehouseInfo,
   warehouseStockList,
   findProductAvailableStocksByProductId,
+  warehousesWithProduct,
 };
