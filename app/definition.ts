@@ -11,6 +11,7 @@ import orderResolvers from "@resolvers/order";
 import shippingRefs from "src/typeRefs/shipping";
 import shippingResolvers from "@resolvers/shipping";
 import categoryRefs from "src/typeRefs/category";
+import categoryResolvers from "@resolvers/category";
 
 export default {
   typeDefs: [
@@ -29,5 +30,6 @@ export default {
     warehouseResolvers(),
     orderResolvers(),
     shippingResolvers(),
+    categoryResolvers(),
   ],
 };

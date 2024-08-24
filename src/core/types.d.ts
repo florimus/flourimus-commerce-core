@@ -47,6 +47,15 @@ export type InviteStaffMutationArgsType = {
   };
 };
 
+export type CategoryCreateMutationArgsType = {
+  categoryCreateInput: {
+    name: string;
+    description: string;
+    medias: string[];
+    productIds: string[];
+  };
+};
+
 export type OnboardStaffMutationArgsType = {
   onboardStaffInput: {
     _id: string;
