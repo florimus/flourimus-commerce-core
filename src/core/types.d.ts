@@ -50,9 +50,11 @@ export type InviteStaffMutationArgsType = {
 export type CategoryCreateMutationArgsType = {
   categoryCreateInput: {
     name: string;
+    parentId: string;
     description: string;
     medias: string[];
     productIds: string[];
+    subCategoryIds: string[];
   };
 };
 
@@ -613,6 +615,22 @@ export interface ShippingMethodType {
   createdAt?: string;
   updatedAt?: string;
   isActive: boolean;
+  createdBy?: string;
+  updatedBy?: string;
+  metaStatus?: string;
+}
+
+export interface CategoryType {
+  _id: string;
+  name: string;
+  description: string;
+  parentId?: string;
+  productIds: string[];
+  subCategoryIds: string[];
+  medias: string[];
+  createdAt?: string;
+  updatedAt?: string;
+  isActive: Boolean;
   createdBy?: string;
   updatedBy?: string;
   metaStatus?: string;

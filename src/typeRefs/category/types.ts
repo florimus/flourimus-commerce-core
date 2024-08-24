@@ -5,6 +5,7 @@ export const CategoryDefs = gql`
     _id: ID
     name: String
     description: String
+    parentId: String
     productIds: [String]
     subCategoryIds: [String]
     medias: [String]
@@ -20,8 +21,10 @@ export const CategoryDefs = gql`
 
   input CategoryCreateInput {
     name: String
+    parentId: String
     description: String
     medias: [String]
     productIds: [String]
+    subCategoryIds: [String]
   }
 `;
