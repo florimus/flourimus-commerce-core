@@ -52,6 +52,13 @@ const script_02 = async (mongoose, env = "local") => {
             mask: "0",
             next: 1,
           },
+          category: {
+            prefix: "CAT",
+            sufix: "",
+            length: 6,
+            mask: "0",
+            next: 1,
+          },
         },
         channelConfigurations: null,
         createdAt: "2024-01-10T10:00:00.000Z",

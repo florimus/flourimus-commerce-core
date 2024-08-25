@@ -6,6 +6,7 @@ import UnAuthorizationError from "@errors/UnAuthorizationError";
 import { priceTablePermissions } from "@resolvers/price";
 import { warehousePermissions } from "@resolvers/warehouse";
 import { orderPermissions } from "@resolvers/order";
+import { categoryPermissions } from "@resolvers/category";
 
 export const permissions = shield(
   {
@@ -23,6 +24,7 @@ export const permissions = shield(
       ...priceTablePermissions.mutations,
       ...warehousePermissions.mutations,
       ...orderPermissions.mutations,
+      ...categoryPermissions.mutations,
     },
   },
   {
