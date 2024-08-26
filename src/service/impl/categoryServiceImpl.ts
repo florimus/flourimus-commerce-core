@@ -1,9 +1,15 @@
 import sequence from "@core/sequence";
-import { CategoryCreateMutationArgsType, ContextObjectType } from "@core/types";
+import {
+  CategoryCreateMutationArgsType,
+  CategoryType,
+  ContextObjectType,
+  ProductListArgsType,
+} from "@core/types";
 import { getCurrentTime } from "@core/utils/timeUtils";
 import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
 import categoryRepository from "@repositories/categoryRepository";
+import productRepository from "@repositories/productRepository";
 
 /**
  * Controller used to get category info
@@ -70,7 +76,39 @@ const createcategory = async (
   return category;
 };
 
+/**
+ * Controller used to create category
+ * @param id
+ * @param listArgs
+ * @returns
+ */
+const fetchCategoryProducts = async (
+  category: CategoryType,
+  listArgs: ProductListArgsType
+) => {
+  const page = listArgs?.productListInput?.page ?? 0;
+  const size = listArgs?.productListInput?.size ?? 10;
+  const productIds = category?.productIds?.slice(
+    page * size,
+    page * size + size
+  );
+  const products = await productRepository.findProductsByIds(productIds);
+  const totalPages = Math.ceil(category?.productIds?.length / size);
+  const pageInfo = {
+    isStart: page === 0,
+    isEnd: page >= totalPages - 1,
+    totalPages,
+    totalMatches: category?.productIds?.length,
+    currentMatchs: productIds?.length,
+  };
+  return {
+    products,
+    pageInfo,
+  };
+};
+
 export default {
   createcategory,
   getCategoryById,
+  fetchCategoryProducts,
 };

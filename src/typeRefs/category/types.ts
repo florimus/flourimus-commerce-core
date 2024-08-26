@@ -15,11 +15,21 @@ export const CategoryDefs = gql`
     createdBy: String
     updatedBy: String
     metaStatus: String
+    productList(productListInput: ProductListInput): ProductList
   }
 
   # =============== Inputs =================
 
   input CategoryCreateInput {
+    name: String
+    parentId: String
+    description: String
+    medias: [String]
+    productIds: [String]
+    subCategoryIds: [String]
+  }
+
+  input CategoryUpdateInput {
     name: String
     parentId: String
     description: String

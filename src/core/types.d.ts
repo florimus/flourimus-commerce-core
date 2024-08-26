@@ -84,6 +84,10 @@ export type ProductArgsType = {
   _id: string;
 };
 
+export type CategoryArgsType = {
+  _id: string;
+};
+
 export type ProductBulkUploadArgs = {
   file: {
     file: Promise<FileUpload>;
