@@ -18,7 +18,7 @@ export const CategoryDefs = gql`
     productList(productListInput: ProductListInput): ProductList
   }
 
-  # =============== Inputs =================
+  # =============== Inputs ================= 
 
   input CategoryCreateInput {
     name: String
