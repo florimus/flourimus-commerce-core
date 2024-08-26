@@ -1,9 +1,20 @@
-import { ContextObjectType } from "@types";
-import { getCurrentUserInfo } from "@services/customerService";
+import {
+  CategoryArgsType,
+  CategoryType,
+  ProductListArgsType,
+} from "@types";
+import {
+  fetCategoryProducts,
+  getCategoryById,
+} from "@services/categoryService";
 
 export const resolverQuries = {
   Query: {
-    me: async (_: unknown, __: unknown, context: ContextObjectType) =>
-      await getCurrentUserInfo(context),
+    category: async (_: unknown, args: CategoryArgsType) =>
+      await getCategoryById(args),
+  },
+  Category: {
+    productList: async (parent: CategoryType, args: ProductListArgsType) =>
+      await fetCategoryProducts(parent, args),
   },
 };

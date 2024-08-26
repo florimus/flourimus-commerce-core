@@ -64,6 +64,12 @@ const getProductList = async (
   return { products, count };
 };
 
+const findProductsByIds = async (ids: string[]) => {
+  return await Product.find({
+    _id: { $in: ids },
+  });
+};
+
 export default {
   createProduct,
   updateProduct,
@@ -71,4 +77,5 @@ export default {
   updateVariants,
   getProductList,
   getProductInfoById,
+  findProductsByIds,
 };
