@@ -29,10 +29,7 @@ export const createcategory = async (
  * @param context
  * @returns
  */
-export const getCategoryById = async (
-  args: CategoryArgsType,
-  context: ContextObjectType
-) => {
+export const getCategoryById = async (args: CategoryArgsType) => {
   return await categoryServiceImpl.getCategoryById(args?._id);
 };
 

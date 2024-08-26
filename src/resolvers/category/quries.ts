@@ -1,7 +1,6 @@
 import {
   CategoryArgsType,
   CategoryType,
-  ContextObjectType,
   ProductListArgsType,
 } from "@types";
 import {
@@ -11,11 +10,8 @@ import {
 
 export const resolverQuries = {
   Query: {
-    category: async (
-      _: unknown,
-      args: CategoryArgsType,
-      context: ContextObjectType
-    ) => await getCategoryById(args, context),
+    category: async (_: unknown, args: CategoryArgsType) =>
+      await getCategoryById(args),
   },
   Category: {
     productList: async (parent: CategoryType, args: ProductListArgsType) =>
