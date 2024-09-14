@@ -39,7 +39,7 @@ const updateCategoryStatus = async (
   context: ContextObjectType
 ) => {
   if (!_id) {
-    throw new BadRequestError("ProductId is Mandatory");
+    throw new BadRequestError("Category id is Mandatory");
   }
   const category = await categoryRepository.findcategoryById(_id);
   if (!category?._id) {
