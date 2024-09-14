@@ -12,6 +12,6 @@ export default [
     },
   },
   {
-    ignores: ["database/*", "app/*", "jest.config.js"],
+    ignores: ["database/*", "app/*", "jest.config.js", "coverage/*"],
   },
 ];
