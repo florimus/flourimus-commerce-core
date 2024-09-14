@@ -58,6 +58,10 @@ export type CategoryCreateMutationArgsType = {
   };
 };
 
+export type CategoryStatusChangeMutationArgsType = {
+  _id: string;
+}
+
 export type OnboardStaffMutationArgsType = {
   onboardStaffInput: {
     _id: string;

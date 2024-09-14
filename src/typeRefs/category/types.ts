@@ -18,6 +18,11 @@ export const CategoryDefs = gql`
     productList(productListInput: ProductListInput): ProductList
   }
 
+  type CategoryStatusChangeResponse {
+    success: Boolean
+    status: Boolean
+  }
+
   # =============== Inputs ================= 
 
   input CategoryCreateInput {

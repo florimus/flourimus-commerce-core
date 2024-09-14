@@ -12,6 +12,11 @@ const findcategoryById = async (_id: string, isActive?: boolean) => {
   return (await Category.findOne({ _id })) as CategoryType;
 };
 
+const updateCategory = async (_id: string, data: Partial<CategoryType>) => {
+  await Category.updateOne({ _id }, data);
+  return (await Category.findOne({ _id })) as CategoryType;
+};
+
 const checkAllCategoriesExits = async (ids: string[]) => {
   const count = await Category.countDocuments({
     _id: { $in: ids },
@@ -23,4 +28,5 @@ export default {
   createCategory,
   findcategoryById,
   checkAllCategoriesExits,
+  updateCategory,
 };

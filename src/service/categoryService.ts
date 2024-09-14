@@ -1,6 +1,7 @@
 import {
   CategoryArgsType,
   CategoryCreateMutationArgsType,
+  CategoryStatusChangeMutationArgsType,
   CategoryType,
   ContextObjectType,
   ProductListArgsType,
@@ -21,6 +22,18 @@ export const createcategory = async (
     args?.categoryCreateInput,
     context
   );
+};
+
+/**
+ * Controller used to update category status
+ * @param args
+ * @returns
+ */
+export const updateCategoryStatus = async (
+  args: CategoryStatusChangeMutationArgsType,
+  context: ContextObjectType
+) => {
+  return await categoryServiceImpl.updateCategoryStatus(args?._id, context);
 };
 
 /**

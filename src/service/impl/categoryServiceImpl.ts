@@ -29,6 +29,38 @@ const getCategoryById = async (id: string, isActive: boolean = false) => {
 };
 
 /**
+ * Controller used to update category status
+ * @param _id
+ * @param context
+ * @returns
+ */
+const updateCategoryStatus = async (
+  _id: string,
+  context: ContextObjectType
+) => {
+  if (!_id) {
+    throw new BadRequestError("ProductId is Mandatory");
+  }
+  const category = await categoryRepository.findcategoryById(_id);
+  if (!category?._id) {
+    throw new NotFoundError("Category not found");
+  }
+  const categoryUpdateBody = {
+    isActive: !category.isActive,
+    updatedAt: getCurrentTime(),
+    updatedBy: context.email,
+  } as Partial<CategoryType>;
+  const updatedCategory = await categoryRepository.updateCategory(
+    _id,
+    categoryUpdateBody
+  );
+  return {
+    success: updatedCategory.isActive === !category.isActive,
+    status: updatedCategory.isActive,
+  };
+};
+
+/**
  * Controller used to create category
  * @param categoryCreateInput
  * @param context
@@ -111,4 +143,5 @@ export default {
   createcategory,
   getCategoryById,
   fetchCategoryProducts,
+  updateCategoryStatus,
 };
