@@ -1,9 +1,11 @@
 import {
   CategoryCreateMutationArgsType,
   CategoryStatusChangeMutationArgsType,
+  categoryUpdateMutationArgsType,
   ContextObjectType,
 } from "@core/types";
 import {
+  categoryDetailsUpdate,
   createcategory,
   updateCategoryStatus,
 } from "@services/categoryService";
@@ -21,5 +23,11 @@ export const resolverMutations = {
       args: CategoryStatusChangeMutationArgsType,
       context: ContextObjectType
     ) => await updateCategoryStatus(args, context),
+
+    categoryUpdate: async (
+      _: unknown,
+      args: categoryUpdateMutationArgsType,
+      context: ContextObjectType
+    ) => await categoryDetailsUpdate(args, context),
   },
 };

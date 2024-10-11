@@ -60,7 +60,20 @@ export type CategoryCreateMutationArgsType = {
 
 export type CategoryStatusChangeMutationArgsType = {
   _id: string;
-}
+};
+
+export type categoryUpdateMutationArgsType = {
+  categoryUpdateInput: {
+    _id: string;
+    name: string;
+    parentId: string;
+    description: string;
+    medias: string[];
+    productIds: string[];
+    subCategoryIds: string[];
+    metaStatus: string
+  };
+};
 
 export type OnboardStaffMutationArgsType = {
   onboardStaffInput: {

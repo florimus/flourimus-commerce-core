@@ -3,6 +3,7 @@ import {
   CategoryCreateMutationArgsType,
   CategoryStatusChangeMutationArgsType,
   CategoryType,
+  categoryUpdateMutationArgsType,
   ContextObjectType,
   ProductListArgsType,
 } from "@core/types";
@@ -57,4 +58,17 @@ export const fetCategoryProducts = async (
   args: ProductListArgsType
 ) => {
   return await categoryServiceImpl.fetchCategoryProducts(category, args);
+};
+
+/**
+ * Controller used to update the category
+ * @param args
+ * @param context
+ * @returns
+ */
+export const categoryDetailsUpdate = async (
+  args: categoryUpdateMutationArgsType,
+  context: ContextObjectType
+) => {
+  return await categoryServiceImpl.categoryDetailsUpdate(args, context);
 };

@@ -2,6 +2,7 @@ import sequence from "@core/sequence";
 import {
   CategoryCreateMutationArgsType,
   CategoryType,
+  categoryUpdateMutationArgsType,
   ContextObjectType,
   ProductListArgsType,
 } from "@core/types";
@@ -139,9 +140,48 @@ const fetchCategoryProducts = async (
   };
 };
 
+/**
+ * Controller used to update the category
+ * @param args
+ * @param context
+ * @returns
+ */
+const categoryDetailsUpdate = async (
+  args: categoryUpdateMutationArgsType,
+  context: ContextObjectType
+) => {
+  const request = args?.categoryUpdateInput;
+  if (!request?._id?.trim()) {
+    throw new BadRequestError("Category id is mandatory");
+  }
+  const category = await categoryRepository.findcategoryById(request?._id);
+  if (!category?._id) {
+    throw new NotFoundError("Category not found");
+  }
+  if (request?.productIds) {
+    // TODO: validate and update products
+  }
+  if (request?.parentId) {
+    // TODO: validate and update parentId
+  }
+  if (request?.subCategoryIds) {
+    // TODO: validate and update subCategoryIds
+  }
+  return await categoryRepository.updateCategory(category._id, {
+    description: request?.description || category?.description,
+    medias: request?.medias || category?.medias,
+    name: request?.name || category?.name,
+    productIds: request?.productIds || category?.productIds,
+    parentId: request?.parentId || category?.parentId,
+    metaStatus: request?.metaStatus || category?.metaStatus,
+    subCategoryIds: request?.subCategoryIds || category?.subCategoryIds,
+  });
+};
+
 export default {
   createcategory,
   getCategoryById,
   fetchCategoryProducts,
   updateCategoryStatus,
+  categoryDetailsUpdate,
 };
