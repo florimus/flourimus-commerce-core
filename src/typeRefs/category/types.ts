@@ -18,6 +18,11 @@ export const CategoryDefs = gql`
     productList(productListInput: ProductListInput): ProductList
   }
 
+  type CategoryStatusChangeResponse {
+    success: Boolean
+    status: Boolean
+  }
+
   # =============== Inputs ================= 
 
   input CategoryCreateInput {
@@ -30,11 +35,13 @@ export const CategoryDefs = gql`
   }
 
   input CategoryUpdateInput {
+    _id: ID!
     name: String
     parentId: String
     description: String
     medias: [String]
     productIds: [String]
     subCategoryIds: [String]
+    metaStatus: String
   }
 `;

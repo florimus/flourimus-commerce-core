@@ -7,4 +7,6 @@ export const quriesPermissions = {
 
 export const mutationPermissions = {
   categoryCreate: and(isAuthenticated, hasRole("usr:c")),
+  categoryStatusChange: and(isAuthenticated, hasRole("usr:c")),
+  categoryUpdate: and(isAuthenticated, hasRole("usr:c")),
 };

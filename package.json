@@ -4,7 +4,8 @@
   "description": "",
   "main": "index.js",
   "scripts": {
-    "test": "jest",
+    "coverage": "jest --coverage",
+    "test": "jest --maxWorkers=4 --silent",
     "start": "ts-node -r tsconfig-paths/register index.ts",
     "dev": "nodemon -r tsconfig-paths/register index.ts",
     "lint": "npx eslint ."

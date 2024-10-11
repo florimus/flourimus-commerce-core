@@ -112,3 +112,12 @@ export const getProductPriceInfo = async (product: ProductType) => {
 export const findProductAvailableStocks = async (product: ProductType) => {
   return await productServiceImpl.findProductAvailableStocks(product);
 };
+/**
+ * Controller used to verify product available
+ * @param productIds
+ * @param active
+ * @returns
+ */
+export const verifyProductIds = async (productIds: string[], active?: boolean) => {
+  return await productServiceImpl.verifyProductIds(productIds, active);
+};

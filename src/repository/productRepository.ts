@@ -70,6 +70,15 @@ const findProductsByIds = async (ids: string[]) => {
   });
 };
 
+const verifyProductIds = async (ids: string[], isActive?: boolean) => {
+  if (isActive) {
+    const count = await Product.countDocuments({ _id: { $in: ids }, isActive });
+    return count === ids.length;
+  }
+  const count = await Product.countDocuments({ _id: { $in: ids } });
+  return count === ids.length;
+};
+
 export default {
   createProduct,
   updateProduct,
@@ -78,4 +87,5 @@ export default {
   getProductList,
   getProductInfoById,
   findProductsByIds,
+  verifyProductIds
 };
