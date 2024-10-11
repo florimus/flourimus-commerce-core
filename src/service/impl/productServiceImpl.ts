@@ -388,6 +388,22 @@ export const findProductAvailableStocks = async (product: ProductType) => {
   return await findProductAvailableStocksByProductId(product._id);
 };
 
+/**
+ * Controller used to verify product available.
+ * @param productIds
+ * @param active
+ * @returns
+ */
+export const verifyProductIds = async (
+  productIds: string[],
+  active?: boolean
+) => {
+  if (!Array.isArray(productIds)) {
+    throw new BadRequestError("Invalid product ids found");
+  }
+  return productRepository.verifyProductIds(productIds, active);
+};
+
 export default {
   getProductById,
   createProduct,
@@ -399,4 +415,5 @@ export default {
   bulkUploadProduct,
   getProductPriceInfo,
   findProductAvailableStocks,
+  verifyProductIds,
 };

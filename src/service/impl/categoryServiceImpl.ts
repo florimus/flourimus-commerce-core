@@ -11,6 +11,7 @@ import BadRequestError from "@errors/BadrequestError";
 import NotFoundError from "@errors/NotFoundError";
 import categoryRepository from "@repositories/categoryRepository";
 import productRepository from "@repositories/productRepository";
+import { verifyProductIds } from "@services/productService";
 
 /**
  * Controller used to get category info
@@ -92,8 +93,8 @@ const createcategory = async (
       throw new BadRequestError("Subcategories not found");
     }
   }
-  if (productIds) {
-    // TODO: need to verify product ids
+  if (productIds && !(await verifyProductIds(productIds))) {
+    throw new NotFoundError("Products not qualified to add");
   }
   const categoryId = await sequence.categoryId();
   const category = await categoryRepository.createCategory({
@@ -158,16 +159,8 @@ const categoryDetailsUpdate = async (
   if (!category?._id) {
     throw new NotFoundError("Category not found");
   }
-  if (request?.productIds) {
-    // TODO: validate and update products
-  }
-  if (request?.parentId) {
-    // TODO: validate and update parentId
-  }
-  if (request?.subCategoryIds) {
-    // TODO: validate and update subCategoryIds
-  }
-  return await categoryRepository.updateCategory(category._id, {
+
+  const updatedCategory: Partial<CategoryType> = {
     description: request?.description || category?.description,
     medias: request?.medias || category?.medias,
     name: request?.name || category?.name,
@@ -175,7 +168,49 @@ const categoryDetailsUpdate = async (
     parentId: request?.parentId || category?.parentId,
     metaStatus: request?.metaStatus || category?.metaStatus,
     subCategoryIds: request?.subCategoryIds || category?.subCategoryIds,
-  });
+    updatedAt: getCurrentTime(),
+    updatedBy: context?.email,
+  };
+
+  // verify product ids
+  if (
+    updatedCategory?.productIds &&
+    !(await verifyProductIds(updatedCategory?.productIds))
+  ) {
+    throw new NotFoundError("Products not qualified to add");
+  }
+  // verify parent id
+  if (updatedCategory?.parentId) {
+    if (updatedCategory?.parentId === category?._id) {
+      throw new BadRequestError("Category cannot be its own parent");
+    }
+    try {
+      await getCategoryById(updatedCategory?.parentId);
+    } catch (error) {
+      throw new NotFoundError(
+        `Parent category ${request?.parentId} cannot found`
+      );
+    }
+  }
+  // verify subcategory ids
+  if (Array.isArray(updatedCategory?.subCategoryIds)) {
+    if (updatedCategory?.subCategoryIds?.includes(category?._id)) {
+      throw new BadRequestError("category cannot be its own sub category");
+    }
+    if (
+      updatedCategory?.subCategoryIds?.includes(updatedCategory?.parentId || "")
+    ) {
+      throw new BadRequestError(
+        "parent category cannot be its own sub category"
+      );
+    }
+    const isAllCategoriesExits =
+      await categoryRepository.checkAllCategoriesExits(request?.subCategoryIds);
+    if (!isAllCategoriesExits) {
+      throw new BadRequestError("Subcategories not found");
+    }
+  }
+  return await categoryRepository.updateCategory(category._id, updatedCategory);
 };
 
 export default {
